@@ -29,12 +29,12 @@ const items = [
     description:
       'Integrate our product into your routine with an intuitive and easy-to-use interface.',
   },
-  {
-    icon: <AutoFixHighRoundedIcon sx={{ color: 'text.secondary' }} />,
-    title: 'Innovative functionality',
-    description:
-      'Stay ahead with features that set new standards, addressing your evolving needs better than the rest.',
-  },
+  // {
+  //   icon: <AutoFixHighRoundedIcon sx={{ color: 'text.secondary' }} />,
+  //   title: 'Innovative functionality',
+  //   description:
+  //     'Stay ahead with features that set new standards, addressing your evolving needs better than the rest.',
+  // },
 ];
 
 export default function Content() {
@@ -46,10 +46,10 @@ export default function Content() {
         <SitemarkIcon />
       </Box>
       {items.map((item, index) => (
-        <Stack key={index} direction="row" sx={{ gap: 2 }}>
+        <Stack key={index} direction="row" sx={{ gap: 2, textAlign:"justify" }}>
           {item.icon}
           <div>
-            <Typography gutterBottom sx={{ fontWeight: 'medium' }}>
+            <Typography gutterBottom sx={{ fontWeight: 'medium' }} style={{fontWeight:"bolder"}}>
               {item.title}
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
