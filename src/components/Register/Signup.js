@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import AppTheme from '../Register/shared-theme/AppTheme';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';  // Import the PersonAdd icon
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 
 import ColorModeIconDropdown from '../Register/shared-theme/ColorModeIconDropdown';
 import BasicInfo from './signup-components/BasicInfo';
@@ -175,7 +175,7 @@ export default function Signup(props) {
             </Stepper>
             {activeStep === steps.length ? (
               <Stack spacing={2} useFlexGap>
-                <Typography variant="h1"><PersonAddIcon /></Typography>
+                <Typography variant="h1"><DoneAllIcon  /></Typography>
                 <Typography variant="h5">Thank you for filling your details!</Typography>
                 <Typography variant="body1" sx={{ color: 'text.secondary' }}>
                   A request have been sent to Administrator for approval. You will receive an email after getting approved.

@@ -8,6 +8,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import { styled } from '@mui/system';
 import { Select, MenuItem,Chip,InputLabel,TextField } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete';
+import{ FormControl }from '@mui/material';
 const FormGrid = styled(Grid)(() => ({
   display: 'flex',
   flexDirection: 'column',
@@ -16,7 +17,11 @@ const FormGrid = styled(Grid)(() => ({
 export default function TechDetails() {
   const [selectedPrimarySkills, setSelectedPrimarySkills] = useState([]);
   const [selectedSecondarySkills, setSelectedSecondarySkills] = useState([]);
-  
+  const [selectedDomain, setSelectedDomain] = useState('');
+
+  const handleDomainChange = (event) => {
+    setSelectedDomain(event.target.value);
+  };
   const skillOptions = [
     "JavaScript",
     "Python",
@@ -54,7 +59,40 @@ export default function TechDetails() {
           size="small"
         />
       </FormGrid>
-      <FormGrid size={{ xs: 6 }}>
+      <FormGrid size={{ xs: 12, md: 6 }} >
+        <FormLabel htmlFor="supervisor" required>
+          Current Supervisor
+        </FormLabel>
+        <OutlinedInput
+          id="supervisor"
+          name="supervisor"
+          type="text"
+          placeholder="Jane Doe"
+          required
+          size="small"
+        />
+      </FormGrid>
+      <FormGrid size={{ xs: 12, md: 6 }}>
+      <FormLabel htmlFor="domain" required>
+        Current Domain
+      </FormLabel>
+      <FormControl fullWidth required size="small">
+        <Select
+          labelId="domain-label"
+          id="domain"
+          name="domain"
+          value={selectedDomain}
+          onChange={handleDomainChange}
+          label="Select Domain"
+        >
+          <MenuItem value="domain1">Domain 1</MenuItem>
+          <MenuItem value="domain2">Domain 2</MenuItem>
+          <MenuItem value="domain3">Domain 3</MenuItem>
+          <MenuItem value="domain4">Domain 4</MenuItem>
+        </Select>
+      </FormControl>
+    </FormGrid>
+      <FormGrid size={{ xs: 12 }}>
       <FormLabel htmlFor="primary-skills" required>
         Primary Tech Skills
       </FormLabel>
@@ -89,7 +127,7 @@ export default function TechDetails() {
         getOptionLabel={(option) => option}
       />
     </FormGrid>
-    <FormGrid size={{ xs: 12, md: 6 }} >
+    <FormGrid size={{ xs: 12, md: 12 }} >
         <FormLabel htmlFor="secondary-skill" required>
           Secondary Skills
         </FormLabel>
@@ -102,19 +140,7 @@ export default function TechDetails() {
           size="small"
         />
       </FormGrid>
-      <FormGrid size={{ xs: 12, md: 6 }} >
-        <FormLabel htmlFor="supervisor" required>
-          Supervisor
-        </FormLabel>
-        <OutlinedInput
-          id="supervisor"
-          name="supervisor"
-          type="text"
-          placeholder="Jane Doe"
-          required
-          size="small"
-        />
-      </FormGrid>
+      
       <FormGrid size={{ xs: 6 }}>
         <FormLabel htmlFor="amdocs-experience" required>
           Experience @Amdocs (in years)

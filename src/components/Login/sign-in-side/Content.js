@@ -8,7 +8,8 @@ import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
 import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
 import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
 
-import { SitemarkIcon } from './CustomIcons';
+import { SitemarkIcon, AmdocsLogo } from './CustomIcons';
+import { Card, CardContent, CardMedia } from '@mui/material';
 
 const items = [
   {
@@ -43,13 +44,23 @@ export default function Content() {
       sx={{ flexDirection: 'column', alignSelf: 'center', gap: 4, maxWidth: 450 }}
     >
       <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-        <SitemarkIcon />
+        {/* <SitemarkIcon /> */}
+        <Card sx={{ maxWidth: 345 }} style={{border:"none"}}>
+          <CardMedia
+            component="img"
+            height="30"
+            image="https://logos-download.com/wp-content/uploads/2019/06/Amdocs_Logo.png"
+            alt="Description of image" // Optional alt text
+          />
+
+        </Card>
+
       </Box>
       {items.map((item, index) => (
-        <Stack key={index} direction="row" sx={{ gap: 2, textAlign:"justify" }}>
+        <Stack key={index} direction="row" sx={{ gap: 2, textAlign: "justify" }}>
           {item.icon}
           <div>
-            <Typography gutterBottom sx={{ fontWeight: 'medium' }} style={{fontWeight:"bolder"}}>
+            <Typography gutterBottom sx={{ fontWeight: 'medium' }} style={{ fontWeight: "bolder" }}>
               {item.title}
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>

@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MuiCard from '@mui/material/Card';
 import Checkbox from '@mui/material/Checkbox';
+// import { useNavigate } from "react-router-dom";
 import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
@@ -33,12 +34,24 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function SignInCard() {
+  const [email,setEmail] = React.useState(null);
+  const [password,setPassword] = React.useState(null);
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
-
+  const [loading, setLoading] = React.useState(false);
+  // const navigate = useNavigate(); 
+  const hashText = async (text) => {
+    const encoder = new TextEncoder(); // Converts the string to a Uint8Array
+    const data = encoder.encode(text); // Encode the text
+  
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data); // Compute the hash
+    const hashArray = Array.from(new Uint8Array(hashBuffer)); // Convert buffer to byte array
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toString(); // Convert bytes to hex
+    return hashHex; // Return the hash as a hex string
+  };
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -47,34 +60,76 @@ export default function SignInCard() {
     setOpen(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (e) => {
     if (emailError || passwordError) {
-      event.preventDefault();
+      e.preventDefault();
       return;
     }
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+    const hashedPassword= await hashText(password)
+    setLoading(true);
+    try {
+        // First API call to admin login
+        const adminResponse = await fetch('http://localhost:8080/api/v1/admin/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ adminEmail:email, adminPassword:hashedPassword }),
+        });
+    
+        if (adminResponse.ok) {
+          // If the response is OK, navigate to admin dashboard
+          setLoading(false);
+          const jwtToken = await adminResponse.text();
+          localStorage.setItem("jwtToken",jwtToken);
+          // navigate('/admin');
+
+          return;
+        }
+    
+        // Second API call to employee login
+        const employeeResponse = await fetch('http://localhost:8080/api/v1/employee/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            
+          },
+          body: JSON.stringify({empEmail: email, empPassword:password }),
+        });
+    
+        if (employeeResponse.ok) {
+          // If the response is OK, navigate to employee dashboard
+          setLoading(false);
+          const response = await employeeResponse.json();
+          const jwtToken = response.token;
+          const empId = response.employee.empId;
+          localStorage.setItem("empToken",jwtToken);
+          localStorage.setItem("empId",empId);
+          // navigate('/employeeDashboard');
+        }
+    
+      } catch (error) {
+        setLoading(false);
+        
+        console.error('Error during login:', error);
+        // Optionally handle error (e.g., show a user-friendly message)
+      }
+};
 
   const validateInputs = () => {
-    const email = document.getElementById('email');
-    const password = document.getElementById('password');
-
+    
     let isValid = true;
 
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) {
+    if (!email || !/^[a-zA-Z0-9._%+-]+@amdocs\.com$/.test(email)) {
       setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address.');
+      setEmailErrorMessage('Please enter a valid amdocs email address.');
       isValid = false;
     } else {
       setEmailError(false);
       setEmailErrorMessage('');
     }
 
-    if (!password.value || password.value.length < 6) {
+    if (!password || password.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage('Password must be at least 6 characters long.');
       isValid = false;
@@ -119,6 +174,8 @@ export default function SignInCard() {
             fullWidth
             variant="outlined"
             color={emailError ? 'error' : 'primary'}
+            value={email}
+            onChange={(e)=>setEmail(e.target.value)}
           />
         </FormControl>
         <FormControl>
@@ -147,6 +204,8 @@ export default function SignInCard() {
             fullWidth
             variant="outlined"
             color={passwordError ? 'error' : 'primary'}
+            value={password}
+            onChange={(e)=>setPassword(e.target.value)}
           />
         </FormControl>
         {/* <FormControlLabel
@@ -155,7 +214,7 @@ export default function SignInCard() {
         /> */}
         <ForgotPassword open={open} handleClose={handleClose} />
         <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
-          Sign in
+             {loading ? 'Signing in...' : 'Sign in'}
         </Button>
         <Typography sx={{ textAlign: 'center' }}>
           Don&apos;t have an account?{' '}
