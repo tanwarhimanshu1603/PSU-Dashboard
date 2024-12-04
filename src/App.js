@@ -16,7 +16,7 @@ function App() {
         {/* Login */}
         <Route path='/' element={<SignInSide />}/>
         {/* Sign Up */}
-        <Route path='signup' element={<Signup />}/>
+        <Route path='register' element={<Signup />}/>
         {/* Admin */}
         {/* <Route path='/admin/*' element={} /> */}
         <Route path="/admin">
