@@ -56,6 +56,22 @@ export default function BasicInfo() {
   };
   return (
     <Grid container spacing={3}  style={{"textAlign": "left"}}>
+      <FormGrid size={{ xs: 6 }}>
+        <FormLabel htmlFor="empId" required>
+          Employee Id
+        </FormLabel>
+        <OutlinedInput
+          id="empId"
+          name="empId"
+          type="empId"
+          placeholder="12345"
+          autoComplete="empId"
+          required
+          size="small"
+          value={empId}
+          onChange={(e)=>setEmpId(e.target.value)}
+        />
+      </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }}>
         <FormLabel htmlFor="email" required>
           Email
@@ -88,22 +104,7 @@ export default function BasicInfo() {
         />
       </FormGrid>
       
-      <FormGrid size={{ xs: 6 }}>
-        <FormLabel htmlFor="empId" required>
-          Employee Id
-        </FormLabel>
-        <OutlinedInput
-          id="empId"
-          name="empId"
-          type="empId"
-          placeholder="12345"
-          autoComplete="empId"
-          required
-          size="small"
-          value={empId}
-          onChange={(e)=>setEmpId(e.target.value)}
-        />
-      </FormGrid>
+      
       <FormGrid size={{ xs: 12, md: 6 }} >
         <FormLabel htmlFor="password" required>
           Confirm Password

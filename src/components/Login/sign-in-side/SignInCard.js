@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from './ForgotPassword';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
+import { useNavigate } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -42,6 +43,7 @@ export default function SignInCard() {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const navigate = useNavigate();
   // const navigate = useNavigate(); 
   const hashText = async (text) => {
     const encoder = new TextEncoder(); // Converts the string to a Uint8Array
@@ -61,7 +63,7 @@ export default function SignInCard() {
   };
 
   const handleSubmit = async (e) => {
-    if (emailError || passwordError) {
+    if (emailError || passwordError || !validateInputs()) {
       e.preventDefault();
       return;
     }
@@ -82,7 +84,7 @@ export default function SignInCard() {
           setLoading(false);
           const jwtToken = await adminResponse.text();
           localStorage.setItem("jwtToken",jwtToken);
-          // navigate('/admin');
+          navigate('/admin');
 
           return;
         }
@@ -94,7 +96,7 @@ export default function SignInCard() {
             'Content-Type': 'application/json',
             
           },
-          body: JSON.stringify({empEmail: email, empPassword:password }),
+          body: JSON.stringify({empEmail: email, empPassword:hashedPassword }),
         });
     
         if (employeeResponse.ok) {
@@ -105,7 +107,7 @@ export default function SignInCard() {
           const empId = response.employee.empId;
           localStorage.setItem("empToken",jwtToken);
           localStorage.setItem("empId",empId);
-          // navigate('/employeeDashboard');
+          navigate('/employee');
         }
     
       } catch (error) {
@@ -154,8 +156,8 @@ export default function SignInCard() {
         Sign in
       </Typography>
       <Box
-        component="form"
-        onSubmit={handleSubmit}
+        //component="form"
+        // onSubmit={handleSubmit}
         noValidate
         sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}
       >
@@ -195,11 +197,10 @@ export default function SignInCard() {
             error={passwordError}
             helperText={passwordErrorMessage}
             name="password"
-            placeholder="••••••"
             type="password"
             id="password"
             autoComplete="current-password"
-            autoFocus
+            // autoFocus
             required
             fullWidth
             variant="outlined"
@@ -213,7 +214,7 @@ export default function SignInCard() {
           label="Remember me"
         /> */}
         <ForgotPassword open={open} handleClose={handleClose} />
-        <Button type="submit" fullWidth variant="contained" onClick={validateInputs}>
+        <Button type="submit" fullWidth variant="contained" onClick={handleSubmit}>
              {loading ? 'Signing in...' : 'Sign in'}
         </Button>
         <Typography sx={{ textAlign: 'center' }}>

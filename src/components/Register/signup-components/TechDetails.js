@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react'
+import {useState,useEffect} from 'react'
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
@@ -18,24 +18,63 @@ export default function TechDetails() {
   const [selectedPrimarySkills, setSelectedPrimarySkills] = useState([]);
   const [selectedSecondarySkills, setSelectedSecondarySkills] = useState([]);
   const [selectedDomain, setSelectedDomain] = useState('');
-
+  const [skillOptions,setSkillOptions] = useState([]);
+  const [domainList,setDomainList] = useState([]);
   const handleDomainChange = (event) => {
     setSelectedDomain(event.target.value);
   };
-  const skillOptions = [
-    "JavaScript",
-    "Python",
-    "Java",
-    "C++",
-    "Ruby",
-    "Go",
-    "React",
-    "Node.js",
-    "CSS",
-    "HTML",
-    "SQL",
-    // Add more skills as needed
-  ];
+  // const skillOptions = [
+  //   "JavaScript",
+  //   "Python",
+  //   "Java",
+  //   "C++",
+  //   "Ruby",
+  //   "Go",
+  //   "React",
+  //   "Node.js",
+  //   "CSS",
+  //   "HTML",
+  //   "SQL",
+  //   // Add more skills as needed
+  // ];
+  const getAllSkills = async()=>{
+    try {
+      // First API call to admin login
+      const skillResponse = await fetch('http://localhost:8080/api/v1/employee/getSkills', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const data = JSON.parse(await skillResponse.text());
+      setSkillOptions(data)
+      console.log(data)
+      }
+      catch(error){
+
+      }
+  }
+  const getAllDomains = async()=>{
+    try {
+      // First API call to admin login
+      const domainResponse = await fetch('http://localhost:8080/api/v1/employee/getDomain', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const data = JSON.parse(await domainResponse.text());
+      setDomainList(data)
+      console.log(data)
+      }
+      catch(error){
+
+      }
+  }
+  useEffect(()=>{
+    getAllSkills();
+    getAllDomains()
+  },[])
   const primarySkillsHandleChange = (event, newValue) => {
     setSelectedPrimarySkills(newValue);
   };
@@ -72,6 +111,19 @@ export default function TechDetails() {
           size="small"
         />
       </FormGrid>
+      <FormGrid size={{ xs: 12, md: 6 }} >
+        <FormLabel htmlFor="current-account" required>
+          Current Account
+        </FormLabel>
+        <OutlinedInput
+          id="current-account"
+          name="current-account"
+          type="text"
+          placeholder="TMO-Canada"
+          required
+          size="small"
+        />
+      </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }}>
       <FormLabel htmlFor="domain" required>
         Current Domain
@@ -85,10 +137,10 @@ export default function TechDetails() {
           onChange={handleDomainChange}
           label="Select Domain"
         >
-          <MenuItem value="domain1">Domain 1</MenuItem>
-          <MenuItem value="domain2">Domain 2</MenuItem>
-          <MenuItem value="domain3">Domain 3</MenuItem>
-          <MenuItem value="domain4">Domain 4</MenuItem>
+          {domainList.map((domain)=>{
+            return <MenuItem value={domain}>{domain}</MenuItem>
+          })}
+          
         </Select>
       </FormControl>
     </FormGrid>
