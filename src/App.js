@@ -6,6 +6,9 @@ import Single from './components/Admin/single/Single'
 import New from './components/Admin/new/New'
 import Signup from './components/Register/Signup'
 import { userInputs } from './components/Admin/formSource';
+import EmployeeDashboard from './components/Employee/employeeDashboard/EmployeeDashboard';
+import Test from './components/Employee/employeeDashboard/Test';
+
 
 function App() {
   
@@ -17,19 +20,29 @@ function App() {
         <Route path='/' element={<SignInSide />}/>
         {/* Sign Up */}
         <Route path='register' element={<Signup />}/>
-        {/* Admin */}
-        {/* <Route path='/admin/*' element={} /> */}
+
+        {/* ---------------------------- */}
+                  {/* Admin */}
+        {/* ---------------------------- */}
         <Route path="/admin">
-            <Route index element={<Home />} />
-            <Route path="users">
-              <Route index element={<List />} />
-              <Route path=":userId" element={<Single />} />
-              <Route
-                path="new"
-                element={<New inputs={userInputs} title="Add New User" />}
-              />
-            </Route>
+          <Route index element={<Home />} />
+          <Route path="users">
+            <Route index element={<List />} />
+            <Route path=":userId" element={<Single />} />
+            <Route
+              path="new"
+              element={<New inputs={userInputs} title="Add New User" />}
+            />
           </Route>
+        </Route>
+        
+        {/* ---------------------------- */}
+                  {/* Employee */}
+        {/* ---------------------------- */}
+        <Route path='/dashboard'>
+          <Route index element={<EmployeeDashboard />} />
+          <Route path='test' element={<Test />} />
+        </Route>
       </Routes>
     </Router>
     // </div>
