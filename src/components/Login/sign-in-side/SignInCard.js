@@ -107,7 +107,7 @@ export default function SignInCard() {
           const empId = response.employee.empId;
           localStorage.setItem("empToken",jwtToken);
           localStorage.setItem("empId",empId);
-          navigate('/employee');
+          navigate('/dashboard');
         }
     
       } catch (error) {

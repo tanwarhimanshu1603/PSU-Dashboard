@@ -7,7 +7,7 @@ import New from './components/Admin/new/New'
 import Signup from './components/Register/Signup'
 import { userInputs } from './components/Admin/formSource';
 import EmployeeDashboard from './components/Employee/employeeDashboard/EmployeeDashboard';
-import Test from './components/Employee/employeeDashboard/Test';
+// import Test from './components/Employee/employeeDashboard/Test';
 
 
 function App() {
@@ -28,7 +28,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="users">
             <Route index element={<List />} />
-            <Route path=":userId" element={<Single />} />
+            {/* <Route path=":userId" element={<Single />} /> */}
+            <Route path=":userId" element={<EmployeeDashboard />} />
             <Route
               path="new"
               element={<New inputs={userInputs} title="Add New User" />}
@@ -41,7 +42,6 @@ function App() {
         {/* ---------------------------- */}
         <Route path='/dashboard'>
           <Route index element={<EmployeeDashboard />} />
-          <Route path='test' element={<Test />} />
         </Route>
       </Routes>
     </Router>

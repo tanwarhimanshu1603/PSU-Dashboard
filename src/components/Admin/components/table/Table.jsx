@@ -113,9 +113,10 @@ const List = () => {
   const handleReject = async(employeeId)=>{
     try {
       const employee = rows.find(row => row.empId === employeeId);
+      console.log(employee);
       
       const response = await fetch('http://localhost:8080/api/v1/admin/reject', {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `${jwtToken}`
