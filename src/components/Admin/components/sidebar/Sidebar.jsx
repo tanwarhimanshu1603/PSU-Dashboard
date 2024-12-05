@@ -17,6 +17,10 @@ const Sidebar = () => {
     navigate("/admin", { state: { scrollTo: "approvals" } });
   };
 
+  const handleLogout = ()=>{
+    localStorage.removeItem('jwtToken');
+    navigate('/')
+  }
 
   return (
     <div className="sidebar">
@@ -49,7 +53,7 @@ const Sidebar = () => {
             </li>
           </LinkScroll>
           <p className="title">USER</p>
-          <li>
+          <li onClick={handleLogout}>
             <ExitToAppIcon className="icon" />
             <span>Logout</span>
           </li>
