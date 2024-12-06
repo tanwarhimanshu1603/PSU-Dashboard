@@ -26,6 +26,13 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="top">
         <Link to="/admin" style={{ textDecoration: "none" }}>
+        {/* <div className="item">
+            <img style={{borderRadius:"50%"}} width={"20px"}
+              src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+              alt="admin_image"
+              className="avatar"
+            />
+          </div> */}
           <span className="logo">Vikrant</span>
         </Link>
       </div>
@@ -40,18 +47,18 @@ const Sidebar = () => {
             </li>
           </Link>
           <p className="title">LISTS</p>
-          <Link to="/admin/users" style={{ textDecoration: "none" }}>
+          <Link to="/admin/employees" style={{ textDecoration: "none" }}>
             <li>
               <PersonOutlineIcon className="icon" />
-              <span>Users</span>
+              <span>Employees</span>
             </li>
           </Link>
-          <LinkScroll onClick={redirectToApprovals} to="/admin" smooth duration={1000} style={{ textDecoration: "none" }}>
+          <Link  to="/admin/approval-requests" style={{ textDecoration: "none" }}>
             <li>
               <StoreIcon className="icon" />
               <span>Approvals</span>
             </li>
-          </LinkScroll>
+          </Link>
           <p className="title">USER</p>
           <li onClick={handleLogout}>
             <ExitToAppIcon className="icon" />

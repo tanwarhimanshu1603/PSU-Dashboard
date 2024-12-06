@@ -7,6 +7,7 @@ import New from './components/Admin/new/New'
 import Signup from './components/Register/Signup'
 import { userInputs } from './components/Admin/formSource';
 import EmployeeDashboard from './components/Employee/employeeDashboard/EmployeeDashboard';
+import ApprovalList from './components/Admin/list/ApprovalList';
 // import Test from './components/Employee/employeeDashboard/Test';
 
 
@@ -26,7 +27,8 @@ function App() {
         {/* ---------------------------- */}
         <Route path="/admin">
           <Route index element={<Home />} />
-          <Route path="users">
+          <Route path='approval-requests' element={<ApprovalList />} />
+          <Route path="employees">
             <Route index element={<List />} />
             {/* <Route path=":userId" element={<Single />} /> */}
             <Route path=":userId" element={<EmployeeDashboard />} />

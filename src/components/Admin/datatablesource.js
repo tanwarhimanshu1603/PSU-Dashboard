@@ -26,7 +26,52 @@ export const userColumns = [
   },
   {
     field: "currentAccount",
-    headerName: "Account",
+    headerName: "Current Account",
+    width: 130,
+    // renderCell: (params) => {
+    //   return (
+    //     <div className={`cellWithStatus ${params.row.status}`}>
+    //       {params.row.status === "active" ? "Approved" : "Pending"}
+    //     </div>
+    //   );
+    // },
+  },
+];
+
+export const approvalColumns = [
+  { field: "empId", headerName: "Employee ID", width: 110 },
+  {
+    field: "empName",
+    headerName: "Employee",
+    width: 150,
+    // renderCell: (params) => {
+    //   return (
+    //     <div className="cellWithImg">
+    //       <img className="cellImg" src={params.row.img} alt="avatar" />
+    //       {params.row.username}
+    //     </div>
+    //   );
+    // },
+  },
+  {
+    field: "empEmail",
+    headerName: "Email",
+    width: 150,
+  },
+
+  {
+    field: "supervisorName",
+    headerName: "Supervisor",
+    width: 150,
+  },
+  {
+    field: "domainName",
+    headerName: "Domain",
+    width: 130,
+  },
+  {
+    field: "currentAccount",
+    headerName: "Current Account",
     width: 130,
     // renderCell: (params) => {
     //   return (

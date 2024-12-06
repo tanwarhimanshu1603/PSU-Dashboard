@@ -9,9 +9,14 @@ import Paper from "@mui/material/Paper";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
-
+import ConfirmDialog from "../../../../utils/ConfirmDialog";
+import Badge from "@mui/material/Badge";
 const List = () => {
   const [rows,setRows] = useState([]);
+  const [requestCount,setRequestCount] = useState(0);
+  const [approveDialogOpen, setApproveDialogOpen] = useState(false); // State for dialog visibility
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false);
+  const [selectedEmpId, setSelectedEmpId] = useState(null); // State to track which employee to delete
   const jwtToken = localStorage.getItem('jwtToken')
   const getApprovalRequests = async()=>{
     try {
@@ -27,6 +32,7 @@ const List = () => {
         const data = JSON.parse(await response.text())
         console.log(data)
         setRows(data)
+        setRequestCount(rows.length)
         return;
       }
     } catch (error) {
@@ -89,7 +95,7 @@ const List = () => {
   //     status: "Pending",
   //   },
   // ];
-  const handleApprove = async(employeeId)=>{
+  const approveRequest = async(employeeId)=>{
     try {
       const employee = rows.find(row => row.empId === employeeId);
       
@@ -103,6 +109,7 @@ const List = () => {
       });
       if (response.ok) {
         setRows(rows.filter((item) => item.empId !== employeeId));
+        setRequestCount(rows.length)
         return;
       }
     } catch (error) {
@@ -110,7 +117,7 @@ const List = () => {
     }
 
   }
-  const handleReject = async(employeeId)=>{
+  const rejectRequest = async(employeeId)=>{
     try {
       const employee = rows.find(row => row.empId === employeeId);
       console.log(employee);
@@ -125,15 +132,47 @@ const List = () => {
       });
       if (response.ok) {
         setRows(rows.filter((item) => item.empId !== employeeId));
+        setRequestCount(rows.length)
         return;
       }
     } catch (error) {
       
     }
   }
+  const handleApproveDialogClose = (confirm) => {
+    setApproveDialogOpen(false); // Close the dialog
+    if (confirm && selectedEmpId) {
+      // If confirmed, delete the employee
+      handleApprove(selectedEmpId);
+    }
+    setSelectedEmpId(null); // Reset the selected employee ID
+  };
+  const handleRejectDialogClose = (confirm) => {
+    setRejectDialogOpen(false); // Close the dialog
+    if (confirm && selectedEmpId) {
+      // If confirmed, delete the employee
+      handleReject(selectedEmpId);
+    }
+    setSelectedEmpId(null); // Reset the selected employee ID
+  };
+  const handleApprove = (empId) => {
+    setSelectedEmpId(empId); // Store the employee ID
+    setApproveDialogOpen(true); // Open the dialog
+  };
+  const handleReject = (empId) => {
+    setSelectedEmpId(empId); // Store the employee ID
+    setRejectDialogOpen(true); // Open the dialog
+  };
   
   return (
     <TableContainer component={Paper} className="table">
+      <div className="listTitle" style={{fontSize:"24px", color:"gray",marginBottom:"10px"}}>Approval Requests<Badge
+            badgeContent={requestCount}
+            color="primary"
+            sx={{
+              marginLeft: "18px", // Add some spacing between "Employees" and badge
+            }}
+          /></div>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -169,13 +208,13 @@ const List = () => {
               <div className="viewButton">View</div>
             </Link> */}
             <Button
-              className="viewButton"
+              className="approveButton"
               onClick={() => handleApprove(row.empId)}
             >
               Approve
             </Button>
             <Button
-              className="deleteButton"
+              className="rejectButton"
               onClick={() => handleReject(row.empId)}
               color="error"
               
@@ -188,6 +227,18 @@ const List = () => {
           ))}
         </TableBody>
       </Table>
+      <ConfirmDialog 
+        open={approveDialogOpen}
+        handleClose={(confirm) => handleApproveDialogClose(confirm)}
+        message={"Are you sure you want to approve the request?"}
+        buttonText={"Approve"}
+      />
+      <ConfirmDialog 
+        open={rejectDialogOpen}
+        handleClose={(confirm) => handleRejectDialogClose(confirm)}
+        message={"Are you sure you want to reject the request?"}
+        buttonText={"Reject"}
+      />
     </TableContainer>
   );
 };
