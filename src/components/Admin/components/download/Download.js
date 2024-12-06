@@ -5,8 +5,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import DescriptionIcon from '@mui/icons-material/Description';
-// import { jsPDF } from "jspdf";
-// import "jspdf-autotable";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 
 export default function Download({filteredData}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -46,30 +46,30 @@ export default function Download({filteredData}) {
       link.click();
     }
   };
-  // const downloadPDF = () => {
-  //   handleClose();
-  //   const doc = new jsPDF();
+  const downloadPDF = () => {
+    handleClose();
+    const doc = new jsPDF();
 
-  //   doc.setFontSize(12);
-  //   doc.text("Employee List", 20, 20);
+    doc.setFontSize(12);
+    doc.text("Employee List", 20, 20);
 
-  //   const headers = ["Employee ID","Name", "Email", "Supervisor","Current Domain"];
-  //   const rows = filteredEmployees.map(emp => [
-  //     emp.empId,
-  //     emp.empName,
-  //     emp.empEmail,
-  //     emp.supervisorName,
-  //     emp.currentAccount
-  //   ]);
+    const headers = ["Employee ID","Name", "Email", "Supervisor","Current Domain"];
+    const rows = filteredData.map(emp => [
+      emp.empId,
+      emp.empName,
+      emp.empEmail,
+      emp.supervisorName,
+      emp.currentAccount
+    ]);
 
-  //   doc.autoTable({
-  //     head: [headers],
-  //     body: rows,
-  //     startY: 30,  // Adjust to prevent overlap
-  //   });
+    doc.autoTable({
+      head: [headers],
+      body: rows,
+      startY: 30,  // Adjust to prevent overlap
+    });
 
-  //   doc.save("employees.pdf");
-  // };
+    doc.save("employees.pdf");
+  };
 
   return (
     <div>
@@ -95,7 +95,7 @@ export default function Download({filteredData}) {
             <DescriptionIcon /> &nbsp;
             CSV
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={downloadPDF}>
             <PictureAsPdfIcon /> &nbsp;
             PDF
         </MenuItem>

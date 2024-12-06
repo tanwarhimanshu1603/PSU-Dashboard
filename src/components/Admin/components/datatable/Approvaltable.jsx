@@ -170,7 +170,7 @@ const Approvaltable = () => {
           Approval Requests
           <Badge
             badgeContent={requestCount}
-            color="primary"
+            color="error"
             sx={{
               marginLeft: "18px", // Add some spacing between "Employees" and badge
             }}
