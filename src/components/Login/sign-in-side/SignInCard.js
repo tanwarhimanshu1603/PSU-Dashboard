@@ -43,6 +43,7 @@ export default function SignInCard() {
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [forgotPasswordMail,setForgotPasswordMail] = React.useState("");
   const navigate = useNavigate();
   // const navigate = useNavigate(); 
   const hashText = async (text) => {
@@ -54,12 +55,33 @@ export default function SignInCard() {
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toString(); // Convert bytes to hex
     return hashHex; // Return the hash as a hex string
   };
+  
   const handleClickOpen = () => {
     setOpen(true);
   };
 
+  const handleForgotPassword = async ()=>{
+    try {
+      // First API call to forgot password
+      const response = await fetch('http://localhost:8080/api/v1/employee/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({empEmail: forgotPasswordMail})
+      });
+      if(response.ok){
+        alert("Mail has been sent to your Email ID " + forgotPasswordMail);
+      }else console.error("Error sending mail.");
+      }
+      catch(error){
+        console.log(error);
+      }
+  }
+
   const handleClose = () => {
     setOpen(false);
+    handleForgotPassword();
   };
 
   const handleSubmit = async (e) => {
@@ -213,7 +235,7 @@ export default function SignInCard() {
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
         /> */}
-        <ForgotPassword open={open} handleClose={handleClose} />
+        <ForgotPassword open={open} handleClose={handleClose} mail={forgotPasswordMail} setMail={setForgotPasswordMail} />
         <Button type="submit" fullWidth variant="contained" onClick={handleSubmit}>
              {loading ? 'Signing in...' : 'Sign in'}
         </Button>

@@ -88,7 +88,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
       console.log(data)
       }
       catch(error){
-
+        console.log(error);
       }
   }
   useEffect(()=>{
@@ -211,7 +211,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
       renderCell: (params) => {
         return (
           <div className="cellAction">
-            <Link to="/admin/users/test" style={{ textDecoration: "none" }}>
+            <Link to={`/admin/employees/${params.row.empId}`} style={{ textDecoration: "none" }}>
               <div className="viewButton">View</div>
             </Link>
             <div
@@ -244,7 +244,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
             <FilterListIcon />
             Filter
           </div>
-          <Link to="/admin/users/new" className="link">
+          <Link to="/admin/employees/new" className="link">
             Add New
           </Link>
         </div>

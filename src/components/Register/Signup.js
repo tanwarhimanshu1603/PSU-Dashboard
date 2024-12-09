@@ -20,6 +20,7 @@ import BasicInfo from './signup-components/BasicInfo';
 import TechDetails from './signup-components/TechDetails';
 import AdditionalDetails from './signup-components/AdditionalDetails';
 import Content from '../Login/sign-in-side/Content';
+import { useNavigate } from 'react-router-dom';
 
 const steps = ['Basic Information', 'Technical Details', 'Additional Information'];
 function getStepContent(step) {
@@ -36,6 +37,7 @@ function getStepContent(step) {
 }
 export default function Signup(props) {
   const [activeStep, setActiveStep] = React.useState(0);
+  const navigate = useNavigate();
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
@@ -180,7 +182,7 @@ export default function Signup(props) {
                 <Typography variant="body1" sx={{ color: 'text.secondary' }}>
                   A request have been sent to Administrator for approval. You will receive an email after getting approved.
                 </Typography>
-                
+                <Button onClick={() => navigate('/')} variant="contained" sx={{maxWidth: '120px'}}>Login</Button>
               </Stack>
             ) : (
               <React.Fragment>

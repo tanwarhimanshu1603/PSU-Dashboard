@@ -7,9 +7,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import theme from '../../../style/theme'
 import LogoutIcon from '@mui/icons-material/Logout';
 import Tooltip from '@mui/material/Tooltip';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
-import InputBase from '@mui/material/InputBase';
+import { EditCalendar } from '@mui/icons-material';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -18,40 +18,33 @@ const Item = styled(Paper)(({ theme }) => ({
     color: theme.palette.text.secondary
 }));
 
-export default function EmployeeDashboard() {
+export default function AdminEmployeeDashboard() {
     const navigate = useNavigate();
 
     const [employee, setEmployee] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const {empId} = useParams();
+    
+    const jwtToken = localStorage.getItem('jwtToken');
 
     useEffect(() => {
-        // Retrieve empId from localStorage
-        const empId = localStorage.getItem("empId");
-        const empToken = localStorage.getItem("empToken");
-        // console.log(empId);
-        
-        if (!empId || !empToken) {
-        // If no empId is found, redirect to login page
-        window.location.href = "/";
-        return;
-        }
 
         // Fetch employee details using empId
         const fetchEmployeeDetails = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/employee/getById/${empId}`, {
+            const response = await fetch(`http://localhost:8080/api/v1/admin/getById/${empId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': empToken 
+                'Authorization': jwtToken 
             }
             });
             const data = await response.json();
             // console.log(data);
             
             if (response.ok) {
-            console.log(data);
+            // console.log(data);
             
             setEmployee(data); // Set the employee data
             } else {
@@ -67,16 +60,8 @@ export default function EmployeeDashboard() {
         fetchEmployeeDetails();
     }, []); // Empty dependency array means this effect runs once when the component is mounted
 
-    const handleLogout = () => {
-        localStorage.removeItem("empId"); // Remove empId from localStorage
-        localStorage.removeItem("empToken"); // Remove login status
-        localStorage.removeItem("isLoggedIn");
-        navigate("/"); // Redirect to the homepage
-    };
-
     const handleEdit = () => {
         console.log("Editing mode..");
-        
     }
 
     if (loading) {
@@ -109,12 +94,6 @@ export default function EmployeeDashboard() {
                             </Typography>
                             <Typography align="center" color="text.secondary" sx={{fontWeight: 500}}>
                                 Software Engineer Specialist
-                                {/* <TextField id="standard-basic" label="Role" variant="standard" /> */}
-                                {/* <InputBase
-                                    sx={{ flex: 1, textAlign: 'center', '& input': {textAlign: 'center'} }}
-                                    placeholder="Designation!!"
-                                    inputProps={{ 'aria-label': 'role' }}
-                                /> */}
                             </Typography>
                             <Typography variant="body2" color="text.secondary" sx={{textAlign: 'center',m:2}}>
                                 Full-stack product designer with hands-on experience in solving problems for clients across various domains. Skilled in communication, collaboration, and user-centered design.
@@ -168,12 +147,7 @@ export default function EmployeeDashboard() {
                     <Grid>
                         <Item>
                             {/* Basic Information */}
-                            <Box sx={{m:0.5,position: 'relative'}}>
-                            <Tooltip title="Logout">
-                                <Box onClick={handleLogout} sx={{ bgcolor: 'text.error', color: 'background.paper',position: 'absolute',top: 5, right: 5,cursor: 'pointer' }}>
-                                    <LogoutIcon color="error"/>
-                                </Box>
-                            </Tooltip>
+                            <Box sx={{m:0.5}}>
                                 <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
                                     Basic Information
                                     <Tooltip title="Edit">
@@ -186,7 +160,7 @@ export default function EmployeeDashboard() {
                                     <Grid container spacing={{xs:2, md:3}} columns={{xs:4,sm:8,md:12}}>
                                         <Grid size={{xs:4,sm:4,md:4}}>
                                             <Typography variant="body2" sx={{fontWeight: 500,textTransform: 'uppercase'}}>Employee ID</Typography>
-                                            <Typography sx={{fontWeight: 'bold',color: '#333333'}}>456789</Typography>
+                                            <Typography sx={{fontWeight: 'bold',color: '#333333'}}>{employee.empId}</Typography>
                                         </Grid>
                                         <Grid size={{xs:4,sm:4,md:4}}>
                                             <Typography variant="body2" sx={{fontWeight: 500,textTransform: 'uppercase'}}>Experience in Amdocs</Typography>

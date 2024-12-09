@@ -8,7 +8,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
-function ForgotPassword({ open, handleClose }) {
+function ForgotPassword({ open, handleClose,mail,setMail }) {
+
   return (
     <Dialog
       open={open}
@@ -39,6 +40,8 @@ function ForgotPassword({ open, handleClose }) {
           label="Email address"
           placeholder="Email address"
           type="email"
+          value={mail}
+          onChange={(e) => setMail(e.target.value)}
           fullWidth
         />
       </DialogContent>
