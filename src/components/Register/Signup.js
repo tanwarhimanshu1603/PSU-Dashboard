@@ -20,27 +20,228 @@ import BasicInfo from './signup-components/BasicInfo';
 import TechDetails from './signup-components/TechDetails';
 import AdditionalDetails from './signup-components/AdditionalDetails';
 import Content from '../Login/sign-in-side/Content';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { useState,useEffect } from 'react';
 
 const steps = ['Basic Information', 'Technical Details', 'Additional Information'];
-function getStepContent(step) {
+function getStepContent(step,propsCombined) {
   switch (step) {
     case 0:
-      return <BasicInfo />;
+      return <BasicInfo props={propsCombined[step]} />;
     case 1:
-      return <TechDetails/>;
+      return <TechDetails props={propsCombined[step]}/>;
     case 2:
-      return <AdditionalDetails />;
+      return <AdditionalDetails props={propsCombined[step]}/>;
     default:
       throw new Error('Unknown step');
   }
 }
 export default function Signup(props) {
   const [activeStep, setActiveStep] = React.useState(0);
-  const navigate = useNavigate();
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
+  const [empEmail,setEmpEmail] = useState("");
+  const [empPassword,setEmpPassword] = useState("");
+  const [empId,setEmpId] = useState("");
+  const [empName,setEmpName] = useState('');
+  const [supervisorName,setSupervisorName] = useState('')
+  const [currentAccount,setCurrentAccount] = useState();
+  const [currentDomain,setCurrentDomain] = useState();
+  const [amdocsExperience,setAmdocsExperience]=useState(null);
+  const [totalExperience,setTotalExperience]=useState(null);
+  const [amdocsJourney, setAmdocsJourney] = useState(null);
+  const [functionalKnowledge, setFunctionalKnowledge] = useState([]);
+  const [primaryTechSkill, setPrimaryTechSkill] = useState([]);
+  const [primaryProductSubdomain, setPrimaryProductSubdomain] = useState([]);
+  const [secondaryTechSkill, setSecondaryTechSkill] = useState([]);
+  const [secondaryProduct, setSecondaryProduct] = useState(null);
+  const [devOpsKnowledge, setDevOpsKnowledge] = useState(null);
+  const [engagementActivityContribution, setEngagementActivityContribution] = useState(null);
+  const [presentationSkills, setPresentationSkills] = useState(0);
+  const [hobbiesSports, setHobbiesSports] = useState(null);
+  const [additionalInfo, setAdditionalInfo] = useState(null);
+  const [approved, setApproved] = useState(false);
+  
+  // const [selectedDomain, setSelectedDomain] = useState('');
+  
+  const [mentoringAbility, setMentoringAbility] = useState(null);
+  const [contributedToDesign, setContributedToDesign] = useState(null);
+  const [explorationInterest, setExplorationInterest] = useState(null);
+  const [skillOptions,setSkillOptions] = useState([]);
+  const [domainList,setDomainList] = useState([]);
+  const [emailError, setEmailError] = useState(false);
+  const [emailErrorMessage, setEmailErrorMessage] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
+  
+  const basicInfoProps = {
+    empEmail,setEmpEmail,empId,setEmpId,empPassword,setEmpPassword
+  }
+  const techDetailsProps = {
+    empName,setEmpName,supervisorName,setSupervisorName,currentAccount,setCurrentAccount,functionalKnowledge, setFunctionalKnowledge,
+    primaryTechSkill,setPrimaryTechSkill,secondaryTechSkill,setSecondaryTechSkill,amdocsExperience,setAmdocsExperience,
+    totalExperience,setTotalExperience,amdocsJourney,setAmdocsJourney,skillOptions,domainList
+  }
+  const additionalInfoProps = {
+    presentationSkills,setPresentationSkills,hobbiesSports,setHobbiesSports,mentoringAbility,setMentoringAbility,
+    contributedToDesign,setContributedToDesign,explorationInterest,setExplorationInterest,engagementActivityContribution,setEngagementActivityContribution
+  }
+  const propsCombined = [basicInfoProps,techDetailsProps,additionalInfoProps]
+
+  const navigate = useNavigate()
+  const hashText = async (text) => {
+    const encoder = new TextEncoder(); // Converts the string to a Uint8Array
+    const data = encoder.encode(text); // Encode the text
+  
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data); // Compute the hash
+    const hashArray = Array.from(new Uint8Array(hashBuffer)); // Convert buffer to byte array
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toString(); // Convert bytes to hex
+    return hashHex; // Return the hash as a hex string
   };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const bodyToSend = {
+      empEmail,
+      empPassword,
+      empId,
+      empName,
+      supervisorName,
+      amdocsExperience,
+      totalExperience,
+      amdocsJourney,
+      functionalKnowledge,
+      primaryTechSkill,
+      primaryProductSubdomain,
+      secondaryTechSkill,
+      secondaryProduct,
+      devOpsKnowledge,
+      mentoringAbility,
+      explorationInterest,
+      contributedToDesign,
+      engagementActivityContribution,
+      presentationSkills,
+      hobbiesSports,
+      additionalInfo,
+      approved
+    }
+    console.log(bodyToSend)
+    const hashedPassword = await hashText(empPassword);
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/employee/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          empEmail,
+          empPassword:hashedPassword,
+          empId,
+          empName,
+          supervisorName,
+          amdocsExperience,
+          totalExperience,
+          amdocsJourney,
+          functionalKnowledge,
+          primaryTechSkill,
+          primaryProductSubdomain,
+          secondaryTechSkill,
+          secondaryProduct,
+          devOpsKnowledge,
+          mentoringAbility,
+          explorationInterest,
+          contributedToDesign,
+          engagementActivityContribution,
+          presentationSkills,
+          hobbiesSports,
+          additionalInfo,
+          approved
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to register employee. Please check the input fields.");
+      }
+      // const empToken = await response.text();
+      // localStorage.setItem("empToken",empToken);
+      // localStorage.setItem("empId", empId);
+      // localStorage.setItem("isLoggedIn", true);
+      console.log("Register",response)
+      
+      handleNext();
+    } catch (err) {
+      console.log("error aagya")
+    }
+};
+const getAllSkills = async()=>{
+  try {
+    // First API call to admin login
+    const skillResponse = await fetch('http://localhost:8080/api/v1/employee/getSkills', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    const data = JSON.parse(await skillResponse.text());
+    setSkillOptions(data)
+    }
+    catch(error){
+
+    }
+}
+const getAllDomains = async()=>{
+  try {
+    // First API call to admin login
+    const domainResponse = await fetch('http://localhost:8080/api/v1/employee/getDomain', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    const data = JSON.parse(await domainResponse.text());
+    setDomainList(data)
+    }
+    catch(error){
+
+    }
+}
+useEffect(()=>{
+  getAllSkills();
+  getAllDomains()
+},[])
+  // const handleNext = () => {
+  //   setActiveStep(activeStep + 1);
+  // };
+
+  const handleNext = () => {
+    let isValid = true;
+  
+    // Validation logic based on the active step
+    if (activeStep === 0) {
+      if (!empEmail || !empId || !empPassword) {
+        isValid = false;
+        alert("Please fill in all the fields in Basic Information before proceeding.");
+      }
+    } else if (activeStep === 1) {
+      if (
+        !empName ||
+        !supervisorName ||
+        !currentAccount ||
+        !functionalKnowledge ||
+        !primaryTechSkill ||
+        !secondaryTechSkill ||
+        !amdocsExperience ||
+        !totalExperience ||
+        !amdocsJourney
+      ) {
+        isValid = false;
+        alert("Please fill in all the fields in Technical Details before proceeding.");
+      }
+    }
+  
+    // Move to the next step only if the validation passes
+    if (isValid) {
+      setActiveStep(activeStep + 1);
+    }
+  };
+  
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
@@ -186,7 +387,7 @@ export default function Signup(props) {
               </Stack>
             ) : (
               <React.Fragment>
-                {getStepContent(activeStep)}
+                {getStepContent(activeStep,propsCombined)}
                 <Box
                   sx={[
                     {
@@ -228,7 +429,7 @@ export default function Signup(props) {
                   <Button
                     variant="contained"
                     endIcon={<ChevronRightRoundedIcon />}
-                    onClick={handleNext}
+                    onClick={activeStep===steps.length-1? handleSubmit : handleNext}
                     sx={{ width: { xs: '100%', sm: 'fit-content' } }}
                   >
                     {activeStep === steps.length - 1 ? 'Send for approval' : 'Next'}

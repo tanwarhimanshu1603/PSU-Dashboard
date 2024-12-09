@@ -14,20 +14,23 @@ const FormGrid = styled(Grid)(() => ({
   flexDirection: 'column',
 }));
 
-export default function AdditionalDetails() {
-  const [presentationSkill,setPresentationSkill]= useState(null);
-  const [hobby,setHobby] = useState(null);
-  const [mentoringAbility, setMentoringAbility] = useState(null);
-  const [contributedToDesign, setContributedToDesign] = useState(null);
-  const [explorationInterest, setExplorationInterest] = useState(null);
-  const [engagementActivity, setEngagementActivity] = useState(null);
-
+export default function AdditionalDetails({props}) {
+  // const [presentationSkill,setPresentationSkill]= useState(null);
+  // const [hobby,setHobby] = useState(null);
+  // const [mentoringAbility, setMentoringAbility] = useState(null);
+  // const [contributedToDesign, setContributedToDesign] = useState(null);
+  // const [explorationInterest, setExplorationInterest] = useState(null);
+  // const [engagementActivity, setEngagementActivity] = useState(null);
+ const {
+  presentationSkills,setPresentationSkills,hobbiesSports,setHobbiesSports,mentoringAbility,setMentoringAbility,
+  contributedToDesign,setContributedToDesign,explorationInterest,setExplorationInterest,engagementActivityContribution,setEngagementActivityContribution
+} = props
   const handlePresentationSkillChange = (event) => {
-    setPresentationSkill(event.target.value);
+    setPresentationSkills(event.target.value);
   };
 
   const handleHobbyChange = (event) => {
-    setHobby(event.target.value);
+    setHobbiesSports(event.target.value);
   };
 
   const handleMentoringChange = (event) => {
@@ -43,7 +46,7 @@ export default function AdditionalDetails() {
   };
 
   const handleEngagementActivityChange = (event) => {
-    setEngagementActivity(event.target.value);
+    setEngagementActivityContribution(event.target.value);
   };
 
   return (
@@ -58,8 +61,8 @@ export default function AdditionalDetails() {
           name="presentation-skill"
           type="number"
           placeholder="4"
-          value={presentationSkill}
-          onChange={setPresentationSkill}
+          value={presentationSkills}
+          onChange={handlePresentationSkillChange}
           // required
           size="small"
         />
@@ -75,8 +78,8 @@ export default function AdditionalDetails() {
           name="hobby"
           type="text"
           size="small"
-          value={hobby}
-          onChange={setHobby}
+          value={hobbiesSports}
+          onChange={handleHobbyChange}
         />
       </FormGrid>
 
@@ -92,8 +95,8 @@ export default function AdditionalDetails() {
           onChange={handleMentoringChange}
           row
         >
-          <FormControlLabel value="true" control={<Radio />} label="Yes" />
-          <FormControlLabel value="false" control={<Radio />} label="No" />
+          <FormControlLabel value={true} control={<Radio />} label="Yes" />
+          <FormControlLabel value={false} control={<Radio />} label="No" />
         </RadioGroup>
       </Grid>
 
@@ -109,8 +112,8 @@ export default function AdditionalDetails() {
           onChange={handleContributedToDesignChange}
           row
         >
-          <FormControlLabel value="true" control={<Radio />} label="Yes" />
-          <FormControlLabel value="false" control={<Radio />} label="No" />
+          <FormControlLabel value={true} control={<Radio />} label="Yes" />
+          <FormControlLabel value={false} control={<Radio />} label="No" />
         </RadioGroup>
       </Grid>
 
@@ -126,8 +129,8 @@ export default function AdditionalDetails() {
           onChange={handleExplorationInterestChange}
           row
         >
-          <FormControlLabel value="true" control={<Radio />} label="Yes" />
-          <FormControlLabel value="false" control={<Radio />} label="No" />
+          <FormControlLabel value={true} control={<Radio />} label="Yes" />
+          <FormControlLabel value={false} control={<Radio />} label="No" />
         </RadioGroup>
       </Grid>
 
@@ -139,12 +142,12 @@ export default function AdditionalDetails() {
         <RadioGroup
           id="engagement-activity"
           name="engagement-activity"
-          value={engagementActivity}
+          value={engagementActivityContribution}
           onChange={handleEngagementActivityChange}
           row
         >
-          <FormControlLabel value="yes" control={<Radio />} label="Yes" />
-          <FormControlLabel value="no" control={<Radio />} label="No" />
+          <FormControlLabel value={true} control={<Radio />} label="Yes" />
+          <FormControlLabel value={false} control={<Radio />} label="No" />
         </RadioGroup>
       </Grid>
     </Grid>

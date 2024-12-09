@@ -9,9 +9,9 @@ import FilterDialog from "../../../../utils/FilterDialog";
 import Badge from "@mui/material/Badge";
 import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-const Approvaltable = () => {
+const Approvaltable = ({requestCount,setRequestCount}) => {
     const [rows,setRows] = useState([]);
-    const [requestCount,setRequestCount] = useState(0);
+    // const [requestCount,setRequestCount] = useState(0);
     const [openErrorToast,setOpenErrorToast] = useState(false);
     const [openSuccessToast,setOpenSuccessToast] = useState(false);
     const [approveDialogOpen, setApproveDialogOpen] = useState(false); // State for dialog visibility
@@ -88,9 +88,12 @@ const Approvaltable = () => {
             body: JSON.stringify(employee),
           });
           if (response.ok) {
-            setRows(rows.filter((item) => item.empId !== employeeId));
-            setRequestCount(rows.length)
-            setSuccessMessage("Rejected Successfully!!")
+            const updatedRows = rows.filter((item) => item.empId !== employeeId);
+
+            // Update state based on the updated rows
+            setRows(updatedRows);
+            setRequestCount(updatedRows.length); // Use the updated rows length
+            setSuccessMessage("Rejected Successfully!!");
             setOpenSuccessToast(true);
             return;
           }
@@ -170,7 +173,7 @@ const Approvaltable = () => {
           Approval Requests
           <Badge
             badgeContent={requestCount}
-            color="primary"
+            color="error"
             sx={{
               marginLeft: "18px", // Add some spacing between "Employees" and badge
             }}

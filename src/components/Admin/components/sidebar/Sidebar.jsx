@@ -8,8 +8,9 @@ import { DarkModeContext } from "../../context/darkModeContext";
 import { useContext } from "react";
 import {Link as LinkScroll} from "react-scroll";
 import { useNavigate } from "react-router-dom";
+import { Badge } from "@mui/material";
 
-const Sidebar = () => {
+const Sidebar = ({requestCount}) => {
   const { dispatch } = useContext(DarkModeContext);
   const navigate = useNavigate();
 

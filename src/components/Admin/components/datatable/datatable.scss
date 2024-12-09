@@ -32,20 +32,16 @@
 
       .link{
         text-decoration: none;
-        color: green;
+        color: rgb(0, 23, 128);
         font-size: 16px;
         font-weight: 400;
-        border: 1px solid green;
+        border: 1px solid rgb(0, 23, 128);
         padding: 5px;
         border-radius: 5px;
         cursor: pointer;
       }
 
-      .link:hover{
-        background-color: rgb(49, 161, 49);
-        color: #ffffff;
-        transition: background-color 0.5s ease-in-out;
-      }
+     
     }
   }
 

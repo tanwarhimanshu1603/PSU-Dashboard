@@ -12,11 +12,10 @@ const FormGrid = styled(Grid)(() => ({
   flexDirection: 'column',
 }));
 
-export default function BasicInfo() {
-  const [email,setEmail] = useState(null);
-  const [password,setPassword] = useState(null);
+export default function BasicInfo({props}) {
+  const {empEmail,setEmpEmail,empId,setEmpId,empPassword,setEmpPassword} = props
   const [confirmPassword,setConfirmPassword] = useState(null);
-  const [empId,setEmpId] = useState(null);
+  // const [empId,setEmpId] = useState(null);
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
@@ -26,7 +25,7 @@ export default function BasicInfo() {
     
     let isValid = true;
 
-    if (!email || !/^[a-zA-Z0-9._%+-]+@amdocs\.com$/.test(email)) {
+    if (!empEmail || !/^[a-zA-Z0-9._%+-]+@amdocs\.com$/.test(empEmail)) {
       setEmailError(true);
       setEmailErrorMessage('Please enter a valid email address with the @amdocs.com domain.');
       isValid = false;
@@ -35,7 +34,7 @@ export default function BasicInfo() {
       setEmailErrorMessage('');
     }
 
-    if (!password || password.length < 6) {
+    if (!empPassword || empPassword.length < 6) {
       setPasswordError(true);
       setPasswordErrorMessage('Password must be at least 6 characters long.');
       isValid = false;
@@ -43,7 +42,7 @@ export default function BasicInfo() {
       setPasswordError(false);
       setPasswordErrorMessage('');
     }
-    if (password!=confirmPassword) {
+    if (empPassword!==confirmPassword) {
       setPasswordError(true);
       setPasswordErrorMessage('Password does not match.');
       isValid = false;
@@ -84,8 +83,8 @@ export default function BasicInfo() {
           autoComplete="email"
           required
           size="small"
-          value={email}
-          onChange={(e)=>setEmail(e.target.value)}
+          value={empEmail}
+          onChange={(e)=>setEmpEmail(e.target.value)}
         />
       </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }} >
@@ -99,8 +98,8 @@ export default function BasicInfo() {
           autoComplete="password"
           required
           size="small"
-          value={password}
-          onChange={(e)=>setPassword(e.target.value)}
+          value={empPassword}
+          onChange={(e)=>setEmpPassword(e.target.value)}
         />
       </FormGrid>
       
