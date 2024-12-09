@@ -14,73 +14,23 @@ const FormGrid = styled(Grid)(() => ({
   flexDirection: 'column',
 }));
 
-export default function TechDetails() {
-  const [selectedPrimarySkills, setSelectedPrimarySkills] = useState([]);
-  const [selectedSecondarySkills, setSelectedSecondarySkills] = useState([]);
-  const [selectedDomain, setSelectedDomain] = useState('');
-  const [skillOptions,setSkillOptions] = useState([]);
-  const [domainList,setDomainList] = useState([]);
+export default function TechDetails({props}) {
+  const {
+    empName,setEmpName,supervisorName,setSupervisorName,currentAccount,setCurrentAccount,functionalKnowledge, setFunctionalKnowledge,
+    primaryTechSkill,setPrimaryTechSkill,secondaryTechSkill,setSecondaryTechSkill,amdocsExperience,setAmdocsExperience,
+    totalExperience,setTotalExperience,amdocsJourney,setAmdocsJourney,skillOptions,domainList} = props
+    const [selectedDomain, setSelectedDomain] = useState('');
   const handleDomainChange = (event) => {
+    setFunctionalKnowledge([...functionalKnowledge,event.target.value])
     setSelectedDomain(event.target.value);
   };
-  // const skillOptions = [
-  //   "JavaScript",
-  //   "Python",
-  //   "Java",
-  //   "C++",
-  //   "Ruby",
-  //   "Go",
-  //   "React",
-  //   "Node.js",
-  //   "CSS",
-  //   "HTML",
-  //   "SQL",
-  //   // Add more skills as needed
-  // ];
-  const getAllSkills = async()=>{
-    try {
-      // First API call to admin login
-      const skillResponse = await fetch('http://localhost:8080/api/v1/employee/getSkills', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      const data = JSON.parse(await skillResponse.text());
-      setSkillOptions(data)
-      console.log(data)
-      }
-      catch(error){
-
-      }
-  }
-  const getAllDomains = async()=>{
-    try {
-      // First API call to admin login
-      const domainResponse = await fetch('http://localhost:8080/api/v1/employee/getDomain', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      const data = JSON.parse(await domainResponse.text());
-      setDomainList(data)
-      console.log(data)
-      }
-      catch(error){
-
-      }
-  }
-  useEffect(()=>{
-    getAllSkills();
-    getAllDomains()
-  },[])
+  
   const primarySkillsHandleChange = (event, newValue) => {
-    setSelectedPrimarySkills(newValue);
+    setPrimaryTechSkill(newValue);
   };
 
   const primarySkillsHandleDelete = (skillToDelete) => {
-    setSelectedPrimarySkills((prevSkills) => prevSkills.filter(skill => skill !== skillToDelete));
+    setPrimaryTechSkill(primaryTechSkill.filter(skill => skill !== skillToDelete));
   };
   return (
     <Grid container spacing={3} style={{ "textAlign": "left" }}>
@@ -96,6 +46,8 @@ export default function TechDetails() {
           autoComplete="name"
           required
           size="small"
+          value={empName}
+          onChange={(e)=>{setEmpName(e.target.value)}}
         />
       </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }} >
@@ -109,6 +61,8 @@ export default function TechDetails() {
           placeholder="Jane Doe"
           required
           size="small"
+          value={supervisorName}
+          onChange={(e)=>setSupervisorName(e.target.value)}
         />
       </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }} >
@@ -122,6 +76,8 @@ export default function TechDetails() {
           placeholder="TMO-Canada"
           required
           size="small"
+          value={currentAccount}
+          onChange={(e)=>setCurrentAccount(e.target.value)}
         />
       </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }}>
@@ -152,7 +108,7 @@ export default function TechDetails() {
         multiple
         id="primary-skills"
         options={skillOptions}
-        value={selectedPrimarySkills}
+        value={primaryTechSkill}
         onChange={primarySkillsHandleChange}
         disableCloseOnSelect
         renderInput={(params) => (
@@ -190,6 +146,8 @@ export default function TechDetails() {
           placeholder="ReactJS"
           required
           size="small"
+          value={secondaryTechSkill}
+          onChange={(e)=>setSecondaryTechSkill(e.target.value)}
         />
       </FormGrid>
       
@@ -204,6 +162,8 @@ export default function TechDetails() {
           placeholder="2.5"
           required
           size="small"
+          value={amdocsExperience}
+          onChange={(e)=>setAmdocsExperience(e.target.value)}
         />
       </FormGrid>
       <FormGrid size={{ xs: 6 }}>
@@ -217,6 +177,8 @@ export default function TechDetails() {
           placeholder="4.2"
           required
           size="small"
+          value={totalExperience}
+          onChange={(e)=>setTotalExperience(e.target.value)}
         />
       </FormGrid>
       <FormGrid size={{ xs: 12 }}>
@@ -229,7 +191,8 @@ export default function TechDetails() {
           type="text"
           required
           size="small"
-          
+          value={amdocsJourney}
+          onChange={(e)=>setAmdocsJourney(e.target.value)}
         />
       </FormGrid>
       {/* <FormGrid size={{ xs: 6 }}>
