@@ -32,10 +32,10 @@ const Home = () => {
       <div className="homeContainer">
         {/* <Navbar /> */}
         <div className="widgets">
-          <Widget type="user" />
-          <Widget type="order" />
-          <Widget type="earning" />
-          <Widget type="balance" />
+          <Widget type="employeeCount" />
+          <Widget type="C1-stats" />
+          <Widget type="D1-stats" />
+          <Widget type="RTB-stats" />
         </div>
         
         <div className="charts">
@@ -43,10 +43,7 @@ const Home = () => {
           <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
         </div>
         <div className="widgets">
-          <Widget type="user" />
-          <Widget type="order" />
-          <Widget type="earning" />
-          <Widget type="balance" />
+          
         </div>
         {/* <div name="approvals" className="listContainer">
           <div className="listTitle">Approval Requests</div>
