@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid2';
-import { Box, Avatar, Typography, Button, Chip, TextField, Accordion, AccordionSummary, AccordionDetails, capitalize, Alert, Autocomplete } from '@mui/material';
+import { Box, Avatar, Typography, Button, Chip, TextField, Accordion, AccordionSummary, AccordionDetails, capitalize, Autocomplete } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import theme from '../../../style/theme'
@@ -13,7 +13,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import EditOffIcon from '@mui/icons-material/EditOff';
 import InputBase from '@mui/material/InputBase';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import LinearProgress from '@mui/material/LinearProgress';
+import Stack from '@mui/material/Stack';
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
     ...theme.typography.body2,
@@ -37,6 +40,12 @@ export default function EmployeeDashboard() {
     const [primaryTechSkills, setPrimaryTechSkills] = useState([]);
     const [domainKnowledge,setDomainKnowledge] = useState([]);
     const [domainList,setDomainList] = useState([]);
+    const [openErrorToast,setOpenErrorToast] = useState(false);
+    const [openSuccessToast,setOpenSuccessToast] = useState(false);
+    const [openWarningToast,setOpenWarningToast] = useState(false);
+    const [errorMessage,setErrorMessage]=useState('');
+    const [successMessage,setSuccessMessage] = useState('');
+    const [warningMessage,setWarningMessage]= useState('')
 
     useEffect(() => {
         // Retrieve empId from localStorage
@@ -74,9 +83,13 @@ export default function EmployeeDashboard() {
             
             } else {
             setError("Failed to fetch employee details.");
+            setErrorMessage("Failed to fetch employee details.")
+            setOpenErrorToast(true);
             }
         } catch (err) {
             setError("An error occurred while fetching employee details.");
+            setErrorMessage("An error occurred while fetching employee details.")
+            setOpenErrorToast(true);
         } finally {
             setLoading(false); // Set loading to false after the request completes
         }
@@ -100,7 +113,7 @@ export default function EmployeeDashboard() {
         setSkillOptions(data)
         }
         catch(error){
-    
+
         }
     }
 
@@ -121,16 +134,24 @@ export default function EmployeeDashboard() {
     }
 
     const handleLogout = () => {
-        localStorage.removeItem("empId"); // Remove empId from localStorage
-        localStorage.removeItem("empToken"); // Remove login status
-        localStorage.removeItem("isLoggedIn");
-        navigate("/"); // Redirect to the homepage
-    };
+        setLoading(true);  // Start showing the progress bar
+        setTimeout(() => {
+            localStorage.removeItem("empId"); // Remove empId from localStorage
+            localStorage.removeItem("empToken"); // Remove login status
+            localStorage.removeItem("isLoggedIn");
+            navigate("/"); // Redirect to the homepage
+          setLoading(false); // Hide the progress bar after 3 seconds
+          // You can also add your logout logic here
+        }, 3000);
+      }
 
     const handleEdit = () => {
         console.log("Editing mode..");
         if(changesMade){
-            alert('Click on save to update details!!');
+            //alert('Click on save to update details!!');
+            setWarningMessage("Please click on save to update details!!")
+            setOpenWarningToast(true);
+            
         }else setUpdateMode((prev) => !prev);
     }
 
@@ -177,7 +198,7 @@ export default function EmployeeDashboard() {
     };
 
     const updateDetails = async () => {
-    
+        setLoading(true)
         try {
           const response = await fetch('http://localhost:8080/api/v1/employee/update', {
             method: 'PUT',
@@ -189,22 +210,29 @@ export default function EmployeeDashboard() {
           });
     
           if (!response.ok) {
+            setLoading(false)
             throw new Error('Failed to update employee. Please check the input fields.');
+          }
+          else{
+            setLoading(false);
           }
     
         //   alert('Employee updated successfully!');
         } catch (err) {
+            setLoading(false)
         }
       };
 
 
     const handleSaveDetails = () => {
         console.log("Saving Details");
-        if(!changesMade)return;
+        if(!changesMade) return;
         updateDetails();
         setTimeout(() => {
             setUpdateMode((prev) => !prev);
-            alert("changes saved successfully")
+            //alert("changes saved successfully")
+            setSuccessMessage("Changes saved successfully.")
+            setOpenSuccessToast(true);
         },1500);
         setChangesMade(false);
         
@@ -218,9 +246,35 @@ export default function EmployeeDashboard() {
             [name]: value
         });
     }
+    const handleCloseSuccessToast = (event, reason) => {
+        if (reason === "clickaway") {
+          return;
+        }
+      
+        setOpenSuccessToast(false);
+      };
+      const handleCloseErrorToast = (event, reason) => {
+        if (reason === "clickaway") {
+          return;
+        }
+      
+        setOpenErrorToast(false);
+      };
 
+      const handleCloseWarningToast = (event, reason) => {
+        if (reason === "clickaway") {
+          return;
+        }
+      
+        setOpenWarningToast(false);
+      };
+  
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>{loading && (
+            <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
+              <LinearProgress color="inherit" />
+            </Stack>
+          )} Loading...</div>;
     }
 
     if (error) {
@@ -229,6 +283,11 @@ export default function EmployeeDashboard() {
 
     return (
         <Box sx={{ p: 3, bgcolor: '#f7f8fc', minHeight: '100vh' }}>
+            {loading && (
+            <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
+              <LinearProgress color="inherit" />
+            </Stack>
+          )}
             <Box sx={{mb: 1,display: 'flex', justifyContent: 'space-between'}}>
                 <Button onClick={handleBack} variant="outlined" sx={{display: 'flex', gap:1}}>
                     <ArrowBackIcon />
@@ -615,6 +674,39 @@ export default function EmployeeDashboard() {
                     </Grid>
                 </Grid>
             </Grid>
+            <Snackbar open={openErrorToast} autoHideDuration={6000} onClose={handleCloseErrorToast}>
+        <Alert
+          onClose={handleCloseErrorToast}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {errorMessage}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar open={openSuccessToast} autoHideDuration={6000} 
+      onClose={handleCloseSuccessToast}
+      >
+        <Alert
+          onClose={handleCloseSuccessToast}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {successMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openWarningToast} autoHideDuration={6000} onClose={handleCloseWarningToast}>
+        <Alert
+          onClose={handleCloseWarningToast}
+          severity="warning"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {warningMessage}
+        </Alert>
+      </Snackbar>
         </Box>
     );
 }
