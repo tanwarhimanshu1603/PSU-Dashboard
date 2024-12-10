@@ -31,22 +31,30 @@ const Home = () => {
       <Sidebar />
       <div className="homeContainer">
         {/* <Navbar /> */}
+        <h1 style={{paddingLeft:"15px"}}>Domain</h1>
         <div className="widgets">
-          <Widget type="user" />
-          <Widget type="order" />
-          <Widget type="earning" />
-          <Widget type="balance" />
+          
+          
+          <Widget type="employeeCount" />
+          <Widget type="C1-stats" />
+          <Widget type="D1-stats" />
+          <Widget type="RTB-stats" />
+          <Widget type="LCEP-stats" />
         </div>
         
         <div className="charts">
           <Featured />
           <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} />
         </div>
+        <h1 style={{paddingLeft:"15px"}}>Skills</h1>
+          
         <div className="widgets">
-          <Widget type="user" />
-          <Widget type="order" />
-          <Widget type="earning" />
-          <Widget type="balance" />
+          
+          <Widget type="java-stats" />
+          <Widget type="python-stats" />
+          <Widget type="jenkins-stats" />
+          <Widget type="reactJs-stats" />
+          <Widget type="js-stats" />
         </div>
         {/* <div name="approvals" className="listContainer">
           <div className="listTitle">Approval Requests</div>

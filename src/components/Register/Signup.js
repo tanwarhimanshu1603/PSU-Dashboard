@@ -22,7 +22,8 @@ import AdditionalDetails from './signup-components/AdditionalDetails';
 import Content from '../Login/sign-in-side/Content';
 import { useNavigate } from "react-router-dom";
 import { useState,useEffect } from 'react';
-
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 const steps = ['Basic Information', 'Technical Details', 'Additional Information'];
 function getStepContent(step,propsCombined) {
   switch (step) {
@@ -38,8 +39,10 @@ function getStepContent(step,propsCombined) {
 }
 export default function Signup(props) {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [empImage,setEmpImage] = useState("https://static.vecteezy.com/system/resources/previews/024/983/914/non_2x/simple-user-default-icon-free-png.png")
   const [empEmail,setEmpEmail] = useState("");
   const [empPassword,setEmpPassword] = useState("");
+  const [confirmPassword,setConfirmPassword] = useState(null);
   const [empId,setEmpId] = useState("");
   const [empName,setEmpName] = useState('');
   const [supervisorName,setSupervisorName] = useState('')
@@ -59,9 +62,8 @@ export default function Signup(props) {
   const [hobbiesSports, setHobbiesSports] = useState(null);
   const [additionalInfo, setAdditionalInfo] = useState(null);
   const [approved, setApproved] = useState(false);
-  
-  // const [selectedDomain, setSelectedDomain] = useState('');
-  
+  const [openErrorToast,setOpenErrorToast] = useState(false);
+  const [errorMessage,setErrorMessage]=useState('');
   const [mentoringAbility, setMentoringAbility] = useState(null);
   const [contributedToDesign, setContributedToDesign] = useState(null);
   const [explorationInterest, setExplorationInterest] = useState(null);
@@ -73,7 +75,7 @@ export default function Signup(props) {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   
   const basicInfoProps = {
-    empEmail,setEmpEmail,empId,setEmpId,empPassword,setEmpPassword
+    empImage,setEmpImage,empEmail,setEmpEmail,empId,setEmpId,empPassword,setEmpPassword,confirmPassword,setConfirmPassword
   }
   const techDetailsProps = {
     empName,setEmpName,supervisorName,setSupervisorName,currentAccount,setCurrentAccount,functionalKnowledge, setFunctionalKnowledge,
@@ -98,31 +100,6 @@ export default function Signup(props) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const bodyToSend = {
-      empEmail,
-      empPassword,
-      empId,
-      empName,
-      supervisorName,
-      amdocsExperience,
-      totalExperience,
-      amdocsJourney,
-      functionalKnowledge,
-      primaryTechSkill,
-      primaryProductSubdomain,
-      secondaryTechSkill,
-      secondaryProduct,
-      devOpsKnowledge,
-      mentoringAbility,
-      explorationInterest,
-      contributedToDesign,
-      engagementActivityContribution,
-      presentationSkills,
-      hobbiesSports,
-      additionalInfo,
-      approved
-    }
-    console.log(bodyToSend)
     const hashedPassword = await hashText(empPassword);
     try {
       const response = await fetch("http://localhost:8080/api/v1/employee/register", {
@@ -135,6 +112,7 @@ export default function Signup(props) {
           empPassword:hashedPassword,
           empId,
           empName,
+          empImage,
           supervisorName,
           amdocsExperience,
           totalExperience,
@@ -159,12 +137,6 @@ export default function Signup(props) {
       if (!response.ok) {
         throw new Error("Failed to register employee. Please check the input fields.");
       }
-      // const empToken = await response.text();
-      // localStorage.setItem("empToken",empToken);
-      // localStorage.setItem("empId", empId);
-      // localStorage.setItem("isLoggedIn", true);
-      console.log("Register",response)
-      
       handleNext();
     } catch (err) {
       console.log("error aagya")
@@ -209,16 +181,49 @@ useEffect(()=>{
   // const handleNext = () => {
   //   setActiveStep(activeStep + 1);
   // };
+  const handleCloseErrorToast = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+  
+    setOpenErrorToast(false);
+  };
+  
+  const validateInputs = () => {
+    
+    let isValid = true;
 
+    if (!empEmail || !/^[a-zA-Z0-9._%+-]+@amdocs\.com$/.test(empEmail)) {
+      setErrorMessage('Please enter a valid email address with the @amdocs.com domain.')
+      setOpenErrorToast(true);
+      isValid = false;
+    }
+    if (!empPassword || empPassword.length < 6) {
+      setErrorMessage("Password must be at least 6 characters long.")
+      setOpenErrorToast(true);
+      isValid = false;
+    } 
+    if (empPassword!==confirmPassword) {
+      setErrorMessage("Password does not match")
+      setOpenErrorToast(true);
+      isValid = false;
+    }
+    return isValid;
+  };
   const handleNext = () => {
     let isValid = true;
   
     // Validation logic based on the active step
     if (activeStep === 0) {
-      if (!empEmail || !empId || !empPassword) {
+      
+      if (!empEmail || !empId || !empPassword || !confirmPassword) {
         isValid = false;
-        alert("Please fill in all the fields in Basic Information before proceeding.");
+        setErrorMessage("Please fill in all required field before proceeding.")
+        setOpenErrorToast(true);
+        
       }
+      else if(!validateInputs()) return;
+      
     } else if (activeStep === 1) {
       if (
         !empName ||
@@ -232,7 +237,9 @@ useEffect(()=>{
         !amdocsJourney
       ) {
         isValid = false;
-        alert("Please fill in all the fields in Technical Details before proceeding.");
+        setErrorMessage("Please fill in all required field before proceeding.")
+        setOpenErrorToast(true);
+        
       }
     }
   
@@ -341,7 +348,16 @@ useEffect(()=>{
               </Stepper>
             </Box>
           </Box>
-        
+          <Snackbar open={openErrorToast} autoHideDuration={5000} onClose={handleCloseErrorToast}>
+        <Alert
+          onClose={handleCloseErrorToast}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {errorMessage}
+        </Alert>
+      </Snackbar>
           <Box
             sx={{
               display: 'flex',
