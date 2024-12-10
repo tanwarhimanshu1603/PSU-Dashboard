@@ -6,17 +6,96 @@ import FormLabel from '@mui/material/FormLabel';
 import Grid from '@mui/material/Grid2';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { styled } from '@mui/system';
-
+import Avatar from '@mui/material/Avatar';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import { IconButton } from "@mui/material";
+import {Box }from '@mui/material';
 const FormGrid = styled(Grid)(() => ({
   display: 'flex',
   flexDirection: 'column',
 }));
 
-export default function BasicInfo({props}) {
-  const {empEmail,setEmpEmail,empId,setEmpId,empPassword,setEmpPassword,confirmPassword,setConfirmPassword} = props
+export default function BasicInfo({ props }) {
+  const {empImage,setEmpImage, empEmail, setEmpEmail, empId, setEmpId, empPassword, setEmpPassword, confirmPassword, setConfirmPassword } = props
+  //const [empId, setEmpId] = useState(""); // Employee ID state
+ 
+  // Handle file upload
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      const uploadedUrl = await uploadToCloudinary(file);
+      setEmpImage(uploadedUrl); // Store the Cloudinary URL
+    } catch (err) {
+      console.error("Image upload failed:", err);
+    }
+  };
+
+  const uploadToCloudinary = async (file) => {
+    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dczif4pj4/image/upload";
+    const CLOUDINARY_UPLOAD_PRESET = "coe_dashboard";
   
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+  
+    try {
+      // Make the POST request with fetch
+      const response = await fetch(CLOUDINARY_URL, {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to upload image to Cloudinary");
+      }
+  
+      const data = await response.json(); // Parse JSON response
+      console.log("Uploaded Image URL:", data.secure_url);
+  
+      return data.secure_url; // Return the uploaded image URL
+    } catch (error) {
+      console.error("Error uploading to Cloudinary:", error);
+      throw error;
+    }
+  };
+  
+  const triggerFileInput = () => {
+    document.getElementById("imageUpload").click();
+  };
   return (
-    <Grid container spacing={3}  style={{"textAlign": "left"}}>
+    <Grid container spacing={3} style={{ "textAlign": "left" }}>
+      <Box sx={{ position: "relative", width: 150, height: 150,marginRight:25,marginLeft:25 }}>
+  <Avatar
+    alt="Remy Sharp"
+    src={empImage} // Uploaded image
+    sx={{ width: 150, height: 150 }}
+  />
+  {/* IconButton as an overlay */}
+  <IconButton
+    color="primary"
+    onClick={triggerFileInput}
+    sx={{
+      position: "absolute",
+      bottom: 14,
+      right: 14,
+      zIndex: 2,
+      background: "white", // Optional: Add a white background for better visibility
+      borderRadius: "50%",
+    }}
+  >
+    <AddAPhotoIcon />
+  </IconButton>
+  <input
+    id="imageUpload"
+    type="file"
+    style={{ display: "none" }} // Hide input
+    accept="image/*" // Accept only images
+    onChange={handleImageUpload}
+  />
+</Box>
+
       <FormGrid size={{ xs: 6 }}>
         <FormLabel htmlFor="empId" required>
           Employee Id
@@ -30,7 +109,7 @@ export default function BasicInfo({props}) {
           required
           size="small"
           value={empId}
-          onChange={(e)=>setEmpId(e.target.value)}
+          onChange={(e) => setEmpId(e.target.value)}
         />
       </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }}>
@@ -46,7 +125,7 @@ export default function BasicInfo({props}) {
           required
           size="small"
           value={empEmail}
-          onChange={(e)=>setEmpEmail(e.target.value)}
+          onChange={(e) => setEmpEmail(e.target.value)}
         />
       </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }} >
@@ -61,11 +140,11 @@ export default function BasicInfo({props}) {
           required
           size="small"
           value={empPassword}
-          onChange={(e)=>setEmpPassword(e.target.value)}
+          onChange={(e) => setEmpPassword(e.target.value)}
         />
       </FormGrid>
-      
-      
+
+
       <FormGrid size={{ xs: 12, md: 6 }} >
         <FormLabel htmlFor="password" required>
           Confirm Password
@@ -78,7 +157,7 @@ export default function BasicInfo({props}) {
           required
           size="small"
           value={confirmPassword}
-          onChange={(e)=>setConfirmPassword(e.target.value)}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
       </FormGrid>
       {/* <FormGrid size={{ xs: 12 }}>
@@ -163,7 +242,7 @@ export default function BasicInfo({props}) {
           size="small"
         />
       </FormGrid> */}
-      
+
     </Grid>
   );
 }

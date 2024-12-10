@@ -51,7 +51,7 @@ const Widget = ({ type }) => {
       data = {
         title: "D1",
         value:82,
-        link: "employees/D1",
+        link: "employees/?domain=D1",
         icon: (
           <GroupsIcon
             className="icon"
@@ -79,6 +79,104 @@ const Widget = ({ type }) => {
         ),
       };
       break;
+      case "LCEP-stats":
+        data = {
+          title: "LCEP",
+          value:44,
+          link: "employees/LCEP",
+          icon: (
+            <GroupsIcon
+              className="icon"
+              style={{
+              backgroundColor: "rgba(128, 0, 128, 0.2)",
+              color: "purple",
+              }}
+            />
+          ),
+        };
+        break;
+        case "java-stats":
+          data = {
+            title: "Java",
+            value:14,
+            link: "employees/?skill=Java",
+            icon: (
+              <GroupsIcon
+                className="icon"
+                style={{
+                backgroundColor: "rgba(128, 0, 128, 0.2)",
+                color: "purple",
+                }}
+              />
+            ),
+          };
+          break;
+          case "reactJs-stats":
+            data = {
+              title: "ReactJs",
+              value:21,
+              link: "employees/?skill=ReactJs",
+              icon: (
+                <GroupsIcon
+                  className="icon"
+                  style={{
+                  backgroundColor: "rgba(128, 0, 128, 0.2)",
+                  color: "purple",
+                  }}
+                />
+              ),
+            };
+            break;
+
+            case "python-stats":
+              data = {
+                title: "Python",
+                value:15,
+                link: "employees/?skill=Python",
+                icon: (
+                  <GroupsIcon
+                    className="icon"
+                    style={{
+                    backgroundColor: "rgba(128, 0, 128, 0.2)",
+                    color: "purple",
+                    }}
+                  />
+                ),
+              };
+              break;
+
+              case "jenkins-stats":
+                data = {
+                  title: "Jenkins",
+                  value:44,
+                  link: "employees/?skill=jenkins",
+                  icon: (
+                    <GroupsIcon
+                      className="icon"
+                      style={{
+                      backgroundColor: "rgba(128, 0, 128, 0.2)",
+                      color: "purple",
+                      }}
+                    />
+                  ),
+                };
+                break;
+                case "js-stats":
+                data = {
+                  title: "Javascript",
+                  value:25,
+                  link: "employees/?skill=javascript",
+                  icon: (
+                    <GroupsIcon
+                      className="icon"
+                      style={{
+                      backgroundColor: "rgba(128, 0, 128, 0.2)",
+                      color: "purple",
+                      }}
+                    />
+                  ),
+                };
+                break;
     default:
       break;
   }
@@ -90,7 +188,7 @@ const Widget = ({ type }) => {
         <span className="counter">
            {data.value}
         </span>
-        <Link to={data.link} style={{textDecoration:"none"}}>
+        <Link to={data.link} style={{textDecoration:"none",color:"gray"}}>
         <span className="link">See details</span>
         </Link>
       </div>

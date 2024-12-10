@@ -8,16 +8,16 @@ import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutl
 const Featured = () => {
   return (
     <div className="featured">
-      <div className="top">
-        <h1 className="title">Total Revenue</h1>
+      {/* <div className="top">
+        <h1 className="title">Total Employees</h1>
         <MoreVertIcon fontSize="small" />
-      </div>
+      </div> */}
       <div className="bottom">
-        <div className="featuredChart">
+        {/* <div className="featuredChart">
           <CircularProgressbar value={70} text={"70%"} strokeWidth={5} />
-        </div>
-        <p className="title">Total sales made today</p>
-        <p className="amount">$420</p>
+        </div> */}
+        <p className="title">Total Employees</p>
+        <p className="amount">652</p>
         <p className="desc">
           Previous transactions processing. Last payments may not be included.
         </p>

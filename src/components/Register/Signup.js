@@ -39,6 +39,7 @@ function getStepContent(step,propsCombined) {
 }
 export default function Signup(props) {
   const [activeStep, setActiveStep] = React.useState(0);
+  const [empImage,setEmpImage] = useState("https://static.vecteezy.com/system/resources/previews/024/983/914/non_2x/simple-user-default-icon-free-png.png")
   const [empEmail,setEmpEmail] = useState("");
   const [empPassword,setEmpPassword] = useState("");
   const [confirmPassword,setConfirmPassword] = useState(null);
@@ -74,7 +75,7 @@ export default function Signup(props) {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   
   const basicInfoProps = {
-    empEmail,setEmpEmail,empId,setEmpId,empPassword,setEmpPassword,confirmPassword,setConfirmPassword
+    empImage,setEmpImage,empEmail,setEmpEmail,empId,setEmpId,empPassword,setEmpPassword,confirmPassword,setConfirmPassword
   }
   const techDetailsProps = {
     empName,setEmpName,supervisorName,setSupervisorName,currentAccount,setCurrentAccount,functionalKnowledge, setFunctionalKnowledge,
@@ -111,6 +112,7 @@ export default function Signup(props) {
           empPassword:hashedPassword,
           empId,
           empName,
+          empImage,
           supervisorName,
           amdocsExperience,
           totalExperience,
