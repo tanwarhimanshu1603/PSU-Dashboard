@@ -13,46 +13,8 @@ const FormGrid = styled(Grid)(() => ({
 }));
 
 export default function BasicInfo({props}) {
-  const {empEmail,setEmpEmail,empId,setEmpId,empPassword,setEmpPassword} = props
-  const [confirmPassword,setConfirmPassword] = useState(null);
-  // const [empId,setEmpId] = useState(null);
-  const [emailError, setEmailError] = React.useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  const {empEmail,setEmpEmail,empId,setEmpId,empPassword,setEmpPassword,confirmPassword,setConfirmPassword} = props
   
-  const validateInputs = () => {
-    
-    let isValid = true;
-
-    if (!empEmail || !/^[a-zA-Z0-9._%+-]+@amdocs\.com$/.test(empEmail)) {
-      setEmailError(true);
-      setEmailErrorMessage('Please enter a valid email address with the @amdocs.com domain.');
-      isValid = false;
-    }else {
-      setEmailError(false);
-      setEmailErrorMessage('');
-    }
-
-    if (!empPassword || empPassword.length < 6) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password must be at least 6 characters long.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-    if (empPassword!==confirmPassword) {
-      setPasswordError(true);
-      setPasswordErrorMessage('Password does not match.');
-      isValid = false;
-    } else {
-      setPasswordError(false);
-      setPasswordErrorMessage('');
-    }
-
-    return isValid;
-  };
   return (
     <Grid container spacing={3}  style={{"textAlign": "left"}}>
       <FormGrid size={{ xs: 6 }}>

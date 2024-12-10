@@ -1,13 +1,10 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns, userRows ,approvalColumns } from "../../datatablesource";
-import { Link } from "react-router-dom";
+import {approvalColumns } from "../../datatablesource";
 import { useEffect, useState } from "react";
-import FilterListIcon from '@mui/icons-material/FilterList';
 import ConfirmDialog from "../../../../utils/ConfirmDialog";
-import FilterDialog from "../../../../utils/FilterDialog";
 import Badge from "@mui/material/Badge";
-import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 const Approvaltable = ({requestCount,setRequestCount}) => {
     const [rows,setRows] = useState([]);
@@ -171,13 +168,13 @@ const Approvaltable = ({requestCount,setRequestCount}) => {
 
         <div className="titleWithBadge">
           Approval Requests
-          <Badge
+          {/* <Badge
             badgeContent={requestCount}
             color="error"
             sx={{
-              marginLeft: "18px", // Add some spacing between "Employees" and badge
+              marginLeft: "18px", 
             }}
-          />
+          /> */}
         </div>
         
       </div>
@@ -209,9 +206,7 @@ const Approvaltable = ({requestCount,setRequestCount}) => {
         message={"Are you sure you want to delete employee record?"}
         buttonText={"Delete"}
       /> */}
-      <Snackbar open={openErrorToast} autoHideDuration={6000} 
-      onClose={handleCloseErrorToast}
-      >
+      <Snackbar open={openErrorToast} autoHideDuration={6000} onClose={handleCloseErrorToast}>
         <Alert
           onClose={handleCloseErrorToast}
           severity="error"
