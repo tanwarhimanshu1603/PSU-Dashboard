@@ -113,6 +113,7 @@ export default function Signup(props) {
           empId,
           empName,
           empImage,
+          currentAccount,
           supervisorName,
           amdocsExperience,
           totalExperience,

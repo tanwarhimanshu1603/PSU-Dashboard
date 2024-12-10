@@ -24,6 +24,13 @@ export default function TechDetails({props}) {
     setFunctionalKnowledge([...functionalKnowledge,event.target.value])
     setSelectedDomain(event.target.value);
   };
+  const functionalKnowledgeHandleChange = (event, newValue) => {
+    setFunctionalKnowledge(newValue);
+  };
+
+  const functionalKnowledgeHandleDelete = (domainToDelete) => {
+    setFunctionalKnowledge(functionalKnowledge.filter(domain => domain !== domainToDelete));
+  };
   
   const primarySkillsHandleChange = (event, newValue) => {
     setPrimaryTechSkill(newValue);
@@ -31,6 +38,14 @@ export default function TechDetails({props}) {
 
   const primarySkillsHandleDelete = (skillToDelete) => {
     setPrimaryTechSkill(primaryTechSkill.filter(skill => skill !== skillToDelete));
+  };
+
+  const secondarySkillsHandleChange = (event, newValue) => {
+    setSecondaryTechSkill(newValue);
+  };
+
+  const secondarySkillsHandleDelete = (skillToDelete) => {
+    setSecondaryTechSkill(secondaryTechSkill.filter(skill => skill !== skillToDelete));
   };
   return (
     <Grid container spacing={3} style={{ "textAlign": "left" }}>
@@ -80,7 +95,7 @@ export default function TechDetails({props}) {
           onChange={(e)=>setCurrentAccount(e.target.value)}
         />
       </FormGrid>
-      <FormGrid size={{ xs: 12, md: 6 }}>
+      {/* <FormGrid size={{ xs: 12, md: 6 }}>
       <FormLabel htmlFor="domain" required>
         Current Domain
       </FormLabel>
@@ -99,6 +114,41 @@ export default function TechDetails({props}) {
           
         </Select>
       </FormControl>
+    </FormGrid> */}
+    <FormGrid size={{ xs: 12 }}>
+      <FormLabel htmlFor="functional-knowledge" required>
+        Functional Knowledge
+      </FormLabel>
+      <Autocomplete
+        multiple
+        id="functional-knowledge"
+        options={domainList}
+        value={functionalKnowledge}
+        onChange={functionalKnowledgeHandleChange}
+        disableCloseOnSelect
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            // label="Select Skills"
+            placeholder="Search & select domains"
+            required
+            size="small"
+            variant="outlined"
+          />
+        )}
+        renderTags={(value, getTagProps) =>
+          value.map((option, index) => (
+            <Chip
+              label={option}
+              {...getTagProps({ index })}
+              onDelete={() => functionalKnowledgeHandleDelete(option)}
+              key={index}
+            />
+          ))
+        }
+        freeSolo
+        getOptionLabel={(option) => option}
+      />
     </FormGrid>
       <FormGrid size={{ xs: 12 }}>
       <FormLabel htmlFor="primary-skills" required>
@@ -135,7 +185,42 @@ export default function TechDetails({props}) {
         getOptionLabel={(option) => option}
       />
     </FormGrid>
-    <FormGrid size={{ xs: 12, md: 12 }} >
+    <FormGrid size={{ xs: 12 }}>
+      <FormLabel htmlFor="primary-skills" required>
+        Secondary Tech Skills
+      </FormLabel>
+      <Autocomplete
+        multiple
+        id="secondary-skills"
+        options={skillOptions}
+        value={secondaryTechSkill}
+        onChange={secondarySkillsHandleChange}
+        disableCloseOnSelect
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            // label="Select Skills"
+            placeholder="Search & select skills"
+            required
+            size="small"
+            variant="outlined"
+          />
+        )}
+        renderTags={(value, getTagProps) =>
+          value.map((option, index) => (
+            <Chip
+              label={option}
+              {...getTagProps({ index })}
+              onDelete={() => secondarySkillsHandleDelete(option)}
+              key={index}
+            />
+          ))
+        }
+        freeSolo
+        getOptionLabel={(option) => option}
+      />
+    </FormGrid>
+    {/* <FormGrid size={{ xs: 12, md: 12 }} >
         <FormLabel htmlFor="secondary-skill" required>
           Secondary Skills
         </FormLabel>
@@ -149,7 +234,7 @@ export default function TechDetails({props}) {
           value={secondaryTechSkill}
           onChange={(e)=>setSecondaryTechSkill(e.target.value)}
         />
-      </FormGrid>
+      </FormGrid> */}
       
       <FormGrid size={{ xs: 6 }}>
         <FormLabel htmlFor="amdocs-experience" required>
