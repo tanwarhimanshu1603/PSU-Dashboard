@@ -68,8 +68,8 @@ export default function EmployeeDashboard() {
             
             setEmployee(data); // Set the employee data
             setPrimaryTechSkills(data.primaryTechSkill);
-            setDomainKnowledge(data.primaryProductSubdomain);
-            console.log(data.primaryProductSubdomain);
+            setDomainKnowledge(data.functionalKnowledge);
+            // console.log(data.functionalKnowledge);
             
             
             } else {
@@ -152,7 +152,7 @@ export default function EmployeeDashboard() {
         setChangesMade(true);
         setEmployee({
             ...employee,
-            primaryProductSubdomain: newValue
+            functionalKnowledge: newValue
         });
     };
 
@@ -172,13 +172,36 @@ export default function EmployeeDashboard() {
         setChangesMade(true);
         setEmployee({
             ...employee,
-            primaryProductSubdomain: updatedDomain
+            functionalKnowledge: updatedDomain
         });
     };
 
-    const handleUpdateDetails = () => {
+    const updateDetails = async () => {
+    
+        try {
+          const response = await fetch('http://localhost:8080/api/v1/employee/update', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: localStorage.getItem('empToken'),
+            },
+            body: JSON.stringify(employee),
+          });
+    
+          if (!response.ok) {
+            throw new Error('Failed to update employee. Please check the input fields.');
+          }
+    
+        //   alert('Employee updated successfully!');
+        } catch (err) {
+        }
+      };
+
+
+    const handleSaveDetails = () => {
         console.log("Saving Details");
         if(!changesMade)return;
+        updateDetails();
         setTimeout(() => {
             setUpdateMode((prev) => !prev);
             alert("changes saved successfully")
@@ -211,7 +234,7 @@ export default function EmployeeDashboard() {
                     <ArrowBackIcon />
                     Back
                 </Button>
-                <Button onClick={handleUpdateDetails} variant="contained" disabled={!changesMade}>Save</Button>
+                <Button onClick={handleSaveDetails} variant="contained" disabled={!changesMade}>Save</Button>
             </Box>
             <Grid container spacing={2}>
                 <Grid size={{ xs: 6, md: 4 }}>
@@ -339,7 +362,7 @@ export default function EmployeeDashboard() {
                                     freeSolo
                                     getOptionLabel={(option) => option}
                                 /> : <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2,mt: 1 }}>
-                                {employee.primaryProductSubdomain.map((skill) => (
+                                {employee.functionalKnowledge.map((skill) => (
                                     <Chip key={skill} label={skill} color="primary" variant="outlined" />
                                 ))}
                             </Box>

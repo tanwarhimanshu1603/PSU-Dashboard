@@ -55,12 +55,13 @@ export default function SignInCard() {
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toString(); // Convert bytes to hex
     return hashHex; // Return the hash as a hex string
   };
-  
+
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleForgotPassword = async ()=>{
+    setOpen(false);
     try {
       // First API call to forgot password
       const response = await fetch('http://localhost:8080/api/v1/employee/forgot-password', {
@@ -81,7 +82,6 @@ export default function SignInCard() {
 
   const handleClose = () => {
     setOpen(false);
-    handleForgotPassword();
   };
 
   const handleSubmit = async (e) => {
@@ -235,7 +235,7 @@ export default function SignInCard() {
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
         /> */}
-        <ForgotPassword open={open} handleClose={handleClose} mail={forgotPasswordMail} setMail={setForgotPasswordMail} />
+        <ForgotPassword open={open} handleClose={handleClose} mail={forgotPasswordMail} setMail={setForgotPasswordMail} handleForgotPassword={handleForgotPassword} />
         <Button type="submit" fullWidth variant="contained" onClick={handleSubmit}>
              {loading ? 'Signing in...' : 'Sign in'}
         </Button>

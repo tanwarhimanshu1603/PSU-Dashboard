@@ -168,13 +168,13 @@ const Approvaltable = ({requestCount,setRequestCount}) => {
 
         <div className="titleWithBadge">
           Approval Requests
-          {/* <Badge
+          <Badge
             badgeContent={requestCount}
             color="error"
             sx={{
               marginLeft: "18px", 
             }}
-          /> */}
+          />
         </div>
         
       </div>

@@ -8,7 +8,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import OutlinedInput from '@mui/material/OutlinedInput';
 
-function ForgotPassword({ open, handleClose,mail,setMail }) {
+function ForgotPassword({ open, handleClose,mail,setMail,handleForgotPassword }) {
 
   return (
     <Dialog
@@ -18,7 +18,7 @@ function ForgotPassword({ open, handleClose,mail,setMail }) {
         component: 'form',
         onSubmit: (event) => {
           event.preventDefault();
-          handleClose();
+          handleForgotPassword();
         },
         sx: { backgroundImage: 'none' },
       }}
