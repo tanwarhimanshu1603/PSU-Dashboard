@@ -58,7 +58,7 @@ export default function Signup(props) {
   const [secondaryProduct, setSecondaryProduct] = useState(null);
   const [devOpsKnowledge, setDevOpsKnowledge] = useState(null);
   const [engagementActivityContribution, setEngagementActivityContribution] = useState(null);
-  const [presentationSkills, setPresentationSkills] = useState(0);
+  const [presentationSkills, setPresentationSkills] = useState();
   const [hobbiesSports, setHobbiesSports] = useState(null);
   const [additionalInfo, setAdditionalInfo] = useState(null);
   const [approved, setApproved] = useState(false);
@@ -69,22 +69,19 @@ export default function Signup(props) {
   const [explorationInterest, setExplorationInterest] = useState(null);
   const [skillOptions,setSkillOptions] = useState([]);
   const [domainList,setDomainList] = useState([]);
-  const [emailError, setEmailError] = useState(false);
-  const [emailErrorMessage, setEmailErrorMessage] = useState('');
-  const [passwordError, setPasswordError] = useState(false);
-  const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
   
   const basicInfoProps = {
     empImage,setEmpImage,empEmail,setEmpEmail,empId,setEmpId,empPassword,setEmpPassword,confirmPassword,setConfirmPassword
   }
   const techDetailsProps = {
-    empName,setEmpName,supervisorName,setSupervisorName,currentAccount,setCurrentAccount,functionalKnowledge, setFunctionalKnowledge,
+    empName,setEmpName,supervisorName,setSupervisorName,currentAccount,setCurrentAccount,devOpsKnowledge,setDevOpsKnowledge,functionalKnowledge, setFunctionalKnowledge,
     primaryTechSkill,setPrimaryTechSkill,secondaryTechSkill,setSecondaryTechSkill,amdocsExperience,setAmdocsExperience,
     totalExperience,setTotalExperience,amdocsJourney,setAmdocsJourney,skillOptions,domainList
   }
   const additionalInfoProps = {
     presentationSkills,setPresentationSkills,hobbiesSports,setHobbiesSports,mentoringAbility,setMentoringAbility,
-    contributedToDesign,setContributedToDesign,explorationInterest,setExplorationInterest,engagementActivityContribution,setEngagementActivityContribution
+    contributedToDesign,setContributedToDesign,explorationInterest,setExplorationInterest,engagementActivityContribution,setEngagementActivityContribution,
+    additionalInfo,setAdditionalInfo
   }
   const propsCombined = [basicInfoProps,techDetailsProps,additionalInfoProps]
 
@@ -101,6 +98,32 @@ export default function Signup(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const hashedPassword = await hashText(empPassword);
+    console.log({
+      empEmail,
+      empPassword:hashedPassword,
+      empId,
+      empName,
+      empImage,
+      currentAccount,
+      supervisorName,
+      amdocsExperience,
+      totalExperience,
+      amdocsJourney,
+      functionalKnowledge,
+      primaryTechSkill,
+      primaryProductSubdomain,
+      secondaryTechSkill,
+      secondaryProduct,
+      devOpsKnowledge,
+      mentoringAbility,
+      explorationInterest,
+      contributedToDesign,
+      engagementActivityContribution,
+      presentationSkills,
+      hobbiesSports,
+      additionalInfo,
+      approved
+    })
     try {
       const response = await fetch("http://localhost:8080/api/v1/employee/register", {
         method: "POST",
@@ -140,7 +163,7 @@ export default function Signup(props) {
       }
       handleNext();
     } catch (err) {
-      console.log("error aagya")
+      console.log(err.message)
     }
 };
 const getAllSkills = async()=>{

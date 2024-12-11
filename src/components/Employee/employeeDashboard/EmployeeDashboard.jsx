@@ -325,10 +325,10 @@ export default function EmployeeDashboard() {
                                     inputProps={{ 'aria-label': 'role' }}
                                 /> */}
                             </Typography>
-                            <Typography variant="body2" color="text.secondary" sx={{textAlign: 'center',m:2}}>
+                            {/* <Typography variant="body2" color="text.secondary" sx={{textAlign: 'center',m:2}}>
                                 Full-stack product designer with hands-on experience in solving problems for clients across various domains. Skilled in communication, collaboration, and user-centered design.
                                 Full-stack product designer with hands-on experience in solving problems for clients across various domains. Skilled in communication, collaboration, and user-centered design.
-                            </Typography>
+                            </Typography> */}
 
                             {/* Skills Section */}
                             <Box sx={{m:2}}>

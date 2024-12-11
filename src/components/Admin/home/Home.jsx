@@ -41,6 +41,13 @@ const Home = ({requestCount}) => {
           <Widget type="RTB-stats" />
           <Widget type="LCEP-stats" />
         </Box>
+        <Box className="widgets"> 
+          <Widget type="employeeCount" />
+          <Widget type="C1-stats" />
+          <Widget type="D1-stats" />
+          <Widget type="RTB-stats" />
+          <Widget type="LCEP-stats" />
+        </Box>
         {/* <Box className="widgets" sx={{
         display: 'flex',
         gap: 1,

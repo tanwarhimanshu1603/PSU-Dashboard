@@ -23,7 +23,8 @@ export default function AdditionalDetails({props}) {
   // const [engagementActivity, setEngagementActivity] = useState(null);
  const {
   presentationSkills,setPresentationSkills,hobbiesSports,setHobbiesSports,mentoringAbility,setMentoringAbility,
-  contributedToDesign,setContributedToDesign,explorationInterest,setExplorationInterest,engagementActivityContribution,setEngagementActivityContribution
+  contributedToDesign,setContributedToDesign,explorationInterest,setExplorationInterest,engagementActivityContribution,setEngagementActivityContribution,
+  additionalInfo,setAdditionalInfo
 } = props
   const handlePresentationSkillChange = (event) => {
     setPresentationSkills(event.target.value);
@@ -150,6 +151,19 @@ export default function AdditionalDetails({props}) {
           <FormControlLabel value={false} control={<Radio />} label="No" />
         </RadioGroup>
       </Grid>
+      <FormGrid size={{ xs: 12 }}>
+        <FormLabel htmlFor="amdocs-journey" required>
+          Additional Info
+        </FormLabel>
+        <OutlinedInput
+          id="amdocs-journey"
+          name="amdocs-journey"
+          type="text"
+          size="small"
+          value={additionalInfo}
+          onChange={(e)=>setAdditionalInfo(e.target.value)}
+        />
+      </FormGrid>
     </Grid>
   );
 }
