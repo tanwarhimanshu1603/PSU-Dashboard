@@ -86,6 +86,8 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
           currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
         }));
         setData(processedData)
+        console.log(data);
+        
         setFilteredData(processedData)
         setEmpCount(filteredData.length)
         return;

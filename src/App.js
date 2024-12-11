@@ -17,6 +17,10 @@ import { useEffect, useState } from 'react';
 function App() {
 
   const [requestCount,setRequestCount] = useState(0);
+  const [data, setData] = useState([]);
+  const [errorMessage,setErrorMessage]=useState('');
+  const [allSkills,setAllSkills]=useState([]);
+  const [allDomains,setAllDomains] = useState([]);
   const jwtToken = localStorage.getItem('jwtToken');
 
   const getApprovalRequests = async()=>{
@@ -42,8 +46,67 @@ function App() {
     }
   }
 
+  const getAllEmployees = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/v1/admin/getAllEmp', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `${jwtToken}`
+        },
+      });
+      if (response.ok) {
+        const employeeData = JSON.parse(await response.text())
+
+        setData(employeeData)
+        return;
+      }
+    } catch (error) {
+      setErrorMessage(error.message)
+    }
+  }
+  const getAllSkills = async()=>{
+    try {
+      // First API call to admin login
+      const skillResponse = await fetch('http://localhost:8080/api/v1/employee/getSkills', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const data = JSON.parse(await skillResponse.text());
+      setAllSkills(data)
+      // console.log(data)
+      }
+      catch(error){
+
+      }
+  }
+  const getAllDomains = async()=>{
+    try {
+      // First API call to admin login
+      const domainResponse = await fetch('http://localhost:8080/api/v1/employee/getDomain', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const data = JSON.parse(await domainResponse.text());
+      setAllDomains(data)
+      // console.log(data)
+      }
+      catch(error){
+        console.log(error);
+      }
+  }
+
   useEffect(() => {
-    getApprovalRequests();
+    if(jwtToken){
+      getApprovalRequests();
+      getAllEmployees();
+      getAllDomains();
+      getAllSkills();
+    }
   },[])
   
   return (
@@ -59,15 +122,15 @@ function App() {
                   {/* Admin */}
         {/* ---------------------------- */}
         <Route path="/admin">
-          <Route index element={<Home requestCount={requestCount} />} />
-          <Route path='approval-requests' element={<ApprovalList requestCount={requestCount} setRequestCount={setRequestCount} />} />
+          <Route index element={<Home requestCount={requestCount} data={data} allDomains={allDomains} allSkills={allSkills} employeeCount={data.length}/>} />
+          <Route path='approval-requests' element={<ApprovalList requestCount={requestCount} setRequestCount={setRequestCount} employeeCount={data.length}/>} />
           <Route path="employees">
-            <Route index element={<List requestCount={requestCount}/>} />
+            <Route index element={<List requestCount={requestCount} employeeCount={data.length}/>} />
             {/* <Route path=":userId" element={<Single />} /> */}
             <Route path=":empId" element={<AdminEmployeeDashboard />} />
             <Route
               path="new"
-              element={<New inputs={userInputs} title="Add New User" requestCount={requestCount} />}
+              element={<New inputs={userInputs} title="Add New User" requestCount={requestCount} employeeCount={data.length}/>}
             />
           </Route>
         </Route>

@@ -6,7 +6,7 @@ import { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-const New = ({ inputs, title,requestCount }) => {
+const New = ({ inputs, title,requestCount,employeeCount }) => {
   const [file, setFile] = useState("");
   const [empName,setEmpName] = useState('');
   const [empEmail,setEmpEmail] = useState('');
@@ -86,7 +86,7 @@ const New = ({ inputs, title,requestCount }) => {
   };
   return (
     <div className="new">
-      <Sidebar requestCount={requestCount}/>
+      <Sidebar requestCount={requestCount} employeeCount={employeeCount}/>
       <div className="newContainer">
         <Navbar />
         <div className="top">

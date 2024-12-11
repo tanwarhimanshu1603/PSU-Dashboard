@@ -5,11 +5,11 @@ import Table from '../components/table/Table'
 import Badge from "@mui/material/Badge";
 import Approvaltable from "../components/datatable/Approvaltable";
 import { useState } from "react";
-const ApprovalList = ({requestCount,setRequestCount}) => {
+const ApprovalList = ({requestCount,setRequestCount,employeeCount}) => {
 
   return (
     <div className="list">
-      <Sidebar requestCount={requestCount}/>
+      <Sidebar requestCount={requestCount} employeeCount={employeeCount}/>
       <div className="listContainer">
         {/* <Navbar/> */}
         <div name="approvals" className="listContainer" style={{margin:"15px"}}>

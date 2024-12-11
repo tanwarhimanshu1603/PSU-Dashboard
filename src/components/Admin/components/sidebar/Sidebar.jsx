@@ -12,7 +12,7 @@ import { Badge } from "@mui/material";
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
 import { useState } from "react";
-const Sidebar = ({ requestCount }) => {
+const Sidebar = ({ requestCount,employeeCount }) => {
   const [loading, setLoading] = useState(false);
 
   const { dispatch } = useContext(DarkModeContext);
@@ -61,6 +61,9 @@ const Sidebar = ({ requestCount }) => {
             <li>
               <PersonOutlineIcon className="icon" />
               <span>Employees</span>
+              <div style={{ marginLeft: '2px' }}><Badge
+                badgeContent={employeeCount}
+              /></div>
             </li>
           </Link>
           <Link to="/admin/approval-requests" style={{ textDecoration: "none" }}>

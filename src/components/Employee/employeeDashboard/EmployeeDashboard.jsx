@@ -315,7 +315,6 @@ export default function EmployeeDashboard() {
                             <Typography align="center" variant="h6" sx={{ mt: 2,fontWeight: 700,color: '#1e88e5' }}>
                                 {employee.empName}
                             </Typography>
-                            <Typography align="center" color="text.secondary" sx={{fontWeight: 500}}>({employee.empId})</Typography>
                             <Typography align="center" color="text.secondary" sx={{fontWeight: 500}}>
                                 Software Engineer Specialist
                                 {/* <TextField id="standard-basic" label="Designation" variant="standard" /> */}

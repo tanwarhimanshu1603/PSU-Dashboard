@@ -7,7 +7,7 @@ import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlin
 import GroupsIcon from '@mui/icons-material/Groups';
 import { Link } from "react-router-dom";
 
-const Widget = ({ type }) => {
+const Widget = ({ type,count }) => {
   let data;
 
   //temporary
@@ -18,7 +18,7 @@ const Widget = ({ type }) => {
     case "employeeCount":
       data = {
         title: "TOTAL EMPLOYEES",
-        value:652,
+        value:61,
         link: "employees",
         icon: (
           <GroupsIcon
@@ -31,27 +31,91 @@ const Widget = ({ type }) => {
         ),
       };
       break;
-    case "C1-stats":
-      data = {
-        title: "C1",
-          value:91,
+      case "C1-stats":
+        data = {
+          title: "C1",
+          value:count,
           link: "employees/?domain=C1",
           icon: (
             <GroupsIcon
               className="icon"
               style={{
-                backgroundColor: "rgba(128, 0, 128, 0.2)",
-                color: "purple",
+              backgroundColor: "rgba(128, 0, 128, 0.2)",
+              color: "purple",
               }}
             />
           ),
         };
         break;
-    case "D1-stats":
+        case "D1-stats":
       data = {
         title: "D1",
-        value:82,
+        value:count,
         link: "employees/?domain=D1",
+        icon: (
+          <GroupsIcon
+            className="icon"
+            style={{
+            backgroundColor: "rgba(128, 0, 128, 0.2)",
+            color: "purple",
+            }}
+          />
+        ),
+      };
+      break;
+      case "R1-stats":
+      data = {
+        title: "R1",
+        value:count,
+        link: "employees/?domain=R1",
+        icon: (
+          <GroupsIcon
+            className="icon"
+            style={{
+            backgroundColor: "rgba(128, 0, 128, 0.2)",
+            color: "purple",
+            }}
+          />
+        ),
+      };
+      break;
+      case "PSU-stats":
+      data = {
+        title: "PSU",
+        value:count,
+        link: "employees/?domain=PSU",
+        icon: (
+          <GroupsIcon
+            className="icon"
+            style={{
+            backgroundColor: "rgba(128, 0, 128, 0.2)",
+            color: "purple",
+            }}
+          />
+        ),
+      };
+      break;
+      case "OC-stats":
+      data = {
+        title: "OC",
+        value:count,
+        link: "employees/?domain=OC",
+        icon: (
+          <GroupsIcon
+            className="icon"
+            style={{
+            backgroundColor: "rgba(128, 0, 128, 0.2)",
+            color: "purple",
+            }}
+          />
+        ),
+      };
+      break;
+      case "OH-stats":
+      data = {
+        title: "OH",
+        value:count,
+        link: "employees/?domain=OH",
         icon: (
           <GroupsIcon
             className="icon"
@@ -66,7 +130,7 @@ const Widget = ({ type }) => {
       case "RTB-stats":
       data = {
         title: "RTB",
-        value:74,
+        value:count,
         link: "employees/?domain=RTB",
         icon: (
           <GroupsIcon
@@ -79,22 +143,102 @@ const Widget = ({ type }) => {
         ),
       };
       break;
+      case "CARE-stats":
+      data = {
+        title: "CARE",
+        value:count,
+        link: "employees/?domain=CARE",
+        icon: (
+          <GroupsIcon
+            className="icon"
+            style={{
+            backgroundColor: "rgba(128, 0, 128, 0.2)",
+            color: "purple",
+            }}
+          />
+        ),
+      };
+      break;
       case "LCEP-stats":
-        data = {
-          title: "LCEP",
-          value:44,
-          link: "employees/?domain=LCEP",
-          icon: (
-            <GroupsIcon
-              className="icon"
-              style={{
-              backgroundColor: "rgba(128, 0, 128, 0.2)",
-              color: "purple",
-              }}
-            />
-          ),
-        };
-        break;
+      data = {
+        title: "LCEP",
+        value:count,
+        link: "employees/?domain=LCEP",
+        icon: (
+          <GroupsIcon
+            className="icon"
+            style={{
+            backgroundColor: "rgba(128, 0, 128, 0.2)",
+            color: "purple",
+            }}
+          />
+        ),
+      };
+      break;
+      case "CPQ-stats":
+      data = {
+        title: "CPQ",
+        value:count,
+        link: "employees/?domain=CPQ",
+        icon: (
+          <GroupsIcon
+            className="icon"
+            style={{
+            backgroundColor: "rgba(128, 0, 128, 0.2)",
+            color: "purple",
+            }}
+          />
+        ),
+      };
+      break;
+      case "MEC-stats":
+      data = {
+        title: "MEC",
+        value:count,
+        link: "employees/?domain=MEC",
+        icon: (
+          <GroupsIcon
+            className="icon"
+            style={{
+            backgroundColor: "rgba(128, 0, 128, 0.2)",
+            color: "purple",
+            }}
+          />
+        ),
+      };
+      break;
+      case "OMS-stats":
+      data = {
+        title: "OMS",
+        value:count,
+        link: "employees/?domain=OMS",
+        icon: (
+          <GroupsIcon
+            className="icon"
+            style={{
+            backgroundColor: "rgba(128, 0, 128, 0.2)",
+            color: "purple",
+            }}
+          />
+        ),
+      };
+      break;
+      case "CRM-stats":
+      data = {
+        title: "CRM",
+        value:count,
+        link: "employees/?domain=CRM",
+        icon: (
+          <GroupsIcon
+            className="icon"
+            style={{
+            backgroundColor: "rgba(128, 0, 128, 0.2)",
+            color: "purple",
+            }}
+          />
+        ),
+      };
+      break;
         case "java-stats":
           data = {
             title: "Java",
@@ -194,8 +338,8 @@ const Widget = ({ type }) => {
       </div>
       <div className="right">
         <div className="percentage positive">
-          <KeyboardArrowUpIcon />
-          {diff} %
+          {/* <KeyboardArrowUpIcon />
+          {diff} % */}
         </div>
         {data.icon}
       </div>
