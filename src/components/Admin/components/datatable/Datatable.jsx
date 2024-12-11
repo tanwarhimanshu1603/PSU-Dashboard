@@ -1,13 +1,13 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
-import { userColumns, userRows } from "../../datatablesource";
+import { userColumns } from "../../datatablesource";
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ConfirmDialog from "../../../../utils/ConfirmDialog";
 import FilterDialog from "../../../../utils/FilterDialog";
 import Badge from "@mui/material/Badge";
-import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import {
   Button,
@@ -20,10 +20,10 @@ import {
   Chip,
   Box,
 } from "@mui/material";
-const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) => {
+const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data,setData,allSkills,allDomains }) => {
   const [openErrorToast,setOpenErrorToast] = useState(false);
   const [openSuccessToast,setOpenSuccessToast] = useState(false);
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const [empCount,setEmpCount]=useState(0);
   const [dialogOpen, setDialogOpen] = useState(false); // State for dialog visibility
   const [selectedEmpId, setSelectedEmpId] = useState(null); // State to track which employee to delete
@@ -32,111 +32,110 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
   const [filterDialogOpen, setFilterDialogOpen] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedDomain, setSelectedDomain] = useState([]);
-  const [allSkills,setAllSkills]=useState([]);
-  const [allDomains,setAllDomains] = useState([]);
+
+
+  // const [allSkills,setAllSkills]=useState([]);
+  // const [allDomains,setAllDomains] = useState([]);
 
   const location = useLocation();
 
   useEffect(() => {
-    // Parse query parameters
+    
     const searchParams = new URLSearchParams(location.search);
-
     const domainParam = searchParams.get("domain");
     const skillParam = searchParams.get("skill");
 
     if (domainParam){
-      // console.log(domainParam);
       const updatedDomain = [...selectedDomain,domainParam]
       setSelectedDomain(updatedDomain);
-      // console.log(updatedDomain);
     }
     if (skillParam){
       setSelectedSkills([
         ...selectedSkills, skillParam
       ]);
     }
-
-     // Log for debugging
-       // Log for debugging
-
+    if(domainParam || skillParam) handleFilter(false);
+    else handleReset(false);
+   
   }, [location.search]); // Re-run if the search string changes
 
   useEffect(() => {
-    if(selectedDomain.length>0 || selectedSkills.length>0)handleFilter();
+    if(selectedDomain.length>0 || selectedSkills.length>0 ) handleFilter(false);
+    else if(selectedDomain.length===0 && selectedSkills.length===0) handleReset(false);
   },[selectedDomain,selectedSkills]);
 
   
   
   const jwtToken = localStorage.getItem('jwtToken');
-  const getAllEmployees = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/api/v1/admin/getAllEmp', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `${jwtToken}`
-        },
-      });
-      if (response.ok) {
-        const employeeData = JSON.parse(await response.text())
+  // const getAllEmployees = async () => {
+  //   try {
+  //     const response = await fetch('http://localhost:8080/api/v1/admin/getAllEmp', {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `${jwtToken}`
+  //       },
+  //     });
+  //     if (response.ok) {
+  //       const employeeData = JSON.parse(await response.text())
 
-        // console.log(employeeData)
-        const processedData = employeeData.map((employee) => ({
-          ...employee,
-          currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
-        }));
-        setData(processedData)
-        console.log(data);
+  //       // console.log(employeeData)
+  //       const processedData = employeeData.map((employee) => ({
+  //         ...employee,
+  //         currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
+  //       }));
+  //       setData(processedData)
+  //       console.log(data);
         
-        setFilteredData(processedData)
-        setEmpCount(filteredData.length)
-        return;
-      }
-    } catch (error) {
-      setErrorMessage(error.message)
-    }
-  }
-  const getAllSkills = async()=>{
-    try {
-      // First API call to admin login
-      const skillResponse = await fetch('http://localhost:8080/api/v1/employee/getSkills', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      const data = JSON.parse(await skillResponse.text());
-      setAllSkills(data)
-      // console.log(data)
-      }
-      catch(error){
+  //       setFilteredData(processedData)
+  //       setEmpCount(filteredData.length)
+  //       return;
+  //     }
+  //   } catch (error) {
+  //     setErrorMessage(error.message)
+  //   }
+  // }
+  // const getAllSkills = async()=>{
+  //   try {
+  //     // First API call to admin login
+  //     const skillResponse = await fetch('http://localhost:8080/api/v1/employee/getSkills', {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       }
+  //     });
+  //     const data = JSON.parse(await skillResponse.text());
+  //     setAllSkills(data)
+  //     // console.log(data)
+  //     }
+  //     catch(error){
 
-      }
-  }
-  const getAllDomains = async()=>{
-    try {
-      // First API call to admin login
-      const domainResponse = await fetch('http://localhost:8080/api/v1/employee/getDomain', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      const data = JSON.parse(await domainResponse.text());
-      setAllDomains(data)
-      // console.log(data)
-      }
-      catch(error){
-        console.log(error);
-      }
-  }
+  //     }
+  // }
+  // const getAllDomains = async()=>{
+  //   try {
+  //     // First API call to admin login
+  //     const domainResponse = await fetch('http://localhost:8080/api/v1/employee/getDomain', {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       }
+  //     });
+  //     const data = JSON.parse(await domainResponse.text());
+  //     setAllDomains(data)
+  //     // console.log(data)
+  //     }
+  //     catch(error){
+  //       console.log(error);
+  //     }
+  // }
 
-  useEffect(() => {
-    getAllEmployees();
-    getAllSkills();
-    getAllDomains()
-    if(selectedDomain || selectedSkills)handleFilter();
-  }, [])
+  // useEffect(() => {
+  //   getAllEmployees();
+  //   getAllSkills();
+  //   getAllDomains()
+  //   if(selectedDomain || selectedSkills)handleFilter();
+  // }, [])
 
   useEffect(() => {
     if (!searchTerm) {
@@ -185,6 +184,19 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
     setSelectedEmpId(empId); // Store the employee ID
     setDialogOpen(true); // Open the dialog
   };
+  const selectedSkillsHandleDelete = (skillToDelete) => {
+    console.log("Deleting ",skillToDelete)
+    setSelectedSkills(selectedSkills.filter(skill => skill !== skillToDelete));
+    console.log(selectedSkills)
+  };
+  const selectedDomainsHandleDelete = (domainToDelete) => {
+    console.log("Deleting ",domainToDelete)
+    setSelectedDomain(selectedDomain.filter(domain => domain !== domainToDelete));
+    console.log(selectedDomain)
+  };
+
+
+
   const handleDialogClose = (confirm) => {
     setDialogOpen(false); // Close the dialog
     if (confirm && selectedEmpId) {
@@ -207,7 +219,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
   
     setOpenErrorToast(false);
   };
-  const handleFilter = () => {
+  const handleFilter = (calledFromFilterDialog) => {
     setSearchTerm(''); // Clear any existing search term
     console.log(selectedSkills, selectedDomain);
 
@@ -233,14 +245,16 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
     // Update state with filtered data and employee count
     setFilteredData(filtered);
     setEmpCount(filtered.length);
-    setFilterDialogOpen(false); // Close the dialog
+    if(calledFromFilterDialog) setFilterDialogOpen(false); // Close the dialog
 };
 
 
   // Handle Reset
-  const handleReset = () => {
-    setSelectedSkills([]);
-    setSelectedDomain("");
+  const handleReset = (calledByClickingButton) => {
+    if(calledByClickingButton){
+      setSelectedSkills([]);
+      setSelectedDomain([]);
+    }
     setFilteredData(data);
     setEmpCount(data.length);
     setFilterDialogOpen(false);
@@ -319,7 +333,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
               onChange={(event, value) => setSelectedSkills(value)}
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
-                  <Chip key={option} label={option} {...getTagProps({ index })} />
+                  <Chip key={option} label={option} {...getTagProps({ index })} onDelete={() => selectedSkillsHandleDelete(option)} />
                 ))
               }
               renderInput={(params) => <TextField {...params} label="Select Skills" />}
@@ -335,7 +349,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
               onChange={(event, value) => setSelectedDomain(value)}
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => (
-                  <Chip key={option} label={option} {...getTagProps({ index })} />
+                  <Chip key={option} label={option} {...getTagProps({ index })} onDelete={() => selectedDomainsHandleDelete(option)} />
                 ))
               }
               renderInput={(params) => <TextField {...params} label="Select Domains" />}
@@ -345,10 +359,10 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
 
         {/* Dialog Actions */}
         <DialogActions>
-          <Button onClick={handleReset} color="secondary">
+          <Button onClick={()=>handleReset(true)} color="secondary">
             Reset
           </Button>
-          <Button onClick={handleFilter} variant="contained">
+          <Button onClick={() => setFilterDialogOpen(false)} variant="contained">
             Filter
           </Button>
         </DialogActions>

@@ -125,7 +125,7 @@ function App() {
           <Route index element={<Home requestCount={requestCount} data={data} allDomains={allDomains} allSkills={allSkills} employeeCount={data.length}/>} />
           <Route path='approval-requests' element={<ApprovalList requestCount={requestCount} setRequestCount={setRequestCount} employeeCount={data.length}/>} />
           <Route path="employees">
-            <Route index element={<List requestCount={requestCount} employeeCount={data.length}/>} />
+            <Route index element={<List requestCount={requestCount} employeeCount={data.length} data={data} setData={setData} allSkills={allSkills} allDomains={allDomains}/> }  />
             {/* <Route path=":userId" element={<Single />} /> */}
             <Route path=":empId" element={<AdminEmployeeDashboard />} />
             <Route
