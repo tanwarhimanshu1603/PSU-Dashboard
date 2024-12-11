@@ -16,14 +16,10 @@ const FormGrid = styled(Grid)(() => ({
 
 export default function TechDetails({props}) {
   const {
-    empName,setEmpName,supervisorName,setSupervisorName,currentAccount,setCurrentAccount,functionalKnowledge, setFunctionalKnowledge,
+    empName,setEmpName,supervisorName,setSupervisorName,currentAccount,setCurrentAccount,devOpsKnowledge,setDevOpsKnowledge,functionalKnowledge, setFunctionalKnowledge,
     primaryTechSkill,setPrimaryTechSkill,secondaryTechSkill,setSecondaryTechSkill,amdocsExperience,setAmdocsExperience,
     totalExperience,setTotalExperience,amdocsJourney,setAmdocsJourney,skillOptions,domainList} = props
-    const [selectedDomain, setSelectedDomain] = useState('');
-  const handleDomainChange = (event) => {
-    setFunctionalKnowledge([...functionalKnowledge,event.target.value])
-    setSelectedDomain(event.target.value);
-  };
+   
   const functionalKnowledgeHandleChange = (event, newValue) => {
     setFunctionalKnowledge(newValue);
   };
@@ -93,6 +89,21 @@ export default function TechDetails({props}) {
           size="small"
           value={currentAccount}
           onChange={(e)=>setCurrentAccount(e.target.value)}
+        />
+      </FormGrid>
+      <FormGrid size={{ xs: 12, md: 6 }} >
+        <FormLabel htmlFor="devOps-knowledge" required>
+          DevOps Knowledge
+        </FormLabel>
+        <OutlinedInput
+          id="devOps-knowledge"
+          name="devOps-knowledge"
+          type="text"
+          placeholder="Jenkins, CI/CD"
+          required
+          size="small"
+          value={devOpsKnowledge}
+          onChange={(e)=>setDevOpsKnowledge(e.target.value)}
         />
       </FormGrid>
       {/* <FormGrid size={{ xs: 12, md: 6 }}>

@@ -36,7 +36,7 @@ function App() {
             <Route path=":empId" element={<AdminEmployeeDashboard />} />
             <Route
               path="new"
-              element={<New inputs={userInputs} title="Add New User" />}
+              element={<New inputs={userInputs} title="Add New Employee" />}
             />
           </Route>
         </Route>
