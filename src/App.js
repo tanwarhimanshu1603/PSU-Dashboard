@@ -10,10 +10,41 @@ import EmployeeDashboard from './components/Employee/employeeDashboard/EmployeeD
 import AdminEmployeeDashboard from './components/Admin/view/AdminEmployeeDashboard';
 import ApprovalList from './components/Admin/list/ApprovalList';
 import ResetPassword from './components/ResetPassword/ResetPassword';
+import { useEffect, useState } from 'react';
 // import Test from './components/Employee/employeeDashboard/Test';
 
 
 function App() {
+
+  const [requestCount,setRequestCount] = useState(0);
+  const jwtToken = localStorage.getItem('jwtToken');
+
+  const getApprovalRequests = async()=>{
+    try {
+      
+      const response = await fetch('http://localhost:8080/api/v1/admin/getApprovals', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `${jwtToken}`
+        }
+      });
+      if (response.ok) {
+        const data = JSON.parse(await response.text())
+        setRequestCount(data.length)
+        return;
+      }
+    } catch (error) {
+        // setErrorMessage("Something went wrong!!")
+        // setOpenErrorToast(true);
+        console.log("Error while fetching approvals!!");
+        
+    }
+  }
+
+  useEffect(() => {
+    getApprovalRequests();
+  },[])
   
   return (
     <Router>
@@ -28,15 +59,15 @@ function App() {
                   {/* Admin */}
         {/* ---------------------------- */}
         <Route path="/admin">
-          <Route index element={<Home />} />
-          <Route path='approval-requests' element={<ApprovalList />} />
+          <Route index element={<Home requestCount={requestCount} />} />
+          <Route path='approval-requests' element={<ApprovalList requestCount={requestCount} setRequestCount={setRequestCount} />} />
           <Route path="employees">
-            <Route index element={<List />} />
+            <Route index element={<List requestCount={requestCount}/>} />
             {/* <Route path=":userId" element={<Single />} /> */}
             <Route path=":empId" element={<AdminEmployeeDashboard />} />
             <Route
               path="new"
-              element={<New inputs={userInputs} title="Add New User" />}
+              element={<New inputs={userInputs} title="Add New User" requestCount={requestCount} />}
             />
           </Route>
         </Route>

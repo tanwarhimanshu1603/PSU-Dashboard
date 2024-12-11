@@ -289,7 +289,7 @@ export default function EmployeeDashboard() {
             </Stack>
           )}
             <Box sx={{mb: 1,display: 'flex', justifyContent: 'space-between'}}>
-                <Button onClick={handleBack} variant="outlined" sx={{display: 'flex', gap:1}}>
+                <Button onClick={handleBack} variant="text" sx={{display: 'flex', gap:1}}>
                     <ArrowBackIcon />
                     Back
                 </Button>

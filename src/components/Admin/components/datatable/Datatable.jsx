@@ -1,7 +1,7 @@
 import "./datatable.scss";
 import { DataGrid } from "@mui/x-data-grid";
 import { userColumns, userRows } from "../../datatablesource";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ConfirmDialog from "../../../../utils/ConfirmDialog";
@@ -34,6 +34,38 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
   const [selectedDomain, setSelectedDomain] = useState([]);
   const [allSkills,setAllSkills]=useState([]);
   const [allDomains,setAllDomains] = useState([]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    // Parse query parameters
+    const searchParams = new URLSearchParams(location.search);
+
+    const domainParam = searchParams.get("domain");
+    const skillParam = searchParams.get("skill");
+
+    if (domainParam){
+      // console.log(domainParam);
+      const updatedDomain = [...selectedDomain,domainParam]
+      setSelectedDomain(updatedDomain);
+      // console.log(updatedDomain);
+    }
+    if (skillParam){
+      setSelectedSkills([
+        ...selectedSkills, skillParam
+      ]);
+    }
+
+     // Log for debugging
+       // Log for debugging
+
+  }, [location.search]); // Re-run if the search string changes
+
+  useEffect(() => {
+    if(selectedDomain.length>0 || selectedSkills.length>0)handleFilter();
+  },[selectedDomain,selectedSkills]);
+
+  
   
   const jwtToken = localStorage.getItem('jwtToken');
   const getAllEmployees = async () => {
@@ -47,9 +79,14 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
       });
       if (response.ok) {
         const employeeData = JSON.parse(await response.text())
-        console.log(employeeData)
-        setData(employeeData)
-        setFilteredData(employeeData)
+
+        // console.log(employeeData)
+        const processedData = employeeData.map((employee) => ({
+          ...employee,
+          currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
+        }));
+        setData(processedData)
+        setFilteredData(processedData)
         setEmpCount(filteredData.length)
         return;
       }
@@ -68,7 +105,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
       });
       const data = JSON.parse(await skillResponse.text());
       setAllSkills(data)
-      console.log(data)
+      // console.log(data)
       }
       catch(error){
 
@@ -85,19 +122,18 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
       });
       const data = JSON.parse(await domainResponse.text());
       setAllDomains(data)
-      console.log(data)
+      // console.log(data)
       }
       catch(error){
         console.log(error);
       }
   }
-  useEffect(()=>{
-    getAllSkills();
-    getAllDomains()
-  },[])
 
   useEffect(() => {
     getAllEmployees();
+    getAllSkills();
+    getAllDomains()
+    if(selectedDomain || selectedSkills)handleFilter();
   }, [])
 
   useEffect(() => {
@@ -176,17 +212,21 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
     const filtered = data.filter((employee) => {
       // Match skills with OR logic
       const matchesSkills = selectedSkills.length
-        ? selectedSkills.some((skill) => employee.primaryTechSkill.includes(skill))
+        ? selectedSkills.some((skill) => employee.primaryTechSkill?.includes(skill))
         : true;
 
       // Match domains with OR logic
       const matchesDomains = selectedDomain.length
-        ? selectedDomain.some((domain) => employee.functionalKnowledge.includes(domain))
+        ? selectedDomain.some((domain) => employee.functionalKnowledge?.includes(domain))
         : true;
-
+      // console.log(matchesSkills);
+      
       // AND condition between skills and domains
       return matchesSkills && matchesDomains;
     });
+
+    console.log("Filtered data: ",filtered);
+    
 
     // Update state with filtered data and employee count
     setFilteredData(filtered);
@@ -200,6 +240,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData }) =
     setSelectedSkills([]);
     setSelectedDomain("");
     setFilteredData(data);
+    setEmpCount(data.length);
     setFilterDialogOpen(false);
   };
   

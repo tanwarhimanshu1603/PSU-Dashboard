@@ -35,7 +35,7 @@ const Widget = ({ type }) => {
       data = {
         title: "C1",
           value:91,
-          link: "employees/c1",
+          link: "employees/?domain=C1",
           icon: (
             <GroupsIcon
               className="icon"
@@ -67,7 +67,7 @@ const Widget = ({ type }) => {
       data = {
         title: "RTB",
         value:74,
-        link: "employees/RTB",
+        link: "employees/?domain=RTB",
         icon: (
           <GroupsIcon
             className="icon"
@@ -83,7 +83,7 @@ const Widget = ({ type }) => {
         data = {
           title: "LCEP",
           value:44,
-          link: "employees/LCEP",
+          link: "employees/?domain=LCEP",
           icon: (
             <GroupsIcon
               className="icon"

@@ -4,12 +4,12 @@ import Navbar from "../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 import { useState } from "react";
 
-const New = ({ inputs, title }) => {
+const New = ({ inputs, title,requestCount }) => {
   const [file, setFile] = useState("");
 
   return (
     <div className="new">
-      <Sidebar />
+      <Sidebar requestCount={requestCount}/>
       <div className="newContainer">
         <Navbar />
         <div className="top">

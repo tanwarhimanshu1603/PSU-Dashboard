@@ -5,9 +5,7 @@ import Table from '../components/table/Table'
 import Badge from "@mui/material/Badge";
 import Approvaltable from "../components/datatable/Approvaltable";
 import { useState } from "react";
-const ApprovalList = () => {
-
-  const [requestCount,setRequestCount] = useState(0);
+const ApprovalList = ({requestCount,setRequestCount}) => {
 
   return (
     <div className="list">
