@@ -24,7 +24,9 @@ import { useNavigate } from "react-router-dom";
 import { useState,useEffect } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-const steps = ['Basic Information', 'Technical Details', 'Additional Information'];
+import AmdocsJourney from './signup-components/AmdocsJourney';
+import { nlNL } from '@mui/x-data-grid';
+const steps = ['Basic Information', 'Technical Details','Amdocs Journey', 'Additional Information'];
 function getStepContent(step,propsCombined) {
   switch (step) {
     case 0:
@@ -32,6 +34,8 @@ function getStepContent(step,propsCombined) {
     case 1:
       return <TechDetails props={propsCombined[step]}/>;
     case 2:
+      return <AmdocsJourney props={propsCombined[step]}/>
+    case 3:
       return <AdditionalDetails props={propsCombined[step]}/>;
     default:
       throw new Error('Unknown step');
@@ -51,6 +55,9 @@ export default function Signup(props) {
   const [amdocsExperience,setAmdocsExperience]=useState(null);
   const [totalExperience,setTotalExperience]=useState(null);
   const [amdocsJourney, setAmdocsJourney] = useState(null);
+  const [journeys, setJourneys] = useState([
+    { account: '', description: '', startDate: '', endDate: '',isPresent:false },
+  ]);
   const [functionalKnowledge, setFunctionalKnowledge] = useState([]);
   const [primaryTechSkill, setPrimaryTechSkill] = useState([]);
   const [primaryProductSubdomain, setPrimaryProductSubdomain] = useState([]);
@@ -76,16 +83,25 @@ export default function Signup(props) {
   const techDetailsProps = {
     empName,setEmpName,supervisorName,setSupervisorName,currentAccount,setCurrentAccount,devOpsKnowledge,setDevOpsKnowledge,functionalKnowledge, setFunctionalKnowledge,
     primaryTechSkill,setPrimaryTechSkill,secondaryTechSkill,setSecondaryTechSkill,amdocsExperience,setAmdocsExperience,
-    totalExperience,setTotalExperience,amdocsJourney,setAmdocsJourney,skillOptions,domainList
+    totalExperience,setTotalExperience,skillOptions,domainList
+  }
+  const amdocsJourneyProps = {
+    amdocsExperience,
+    amdocsJourney,setAmdocsJourney,journeys,setJourneys
   }
   const additionalInfoProps = {
     presentationSkills,setPresentationSkills,hobbiesSports,setHobbiesSports,mentoringAbility,setMentoringAbility,
     contributedToDesign,setContributedToDesign,explorationInterest,setExplorationInterest,engagementActivityContribution,setEngagementActivityContribution,
     additionalInfo,setAdditionalInfo
   }
-  const propsCombined = [basicInfoProps,techDetailsProps,additionalInfoProps]
+  const propsCombined = [basicInfoProps,techDetailsProps,amdocsJourneyProps,additionalInfoProps]
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const saveAmdocsJourney = () =>{
+    const journeyAsString = JSON.stringify(journeys);
+    setAmdocsJourney(journeyAsString)
+  }
   const hashText = async (text) => {
     const encoder = new TextEncoder(); // Converts the string to a Uint8Array
     const data = encoder.encode(text); // Encode the text
@@ -108,6 +124,7 @@ export default function Signup(props) {
       supervisorName,
       amdocsExperience,
       totalExperience,
+      journeys,
       amdocsJourney,
       functionalKnowledge,
       primaryTechSkill,
@@ -257,14 +274,24 @@ useEffect(()=>{
         !primaryTechSkill ||
         !secondaryTechSkill ||
         !amdocsExperience ||
-        !totalExperience ||
-        !amdocsJourney
+        !totalExperience
       ) {
         isValid = false;
         setErrorMessage("Please fill in all required field before proceeding.")
         setOpenErrorToast(true);
         
       }
+      else if(parseFloat(amdocsExperience)<1){
+        setJourneys([{ account: '', description: '', startDate: '', endDate: '',isPresent:false}])
+      }
+    }
+    else if(activeStep ===2){
+      if(amdocsExperience>0 && journeys[0].account===''){
+        isValid=false;
+        setErrorMessage("Please provide your amdocs journey.")
+        setOpenErrorToast(true);
+      }
+      else saveAmdocsJourney();
     }
   
     // Move to the next step only if the validation passes
