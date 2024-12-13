@@ -119,7 +119,8 @@ export default function AmdocsJourney({ props }) {
         <OutlinedInput
           id={`startDate-${index}`}
           name="startDate"
-          type="date"
+          type="text"
+          placeholder='May 2023'
           required
           size="small"
           value={journeys[index].startDate}
@@ -133,7 +134,8 @@ export default function AmdocsJourney({ props }) {
   <OutlinedInput
     id={`endDate-${index}`}
     name="endDate"
-    type="date"
+    type="text"
+    placeholder='June 2024'
     required
     size="small"
     value={journeys[index].endDate}
