@@ -789,7 +789,7 @@ export default function EmployeeDashboard() {
                         <Accordion>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
-                                Specialities
+                                Secondary Skills
                                 {/* <Tooltip title="Edit">
                                     <Box onClick={handleEdit} sx={{display: 'flex',cursor: 'pointer' }}>
                                         <EditIcon/>

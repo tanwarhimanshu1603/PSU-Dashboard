@@ -143,11 +143,14 @@ const New = ({ inputs, title,requestCount,employeeCount }) => {
                   <label>Current Supervisor</label>
                   <input type="text" value={supervisorName} onChange={(e)=>setSupervisorName(e.target.value)} required/>
                 </div>
-                <div className="formInput">
+                {/* <div className="formInput">
                   <label>Amdocs Experience(in years)</label>
                   <input type="number"  placeholder="2.3" value={amdocsExperience} onChange={(e)=>setAmdocsExperience(e.target.value)} required/>
+                </div> */}
+                <div className="formInput">
+                <button onClick={handleSubmit}>Add</button>
                 </div>
-                <button style={{display:"block",position:"absolute",right: "17px", bottom: "498px", borderRadius:"9px"}} onClick={handleSubmit}>Add</button>
+                
             </div>
           </div>
         </div>

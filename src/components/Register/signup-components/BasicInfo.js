@@ -150,8 +150,8 @@ export default function BasicInfo({ props }) {
           Confirm Password
         </FormLabel>
         <OutlinedInput
-          id="password"
-          name="password"
+          id="confirmPassword"
+          name="confirmPassword"
           type="password"
           autoComplete="password"
           required

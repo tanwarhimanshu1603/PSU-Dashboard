@@ -324,10 +324,10 @@ export default function EmployeeDashboard() {
                                     inputProps={{ 'aria-label': 'role' }}
                                 /> */}
                             </Typography>
-                            {/* <Typography variant="body2" color="text.secondary" sx={{textAlign: 'center',m:2}}>
+                            <Typography variant="body2" color="text.secondary" sx={{textAlign: 'center',m:2}}>
                                 Full-stack product designer with hands-on experience in solving problems for clients across various domains. Skilled in communication, collaboration, and user-centered design.
                                 Full-stack product designer with hands-on experience in solving problems for clients across various domains. Skilled in communication, collaboration, and user-centered design.
-                            </Typography> */}
+                            </Typography>
 
                             {/* Skills Section */}
                             <Box sx={{m:2}}>
@@ -374,16 +374,7 @@ export default function EmployeeDashboard() {
                             </Box>
 
                             {/* Domain Section */}
-                            {/* <Box sx={{m:2}}>
-                                <Typography sx={{fontWeight:600, color: '#263238'}} variant="h6">
-                                    Domain Knowledge
-                                </Typography>
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mt:1 }}>
-                                    {employee.primaryProductSubdomain.map((skill) => (
-                                        <Chip key={skill} label={skill} color="primary" variant="outlined" />
-                                    ))}
-                                </Box>
-                            </Box> */}
+                            
                             <Box sx={{m:2}}>
                                 <Typography sx={{fontWeight:600, color: '#263238'}} variant="h6">
                                     Domain Knowledge
@@ -428,16 +419,6 @@ export default function EmployeeDashboard() {
                             </Box>
 
                             {/* Functional Knowledge */}
-                            {/* <Box sx={{m:2}}>
-                                <Typography sx={{fontWeight:600, color: '#263238'}} variant="h6">
-                                    Functional Knowledge
-                                </Typography>
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mt:1 }}>
-                                    {employee.functionalKnowledge.map((skill) => (
-                                        <Chip key={skill} label={skill} color="primary" variant="outlined" />
-                                    ))}
-                                </Box>
-                            </Box> */}
                         </Box>
                     </Item>
                 </Grid>
@@ -453,11 +434,7 @@ export default function EmployeeDashboard() {
                             </Tooltip>
                                 <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
                                     Basic Information
-                                    {/* <Tooltip title="Edit">
-                                        <Box onClick={handleEdit} sx={{display: 'flex',cursor: 'pointer' }}>
-                                            <EditIcon/>
-                                        </Box>
-                                    </Tooltip> */}
+                                    
                                 </Typography>
                                 <Box sx={{m:1}}>
                                     <Grid container spacing={{xs:2, md:3}} columns={{xs:4,sm:8,md:12}}>
@@ -512,11 +489,7 @@ export default function EmployeeDashboard() {
                                             </Typography>
                                         </Grid>
                                     </Grid>
-                                    {/* <Box sx={{ mt: 2 }}>
-                                        <Button variant="contained" color="primary" sx={{ mr: 1 }}>
-                                            Download
-                                        </Button>
-                                    </Box> */}
+                                    
                                 </Box>
                                 
                             </Box>
@@ -529,11 +502,7 @@ export default function EmployeeDashboard() {
                             <Box sx={{m:0.5}}>
                                 <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
                                     Amdocs Journey
-                                    {/* <Tooltip title="Edit">
-                                        <Box onClick={handleEdit} sx={{display: 'flex',cursor: 'pointer' }}>
-                                            <EditIcon/>
-                                        </Box>
-                                    </Tooltip> */}
+                                    
                                 </Typography>
                                 {[
                                     { Account: 'T-Mobile', desc: 'Devops', duration: 'Apr 2018 - Present', location: 'Pune, India' },
@@ -557,7 +526,7 @@ export default function EmployeeDashboard() {
                         <Accordion>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
-                                Specialities
+                                Secondary Skills
                                 {/* <Tooltip title="Edit">
                                     <Box onClick={handleEdit} sx={{display: 'flex',cursor: 'pointer' }}>
                                         <EditIcon/>
@@ -568,8 +537,16 @@ export default function EmployeeDashboard() {
                             <AccordionDetails sx={{display: 'flex',flexDirection: 'column',gap: 2}}>
                             <Typography sx={{display: 'flex',flexWrap: 'wrap', gap: 1}}>
                                 {/* Details about {section} will go here. */}
-                                {employee.secondaryProduct && <Chip label={employee.secondaryProduct} color="success" variant="outlined" />}
-                                {employee.secondaryTechSkill && <Chip label={employee.secondaryTechSkill} color="success" variant="outlined" />}
+                                {
+                                    employee.secondaryProduct?.map((product,index) => (
+                                        <Chip key={index} label={product} color="success" variant="outlined" />
+                                    ))
+                                }
+                                {
+                                    employee.secondaryTechSkill?.map((skill,index) => (
+                                        <Chip key={index} label={skill} color="success" variant="outlined" />
+                                    ))
+                                }
                             </Typography>
                             <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
                                 
@@ -582,53 +559,12 @@ export default function EmployeeDashboard() {
                             </Typography>
                             </AccordionDetails>
                         </Accordion>
-                        {/* {['Education', 'Miscellaneous'].map((section, index) => (
-                        <Accordion key={index}>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
-                                {section}
-                                <Tooltip title="Edit">
-                                    <Box onClick={handleEdit} sx={{display: 'flex',cursor: 'pointer' }}>
-                                        <EditIcon/>
-                                    </Box>
-                                </Tooltip>
-                            </Typography>
-                            </AccordionSummary>
-                            <AccordionDetails>
-                            <Typography sx={{display: 'flex',flexWrap: 'wrap', gap: 1}}> */}
-                                {/* Details about {section} will go here. */}
-                                {/* {employee.engagementActivityContribution && <Chip label='Contributed to Engagement Acitivities' color="success" variant="outlined" />}
-                                {employee.explorationInterest && <Chip label='Exploration Interest' color="success" variant="outlined" />}
-                                {employee.contributedToDesign && <Chip label='Contributed to Design' color="success" variant="outlined" />}
-                                {employee.mentoringAbility && <Chip label='Mentoring Ability' color="success" variant="outlined" />} */}
-                                
-                                {/* {[
-                                    { company: 'Infosys', role: 'Product Designer', duration: 'Apr 2018 - Present', location: 'Pune, India' },
-                                    { company: 'Pixel Studio', role: 'UI/UX Designer', duration: 'Oct 2016 - Jul 2018', location: 'Bengaluru, India' },
-                                    { company: 'Ramotion Studio', role: 'Web Designer', duration: 'Apr 2015 - Oct 2016', location: 'Bengaluru, India' },
-                                ].map((exp, index) => (
-                                    <Box key={index}>
-                                        <Typography variant="subtitle1" fontWeight={600} sx={{color: '#1e88e5'}}>
-                                            {exp.company}
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            {exp.role} | {exp.duration} | {exp.location}
-                                        </Typography>
-                                    </Box>
-                                ))} */}
-                            {/* </Typography>
-                            </AccordionDetails>
-                        </Accordion>
-                        ))} */}
+                        
                         <Accordion>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
                                 More Info
-                                {/* <Tooltip title="Edit">
-                                    <Box onClick={handleEdit} sx={{display: 'flex',cursor: 'pointer' }}>
-                                        <EditIcon/>
-                                    </Box>
-                                </Tooltip> */}
+                                
                             </Typography>
                             </AccordionSummary>
                             <AccordionDetails sx={{display: 'flex',flexDirection: 'column',gap: 2}}>

@@ -96,9 +96,10 @@ const Home = ({ requestCount, data, allDomains, allSkills,employeeCount }) => {
   const location = useLocation();
   const jwtToken = localStorage.getItem('jwtToken');
   const [chunkedDomainArray, setChunkedDomainArray] = useState([]);
-  const [domainCounts, setDomainCounts] = useState({});
+  const [skillsObject, setSkillsObject] = useState([]);
 
   const splitArrayIntoChunks = (array, chunkSize) => {
+    
     const result = [];
     for (let i = 0; i < array.length; i += chunkSize) {
       result.push(array.slice(i, i + chunkSize));
@@ -106,29 +107,88 @@ const Home = ({ requestCount, data, allDomains, allSkills,employeeCount }) => {
     return result;
   };
 
-  const calculateDomainCounts = () => {
-    const counts = {};
-    allDomains?.forEach((domain) => {
-      counts[domain] = 0;
-    });
-
-    data?.forEach((employee) => {
-      employee.functionalKnowledge?.forEach((domain) => {
-        if (counts.hasOwnProperty(domain)) {
-          counts[domain]++;
-        }
+    // Helper function to calculate counts and return an array of objects
+    const calculateCounts = (items, field) => {
+      const counts = items.reduce((acc, item) => {
+        acc[item] = 0;
+        return acc;
+      }, {});
+  
+      data?.forEach((employee) => {
+        employee[field]?.forEach((item) => {
+          if (counts.hasOwnProperty(item)) {
+            counts[item]++;
+          }
+        });
       });
-    });
+  
+      return Object.entries(counts)
+        .filter(([, count]) => count >= 0)
+        .map(([key, count]) => ({ [field === "functionalKnowledge" ? "domain" : "skill"]: key, count }));
+    };
 
-    return counts;
-  };
+    useEffect(() => {
+      // Calculate domain counts and sort by count
+      const domains = calculateCounts(allDomains, "functionalKnowledge").sort((a, b) => b.count - a.count);
+      const splitArray = splitArrayIntoChunks(domains,4);
+      setChunkedDomainArray(splitArray);
+      console.log("array: ",splitArray);
+      
+  
+      // Calculate skill counts, sort by count, and limit to top 5
+      const skills = calculateCounts(allSkills, "primaryTechSkill")
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 5);
+      setSkillsObject(skills);
+      console.log("Final skills with count: ",skills);
+      
+    }, [allDomains, allSkills, data]);
 
-  useEffect(() => {
-    const chunkedArray = splitArrayIntoChunks(allDomains, 5);
-    setChunkedDomainArray(chunkedArray);
-    const counts = calculateDomainCounts();
-    setDomainCounts(counts);
-  }, [allDomains, data]);
+  // const calculateSkillsCounts = () => {
+  //   const counts = {};
+  //   allSkills?.forEach((skill) => {
+  //     counts[skill] = 0;
+  //   });
+
+  //   data?.forEach((employee) => {
+  //     employee.primaryTechSkill?.forEach((skill) => {
+  //       if (counts.hasOwnProperty(skill)) {
+  //         counts[skill]++;
+  //       }
+  //     });
+  //   });
+
+  //   return counts;
+  // };
+
+  // useEffect(() => {
+  //   const counts = calculateSkillsCounts();
+  //   setSkillsCounts(counts);
+  // }, [allSkills, data]);
+
+  // const calculateDomainCounts = () => {
+  //   const counts = {};
+  //   allDomains?.forEach((domain) => {
+  //     counts[domain] = 0;
+  //   });
+
+  //   data?.forEach((employee) => {
+  //     employee.functionalKnowledge?.forEach((domain) => {
+  //       if (counts.hasOwnProperty(domain)) {
+  //         counts[domain]++;
+  //       }
+  //     });
+  //   });
+
+  //   return counts;
+  // };
+
+  // useEffect(() => {
+  //   const chunkedArray = splitArrayIntoChunks(allDomains, 5);
+  //   setChunkedDomainArray(chunkedArray);
+  //   const counts = calculateDomainCounts();
+  //   setDomainCounts(counts);
+  // }, [allDomains, data]);
 
   useEffect(() => {
     if (!jwtToken) {
@@ -154,11 +214,13 @@ const Home = ({ requestCount, data, allDomains, allSkills,employeeCount }) => {
             <Box key={index} className="widgets">
               {
                 domainList.map((domain, ind) => (
-                  domainCounts[domain] !== 0 && 
+                  domain.count !== 0 && 
                   <Widget 
                     key={ind} 
-                    type={`${domain}-stats`} 
-                    count={domainCounts[domain]} 
+                    isDomain={true}
+                    domain={domain.domain}
+                    skill={null}
+                    count={domain.count} 
                   />
                 ))
               }
@@ -168,11 +230,23 @@ const Home = ({ requestCount, data, allDomains, allSkills,employeeCount }) => {
         <h1 style={{ paddingLeft: "15px" }}>Skills</h1>
 
         <Box className="widgets">
-          <Widget type="java-stats" />
-          <Widget type="python-stats" />
-          <Widget type="jenkins-stats" />
-          <Widget type="reactJs-stats" />
-          <Widget type="js-stats" />
+          {
+            skillsObject.map((skill, ind) => (
+              skill.count !== 0 && 
+              <Widget 
+                key={ind} 
+                isDomain={false}
+                domain={null}
+                skill={skill.skill}
+                count={skill.count} 
+              />
+            ))
+          }
+          {/* <Widget count={2} isDomain={false} domain={null} skill="java" />
+          <Widget count={2} isDomain={false} domain={null} skill={"python"} />
+          <Widget count={2} isDomain={false} domain={null} skill={"jenkins"} />
+          <Widget count={2} isDomain={false} domain={null} skill={"reactjs"} />
+          <Widget count={2} isDomain={false} domain={null} skill={"js"} /> */}
         </Box>
       </div>
     </div>

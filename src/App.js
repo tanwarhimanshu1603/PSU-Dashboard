@@ -23,6 +23,7 @@ function App() {
   const [allDomains,setAllDomains] = useState([]);
   const jwtToken = localStorage.getItem('jwtToken');
 
+
   const getApprovalRequests = async()=>{
     try {
       
@@ -101,13 +102,13 @@ function App() {
   }
 
   useEffect(() => {
-    if(jwtToken){
-      getApprovalRequests();
-      getAllEmployees();
-      getAllDomains();
-      getAllSkills();
-    }
-  },[])
+      if (jwtToken) {
+       getApprovalRequests();
+       getAllEmployees();
+       getAllDomains();
+       getAllSkills();
+      }
+  }, []);
   
   return (
     <Router>
