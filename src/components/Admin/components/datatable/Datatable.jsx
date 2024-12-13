@@ -64,6 +64,15 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
     else if(selectedDomain.length===0 && selectedSkills.length===0) handleReset(false);
   },[selectedDomain,selectedSkills]);
 
+  useEffect(() => {
+        const processedData = data.map((employee) => ({
+        ...employee,
+          currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
+        }));
+        setData(processedData)
+        // console.log(data);
+  },[]);
+
   
   
   const jwtToken = localStorage.getItem('jwtToken');

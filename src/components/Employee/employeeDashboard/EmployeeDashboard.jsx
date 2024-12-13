@@ -17,6 +17,9 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
+import DeleteIcon from '@mui/icons-material/Delete';
+import RemoveIcon from '@mui/icons-material/Remove';
+import AddIcon from '@mui/icons-material/Add';
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
     ...theme.typography.body2,
@@ -30,14 +33,11 @@ export default function EmployeeDashboard() {
     const [employee, setEmployee] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [updateMode,setUpdateMode] = useState(false);
-    const [profileUpdate,setProfileUpdate] = useState(false);    
-    const [basicInfoUpdate,setBasicInfoUpdate] = useState(false);    
-    const [specialitiesUpdate,setSpecialitiesUpdate] = useState(false);    
-    const [moreInfoUpdate,setMoreInfoUpdate] = useState(false);    
+    const [updateMode,setUpdateMode] = useState(false);  
     const [changesMade,setChangesMade] = useState(false);
     const [skillOptions,setSkillOptions] = useState([]);
     const [primaryTechSkills, setPrimaryTechSkills] = useState([]);
+    const [secondaryTechSkills, setSecondaryTechSkills] = useState([]);
     const [domainKnowledge,setDomainKnowledge] = useState([]);
     const [domainList,setDomainList] = useState([]);
     const [openErrorToast,setOpenErrorToast] = useState(false);
@@ -85,6 +85,7 @@ export default function EmployeeDashboard() {
             }
             
             setPrimaryTechSkills(data.primaryTechSkill);
+            setSecondaryTechSkills(data.secondaryTechSkill);
             setDomainKnowledge(data.functionalKnowledge);
             // console.log(data.functionalKnowledge);
             
@@ -176,6 +177,15 @@ export default function EmployeeDashboard() {
         });
     };
 
+    const secondarySkillsHandleChange = (event, newValue) => {
+        setSecondaryTechSkills(newValue);
+        setChangesMade(true);
+        setEmployee({
+            ...employee,
+            secondaryTechSkill: newValue
+        });
+    };
+
     const domainKnowledgeHandleChange = (event, newValue) => {
         setDomainKnowledge(newValue);
         setChangesMade(true);
@@ -192,6 +202,16 @@ export default function EmployeeDashboard() {
         setEmployee({
             ...employee,
             primaryTechSkill: updatedSkills
+        });
+    };
+
+    const secondarySkillsHandleDelete = (skillToDelete) => {
+        const updatedSkills = secondaryTechSkills.filter(skill => skill !== skillToDelete);
+        setSecondaryTechSkills(updatedSkills);
+        setChangesMade(true);
+        setEmployee({
+            ...employee,
+            secondaryTechSkill: updatedSkills
         });
     };
 
@@ -245,6 +265,23 @@ export default function EmployeeDashboard() {
         setChangesMade(false);
         
     }
+
+    const handleBoolean = (name) => {
+        // console.log("Deleting", name);
+        const updatedEmployee = {
+            ...employee,
+            [name]:  employee[name]===true ? false : true
+        }
+        setChangesMade(true);
+        // updatedEmployee[name]
+        // console.log("Updated Employee: ",updatedEmployee);
+        setEmployee(updatedEmployee);
+        
+    }
+
+    // const handleBooleanAdd = (name) => {
+    //     console.log("Adding", name);
+    // }
 
     const handleChange = (e) => {
         setChangesMade(true);
@@ -324,17 +361,21 @@ export default function EmployeeDashboard() {
                                 {employee.empName}
                             </Typography>
                             <Typography align="center" color="text.secondary" sx={{fontWeight: 500}}>
-                                Software Engineer Specialist
-                                {/* <TextField id="standard-basic" label="Designation" variant="standard" /> */}
-                                {/* <InputBase
-                                    sx={{ flex: 1, textAlign: 'center', '& input': {textAlign: 'center'} }}
-                                    placeholder="Designation!!"
-                                    inputProps={{ 'aria-label': 'role' }}
-                                /> */}
+                                {/* Software Engineer Specialist */}
+                                {
+                                    updateMode ? 
+                                    <TextField id="standard-basic" label="Designation" name='empRole' value={employee.empRole} onChange={handleChange} variant="standard" /> : 
+                                    employee.empRole
+                                }  
                             </Typography>
                             <Typography variant="body2" color="text.secondary" sx={{textAlign: 'center',m:2}}>
-                                Full-stack product designer with hands-on experience in solving problems for clients across various domains. Skilled in communication, collaboration, and user-centered design.
-                                Full-stack product designer with hands-on experience in solving problems for clients across various domains. Skilled in communication, collaboration, and user-centered design.
+                                {/* Full-stack product designer with hands-on experience in solving problems for clients across various domains. Skilled in communication, collaboration, and user-centered design. */}
+                                {
+                                    updateMode ? 
+                                    <TextField fullWidth label="About You" name="empDesc" value={employee.empDesc} onChange={handleChange} id="fullWidth" /> : 
+                                    employee.empDesc
+                                }
+                                
                             </Typography>
 
                             {/* Skills Section */}
@@ -512,7 +553,7 @@ export default function EmployeeDashboard() {
                                     Amdocs Journey
                                     
                                 </Typography>
-                                {amdocsJourney && amdocsJourney.map((exp,index)=>(
+                                {amdocsJourney?.map((exp,index)=>(
                                     <Box key={index} sx={{ m: 1 }}>
                                     <Typography variant="subtitle1" fontWeight={600} sx={{color: '#1e88e5'}}>
                                         {exp.account}
@@ -560,7 +601,43 @@ export default function EmployeeDashboard() {
                                         <Chip key={index} label={product} color="success" variant="outlined" />
                                     ))
                                 }
+                                {/* {
+                                    employee.secondaryTechSkill?.map((skill,index) => (
+                                        <Chip key={index} label={skill} color="success" variant="outlined" />
+                                    ))
+                                } */}
                                 {
+                                    updateMode ? 
+                                    <Autocomplete
+                                        multiple
+                                        id="primary-skills"
+                                        options={skillOptions}
+                                        value={secondaryTechSkills}
+                                        onChange={secondarySkillsHandleChange}
+                                        disableCloseOnSelect
+                                        renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            // label="Select Skills"
+                                            placeholder="Search & select skills"
+                                            required
+                                            size="small"
+                                            variant="outlined"
+                                        />
+                                        )}
+                                        renderTags={(value, getTagProps) =>
+                                        value.map((option, index) => (
+                                            <Chip
+                                            label={option}
+                                            {...getTagProps({ index })}
+                                            onDelete={() => secondarySkillsHandleDelete(option)}
+                                            key={index}
+                                            />
+                                        ))
+                                        }
+                                        freeSolo
+                                        getOptionLabel={(option) => option}
+                                    /> :
                                     employee.secondaryTechSkill?.map((skill,index) => (
                                         <Chip key={index} label={skill} color="success" variant="outlined" />
                                     ))
@@ -581,17 +658,35 @@ export default function EmployeeDashboard() {
                         <Accordion>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
-                                More Info
-                                
+                                More Info    
                             </Typography>
                             </AccordionSummary>
                             <AccordionDetails sx={{display: 'flex',flexDirection: 'column',gap: 2}}>
                             <Typography sx={{display: 'flex',flexWrap: 'wrap', gap: 1}}>
                                 {/* Details about {section} will go here. */}
-                                {employee.engagementActivityContribution && <Chip label='Contributed to Engagement Acitivities' color="success" variant="outlined" />}
+                                {
+                                    updateMode ? 
+                                    [{data: employee.engagementActivityContribution, label:"Contributed to Engagement Acitivities",name: "engagementActivityContribution"},
+                                        {data: employee.explorationInterest, label:"Exploration Interest",name: "explorationInterest"},
+                                        {data: employee.contributedToDesign, label:"Contributed to Design",name: "contributedToDesign"},
+                                        {data: employee.mentoringAbility, label:"Mentoring Ability",name: "mentoringAbility"}]
+                                        .map(({data,label,name},index) => (
+                                            data ? <Chip key={index} label={label} onDelete={() => handleBoolean(name)} deleteIcon={<RemoveIcon />} variant='outlined' color="success" /> 
+                                            : <Chip key={index} label={label} onDelete={() => handleBoolean(name)} deleteIcon={<AddIcon />} variant='outlined' color="error" />
+                                    )) : 
+                                    [{data: employee.engagementActivityContribution, label:"Contributed to Engagement Acitivities",name: "engagementActivityContribution"},
+                                    {data: employee.explorationInterest, label:"Exploration Interest",name: "explorationInterest"},
+                                    {data: employee.contributedToDesign, label:"Contributed to Design",name: "contributedToDesign"},
+                                    {data: employee.mentoringAbility, label:"Mentoring Ability",name: "mentoringAbility"}]
+                                    .map(({data,label,name},index) => (
+                                        data && <Chip key={index} label={label} name={name} color="success" variant="outlined" />
+                                    ))
+                                }
+                                {/* {employee.engagementActivityContribution && <Chip label='Contributed to Engagement Acitivities' color="success" variant="outlined" />}
                                 {employee.explorationInterest && <Chip label='Exploration Interest' color="success" variant="outlined" />}
                                 {employee.contributedToDesign && <Chip label='Contributed to Design' color="success" variant="outlined" />}
-                                {employee.mentoringAbility && <Chip label='Mentoring Ability' color="success" variant="outlined" />}
+                                {employee.mentoringAbility && <Chip label='Mentoring Ability' color="success" variant="outlined" />} */}
+                                {/* <Chip label="Deletable" onDelete={handleBooleanDelete} variant='outlined' /> */}
                             </Typography>
                             <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
                                  

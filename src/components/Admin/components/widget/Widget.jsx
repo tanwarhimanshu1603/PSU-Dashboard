@@ -7,7 +7,7 @@ import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlin
 import GroupsIcon from '@mui/icons-material/Groups';
 import { Link } from "react-router-dom";
 
-const Widget = ({ type,count,isDomain,domain,skill }) => {
+const Widget = ({ count,isDomain,domain,skill }) => {
   let data;
   if(isDomain){
     const tempData = {
