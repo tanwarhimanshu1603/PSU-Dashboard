@@ -45,7 +45,8 @@ export default function EmployeeDashboard() {
     const [openWarningToast,setOpenWarningToast] = useState(false);
     const [errorMessage,setErrorMessage]=useState('');
     const [successMessage,setSuccessMessage] = useState('');
-    const [warningMessage,setWarningMessage]= useState('')
+    const [warningMessage,setWarningMessage]= useState('');
+    const [amdocsJourney,setAmdocsJourney]=useState(null)
 
     useEffect(() => {
         // Retrieve empId from localStorage
@@ -74,8 +75,15 @@ export default function EmployeeDashboard() {
             
             if (response.ok) {
             console.log(data);
-            
             setEmployee(data); // Set the employee data
+
+            try {
+                const journey= JSON.parse(data.amdocsJourney);
+                setAmdocsJourney(journey)
+            } catch (error) {
+                console.log(error)
+            }
+            
             setPrimaryTechSkills(data.primaryTechSkill);
             setDomainKnowledge(data.functionalKnowledge);
             // console.log(data.functionalKnowledge);
@@ -504,7 +512,17 @@ export default function EmployeeDashboard() {
                                     Amdocs Journey
                                     
                                 </Typography>
-                                {[
+                                {amdocsJourney && amdocsJourney.map((exp,index)=>(
+                                    <Box key={index} sx={{ m: 1 }}>
+                                    <Typography variant="subtitle1" fontWeight={600} sx={{color: '#1e88e5'}}>
+                                        {exp.account}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        {exp.description} | {exp.startDate} - {exp.isPresent?"Present": exp.endDate}
+                                    </Typography>
+                                </Box>
+                                ))}
+                                {/* {[
                                     { Account: 'T-Mobile', desc: 'Devops', duration: 'Apr 2018 - Present', location: 'Pune, India' },
                                     { Account: 'Bel Canada', desc: 'Build Jenkins Pipeline', duration: 'Oct 2016 - Jul 2018', location: 'Bengaluru, India' },
                                     { Account: 'ATT', desc: 'Front End Developer', duration: 'Apr 2015 - Oct 2016', location: 'Bengaluru, India' },
@@ -517,7 +535,7 @@ export default function EmployeeDashboard() {
                                             {exp.desc} | {exp.duration} 
                                         </Typography>
                                     </Box>
-                                ))}
+                                ))} */}
                             </Box>
                             </Item>
                         </Grid>

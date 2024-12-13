@@ -18,7 +18,7 @@ export default function TechDetails({props}) {
   const {
     empName,setEmpName,supervisorName,setSupervisorName,currentAccount,setCurrentAccount,devOpsKnowledge,setDevOpsKnowledge,functionalKnowledge, setFunctionalKnowledge,
     primaryTechSkill,setPrimaryTechSkill,secondaryTechSkill,setSecondaryTechSkill,amdocsExperience,setAmdocsExperience,
-    totalExperience,setTotalExperience,amdocsJourney,setAmdocsJourney,skillOptions,domainList} = props
+    totalExperience,setTotalExperience,skillOptions,domainList} = props
    
   const functionalKnowledgeHandleChange = (event, newValue) => {
     setFunctionalKnowledge(newValue);
@@ -259,7 +259,15 @@ export default function TechDetails({props}) {
           required
           size="small"
           value={amdocsExperience}
-          onChange={(e)=>setAmdocsExperience(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (parseFloat(value) >= 0) {
+              setAmdocsExperience(value);
+            }
+            // else{
+            //   setAmdocsExperience("0")
+            // }
+          }}
         />
       </FormGrid>
       <FormGrid size={{ xs: 6 }}>
@@ -274,10 +282,18 @@ export default function TechDetails({props}) {
           required
           size="small"
           value={totalExperience}
-          onChange={(e)=>setTotalExperience(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (parseFloat(value) >= 0) {
+              setTotalExperience(value);
+            }
+            // else{
+            //   setTotalExperience("0")
+            // }
+          }}
         />
       </FormGrid>
-      <FormGrid size={{ xs: 12 }}>
+      {/* <FormGrid size={{ xs: 12 }}>
         <FormLabel htmlFor="amdocs-journey" required>
           Amdocs Journey
         </FormLabel>
@@ -290,7 +306,7 @@ export default function TechDetails({props}) {
           value={amdocsJourney}
           onChange={(e)=>setAmdocsJourney(e.target.value)}
         />
-      </FormGrid>
+      </FormGrid> */}
       {/* <FormGrid size={{ xs: 6 }}>
         <FormLabel htmlFor="city" required>
           City
