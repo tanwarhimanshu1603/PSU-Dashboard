@@ -20,6 +20,7 @@ import Stack from '@mui/material/Stack';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
+import GLOBAL_CONFIG from '../../../constants/global';
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
     ...theme.typography.body2,
@@ -722,7 +723,7 @@ export default function EmployeeDashboard() {
                     </Grid>
                 </Grid>
             </Grid>
-            <Snackbar open={openErrorToast} autoHideDuration={6000} onClose={handleCloseErrorToast}>
+            <Snackbar open={openErrorToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} onClose={handleCloseErrorToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}>
         <Alert
           onClose={handleCloseErrorToast}
           severity="error"
@@ -733,8 +734,8 @@ export default function EmployeeDashboard() {
         </Alert>
       </Snackbar>
 
-      <Snackbar open={openSuccessToast} autoHideDuration={6000} 
-      onClose={handleCloseSuccessToast}
+      <Snackbar open={openSuccessToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} 
+      onClose={handleCloseSuccessToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}
       >
         <Alert
           onClose={handleCloseSuccessToast}
@@ -745,7 +746,7 @@ export default function EmployeeDashboard() {
           {successMessage}
         </Alert>
       </Snackbar>
-      <Snackbar open={openWarningToast} autoHideDuration={6000} onClose={handleCloseWarningToast}>
+      <Snackbar open={openWarningToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} onClose={handleCloseWarningToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}>
         <Alert
           onClose={handleCloseWarningToast}
           severity="warning"

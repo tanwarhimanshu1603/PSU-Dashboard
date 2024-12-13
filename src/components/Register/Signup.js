@@ -25,7 +25,7 @@ import { useState,useEffect } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import AmdocsJourney from './signup-components/AmdocsJourney';
-import { nlNL } from '@mui/x-data-grid';
+import GLOBAL_CONFIG from '../../constants/global';
 const steps = ['Basic Information', 'Technical Details','Amdocs Journey', 'Additional Information'];
 function getStepContent(step,propsCombined) {
   switch (step) {
@@ -51,12 +51,12 @@ export default function Signup(props) {
   const [empName,setEmpName] = useState('');
   const [supervisorName,setSupervisorName] = useState('')
   const [currentAccount,setCurrentAccount] = useState();
-  const [currentDomain,setCurrentDomain] = useState();
+  // const [currentDomain,setCurrentDomain] = useState();
   const [amdocsExperience,setAmdocsExperience]=useState(null);
   const [totalExperience,setTotalExperience]=useState(null);
   const [amdocsJourney, setAmdocsJourney] = useState(null);
   const [journeys, setJourneys] = useState([
-    { account: '', description: '', startDate: '', endDate: '',isPresent:false },
+    // { account: '', description: '', startDate: '', endDate: '',isPresent:false },
   ]);
   const [functionalKnowledge, setFunctionalKnowledge] = useState([]);
   const [primaryTechSkill, setPrimaryTechSkill] = useState([]);
@@ -70,15 +70,17 @@ export default function Signup(props) {
   const [additionalInfo, setAdditionalInfo] = useState(null);
   const [approved, setApproved] = useState(false);
   const [openErrorToast,setOpenErrorToast] = useState(false);
+  const [openSuccessToast,setOpenSuccessToast] = useState(false);
   const [errorMessage,setErrorMessage]=useState('');
+  const [successMessage,setSuccessMessage] = useState('');
   const [mentoringAbility, setMentoringAbility] = useState(null);
   const [contributedToDesign, setContributedToDesign] = useState(null);
   const [explorationInterest, setExplorationInterest] = useState(null);
   const [skillOptions,setSkillOptions] = useState([]);
   const [domainList,setDomainList] = useState([]);
-  
+  const [emailValidated,setEmailValidated] = useState(false);
   const basicInfoProps = {
-    empImage,setEmpImage,empEmail,setEmpEmail,empId,setEmpId,empPassword,setEmpPassword,confirmPassword,setConfirmPassword
+    empImage,setEmpImage,empEmail,setEmpEmail,empId,setEmpId,empPassword,setEmpPassword,confirmPassword,setConfirmPassword,emailValidated,setEmailValidated
   }
   const techDetailsProps = {
     empName,setEmpName,supervisorName,setSupervisorName,currentAccount,setCurrentAccount,devOpsKnowledge,setDevOpsKnowledge,functionalKnowledge, setFunctionalKnowledge,
@@ -86,8 +88,7 @@ export default function Signup(props) {
     totalExperience,setTotalExperience,skillOptions,domainList
   }
   const amdocsJourneyProps = {
-    amdocsExperience,
-    amdocsJourney,setAmdocsJourney,journeys,setJourneys
+    setAmdocsJourney,journeys,setJourneys,setErrorMessage,setOpenErrorToast
   }
   const additionalInfoProps = {
     presentationSkills,setPresentationSkills,hobbiesSports,setHobbiesSports,mentoringAbility,setMentoringAbility,
@@ -98,6 +99,50 @@ export default function Signup(props) {
 
   const navigate = useNavigate();
 
+  const validateEmail = async () => {
+    // e.preventDefault(); // Prevent default form submission behavior
+    if (!empEmail || !/^[a-zA-Z0-9._%+-]+@amdocs\.com$/.test(empEmail)) {
+      setErrorMessage('Please enter a valid email address with the @amdocs.com domain.')
+      setOpenErrorToast(true);
+      return;
+    }
+    try {
+      const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/employee/getEmp/${empEmail}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      if (response.ok) {
+        // Successful employee login
+        const EmployeeResponse= JSON.parse(await response.text());
+        if(EmployeeResponse.length===0){
+          setSuccessMessage('Email and Id validated successfully.')
+          setOpenSuccessToast(true);
+          setEmailValidated(true);
+        }
+        else if(EmployeeResponse[0]["empId"]!==empId){
+
+          setErrorMessage(`Email is already registered with different Emp Id`)
+          setOpenErrorToast(true);
+        }
+        else {
+          setErrorMessage(`Email and Id is already registered`)
+          setOpenErrorToast(true);
+        }
+      }
+       else {
+        setErrorMessage(`Something went wrong while validating.`)
+        setOpenErrorToast(true);
+      }
+    } catch (error) {
+      setErrorMessage("Something went wrong while validating. : ",error.message)
+      setOpenErrorToast(true)
+    } finally {
+      // setLoading(false); 
+    }
+  };
+  
   const saveAmdocsJourney = () =>{
     const journeyAsString = JSON.stringify(journeys);
     setAmdocsJourney(journeyAsString)
@@ -111,67 +156,23 @@ export default function Signup(props) {
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toString(); // Convert bytes to hex
     return hashHex; // Return the hash as a hex string
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    // e.preventDefault();
     const hashedPassword = await hashText(empPassword);
-    console.log({
-      empEmail,
-      empPassword:hashedPassword,
-      empId,
-      empName,
-      empImage,
-      currentAccount,
-      supervisorName,
-      amdocsExperience,
-      totalExperience,
-      journeys,
-      amdocsJourney,
-      functionalKnowledge,
-      primaryTechSkill,
-      primaryProductSubdomain,
-      secondaryTechSkill,
-      secondaryProduct,
-      devOpsKnowledge,
-      mentoringAbility,
-      explorationInterest,
-      contributedToDesign,
-      engagementActivityContribution,
-      presentationSkills,
-      hobbiesSports,
-      additionalInfo,
-      approved
-    })
+    console.log({journeys})
     try {
-      const response = await fetch("http://localhost:8080/api/v1/employee/register", {
+      const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/employee/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          empEmail,
-          empPassword:hashedPassword,
-          empId,
-          empName,
-          empImage,
-          currentAccount,
-          supervisorName,
-          amdocsExperience,
-          totalExperience,
-          amdocsJourney,
-          functionalKnowledge,
-          primaryTechSkill,
-          primaryProductSubdomain,
-          secondaryTechSkill,
-          secondaryProduct,
-          devOpsKnowledge,
-          mentoringAbility,
-          explorationInterest,
-          contributedToDesign,
-          engagementActivityContribution,
-          presentationSkills,
-          hobbiesSports,
-          additionalInfo,
-          approved
+          empEmail, empPassword:hashedPassword, empId, empName,
+          empImage,currentAccount,supervisorName,amdocsExperience,
+          totalExperience,amdocsJourney,functionalKnowledge,primaryTechSkill,
+          primaryProductSubdomain,secondaryTechSkill,secondaryProduct,
+          devOpsKnowledge,mentoringAbility,explorationInterest,contributedToDesign,
+          engagementActivityContribution,presentationSkills,hobbiesSports,additionalInfo,approved
         }),
       });
 
@@ -186,7 +187,7 @@ export default function Signup(props) {
 const getAllSkills = async()=>{
   try {
     // First API call to admin login
-    const skillResponse = await fetch('http://localhost:8080/api/v1/employee/getSkills', {
+    const skillResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/employee/getSkills`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -202,7 +203,7 @@ const getAllSkills = async()=>{
 const getAllDomains = async()=>{
   try {
     // First API call to admin login
-    const domainResponse = await fetch('http://localhost:8080/api/v1/employee/getDomain', {
+    const domainResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/employee/getDomain`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -229,7 +230,13 @@ useEffect(()=>{
   
     setOpenErrorToast(false);
   };
+  const handleCloseSuccessToast = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
   
+    setOpenSuccessToast(false);
+  };
   const validateInputs = () => {
     
     let isValid = true;
@@ -281,17 +288,22 @@ useEffect(()=>{
         setOpenErrorToast(true);
         
       }
-      else if(parseFloat(amdocsExperience)<1){
-        setJourneys([{ account: '', description: '', startDate: '', endDate: '',isPresent:false}])
-      }
+      // else if(parseFloat(amdocsExperience)<1){
+      //   setJourneys([{ account: '', description: '', startDate: '', endDate: '',isPresent:false}])
+      // }
     }
     else if(activeStep ===2){
-      if(amdocsExperience>0 && journeys[0].account===''){
-        isValid=false;
-        setErrorMessage("Please provide your amdocs journey.")
+      // if(amdocsExperience>0 && journeys[0].account===''){
+      //   isValid=false;
+      
+      // }
+      //else 
+      if(journeys.length===1 && (journeys[0]["account"]==='' || journeys[0]["description"]==='' || journeys[0]["startDate"]==='')){
+        setErrorMessage("Please fill all details first or delete this experience.")
         setOpenErrorToast(true);
-      }
-      else saveAmdocsJourney();
+        return;
+    }
+      saveAmdocsJourney();
     }
   
     // Move to the next step only if the validation passes
@@ -399,7 +411,7 @@ useEffect(()=>{
               </Stepper>
             </Box>
           </Box>
-          <Snackbar open={openErrorToast} autoHideDuration={5000} onClose={handleCloseErrorToast}>
+          <Snackbar open={openErrorToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} onClose={handleCloseErrorToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}>
         <Alert
           onClose={handleCloseErrorToast}
           severity="error"
@@ -407,6 +419,18 @@ useEffect(()=>{
           sx={{ width: '100%' }}
         >
           {errorMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openSuccessToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} 
+      onClose={handleCloseSuccessToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}
+      >
+        <Alert
+          onClose={handleCloseSuccessToast}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {successMessage}
         </Alert>
       </Snackbar>
           <Box
@@ -495,11 +519,31 @@ useEffect(()=>{
                   )}
                   <Button
                     variant="contained"
-                    endIcon={<ChevronRightRoundedIcon />}
-                    onClick={activeStep===steps.length-1? handleSubmit : handleNext}
+                    endIcon={emailValidated?<ChevronRightRoundedIcon />:""}
+                    onClick={
+                      () => {
+                        if(activeStep ===0 && !emailValidated){
+                          validateEmail();
+                        }
+                        else if (activeStep === steps.length - 1) {
+                          handleSubmit();
+                        } else {
+                          handleNext();
+                        }
+                      }
+                    }
                     sx={{ width: { xs: '100%', sm: 'fit-content' } }}
                   >
-                    {activeStep === steps.length - 1 ? 'Send for approval' : 'Next'}
+                    {(() => {
+                      if(activeStep ===0 && !emailValidated){
+                        return 'Validate Email'
+                      }
+                      else if (activeStep === steps.length - 1) {
+                            return 'Send for approval';
+                        } else {
+                            return 'Next';
+                        }
+                      })()}
                   </Button>
                 </Box>
               </React.Fragment>

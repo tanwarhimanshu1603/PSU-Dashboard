@@ -12,9 +12,10 @@ import { Badge } from "@mui/material";
 import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
 import { useState } from "react";
+import ConfirmDialog from "../../../../utils/ConfirmDialog";
 const Sidebar = ({ requestCount,employeeCount }) => {
   const [loading, setLoading] = useState(false);
-
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { dispatch } = useContext(DarkModeContext);
   const navigate = useNavigate();
 
@@ -31,6 +32,12 @@ const Sidebar = ({ requestCount,employeeCount }) => {
       // You can also add your logout logic here
     }, 3000);
   }
+  const handleDialogClose = (confirm) => {
+    setDialogOpen(false); // Close the dialog
+    if (confirm) {
+      handleLogout();
+    }
+  };
 
   return (
     <div className="sidebar">
@@ -81,7 +88,7 @@ const Sidebar = ({ requestCount,employeeCount }) => {
             </li>
           </Link>
           <p className="title">USER</p>
-          <li onClick={handleLogout}>
+          <li onClick={()=>setDialogOpen(true)}>
             <ExitToAppIcon className="icon" />
             <span>Logout</span>
           </li>
@@ -92,6 +99,12 @@ const Sidebar = ({ requestCount,employeeCount }) => {
           )}
         </ul>
       </div>
+      <ConfirmDialog 
+        open={dialogOpen}
+        handleClose={(confirm) => handleDialogClose(confirm)}
+        message={"Are you sure you want to logout?"}
+        buttonText = {"Logout"}
+      />
       {/* <div className="bottom">
         <div
           className="colorOption"

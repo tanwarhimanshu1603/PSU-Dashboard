@@ -152,7 +152,7 @@ export default function AdditionalDetails({props}) {
         </RadioGroup>
       </Grid>
       <FormGrid size={{ xs: 12 }}>
-        <FormLabel htmlFor="amdocs-journey" required>
+        <FormLabel htmlFor="amdocs-journey" >
           Additional Info
         </FormLabel>
         <OutlinedInput

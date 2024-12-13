@@ -17,6 +17,7 @@ import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
 import { useNavigate } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import GLOBAL_CONFIG from '../../../constants/global';
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -45,6 +46,10 @@ export default function SignInCard() {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [forgotPasswordMail,setForgotPasswordMail] = React.useState("");
+  const [openSuccessToast,setOpenSuccessToast] = React.useState(false);
+  const [openErrorToast,setOpenErrorToast] = React.useState(false);
+  const [errorMessage,setErrorMessage]= React.useState('');
+  const [successMessage,setSuccessMessage] = React.useState('');
   const navigate = useNavigate();
   // const navigate = useNavigate(); 
   const hashText = async (text) => {
@@ -62,10 +67,10 @@ export default function SignInCard() {
   };
 
   const handleForgotPassword = async ()=>{
-    setOpen(false);
+    
     try {
       // First API call to forgot password
-      const response = await fetch('http://localhost:8080/api/v1/employee/forgot-password', {
+      const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/employee/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,11 +78,18 @@ export default function SignInCard() {
         body: JSON.stringify({empEmail: forgotPasswordMail})
       });
       if(response.ok){
-        alert("Mail has been sent to your Email ID " + forgotPasswordMail);
-      }else console.error("Error sending mail.");
+        setSuccessMessage(`Mail has been sent to your Email ID ${forgotPasswordMail}`)
+        setOpenSuccessToast(true);
+      }else{
+        setErrorMessage("Error sending mail for reset password. Please check email id")
+        setOpenErrorToast(true);
+      }
       }
       catch(error){
-        console.log(error);
+        setErrorMessage("Something went wrong!!")
+        setOpenErrorToast(true);
+      }finally{
+        setOpen(false);
       }
   }
 
@@ -86,60 +98,73 @@ export default function SignInCard() {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
+  
     if (emailError || passwordError || !validateInputs()) {
-      e.preventDefault();
-      return;
+      return; // Validate inputs before making API calls
     }
-    const hashedPassword= await hashText(password)
+  
+    const hashedPassword = await hashText(password);
     setLoading(true);
+  
     try {
-        // First API call to admin login
-        const adminResponse = await fetch('http://localhost:8080/api/v1/admin/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ adminEmail:email, adminPassword:hashedPassword }),
-        });
-    
-        if (adminResponse.ok) {
-          // If the response is OK, navigate to admin dashboard
-          setLoading(false);
-          const jwtToken = await adminResponse.text();
-          localStorage.setItem("jwtToken",jwtToken);
-          navigate('/admin');
-
-          return;
-        }
-    
-        // Second API call to employee login
-        const employeeResponse = await fetch('http://localhost:8080/api/v1/employee/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            
-          },
-          body: JSON.stringify({empEmail: email, empPassword:hashedPassword }),
-        });
-    
-        if (employeeResponse.ok) {
-          // If the response is OK, navigate to employee dashboard
-          setLoading(false);
-          const response = await employeeResponse.json();
-          const jwtToken = response.token;
-          const empId = response.employee.empId;
-          localStorage.setItem("empToken",jwtToken);
-          localStorage.setItem("empId",empId);
-          navigate('/dashboard');
-        }
-    
-      } catch (error) {
-        setLoading(false);
-        
-        console.error('Error during login:', error);
-        // Optionally handle error (e.g., show a user-friendly message)
+      // First API call to admin login
+      const adminResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/admin/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ adminEmail: email, adminPassword: hashedPassword }),
+      });
+  
+      if (adminResponse.ok) {
+        // Successful admin login
+        const jwtToken = await adminResponse.text();
+        localStorage.setItem("jwtToken", jwtToken);
+        navigate('/admin');
+        return;
+      } else if (adminResponse.status === 401) {
+        // setErrorMessage('Unauthorized: Invalid admin credentials')
+        // setOpenErrorToast(true);
+        //console.warn('Unauthorized: Invalid admin credentials');
+      } else {
+        setErrorMessage(`Login failed with status: ${adminResponse.status}`)
+        setOpenErrorToast(true);
+        // console.error(`Admin login failed with status: ${adminResponse.status}`);
       }
-};
+  
+      // Second API call to employee login
+      const employeeResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/employee/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ empEmail: email, empPassword: hashedPassword }),
+      });
+  
+      if (employeeResponse.ok) {
+        // Successful employee login
+        const response = await employeeResponse.json();
+        const jwtToken = response.token;
+        const empId = response.employee.empId;
+        localStorage.setItem("empToken", jwtToken);
+        localStorage.setItem("empId", empId);
+        navigate('/dashboard');
+      } else if (employeeResponse.status === 401) {
+        setErrorMessage('401 Unauthorized: Invalid credentials')
+        setOpenErrorToast(true)
+      } else {
+        setErrorMessage(`Login failed with status: ${employeeResponse.status}`)
+        setOpenErrorToast(true)
+      }
+    } catch (error) {
+      setErrorMessage("Error : ",error.message)
+      setOpenErrorToast(true)
+    } finally {
+      setLoading(false); // Always stop loading, even if there's an error
+    }
+  };
+  
 
   const validateInputs = () => {
     
@@ -165,7 +190,20 @@ export default function SignInCard() {
 
     return isValid;
   };
-
+  const handleCloseErrorToast = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+  
+    setOpenErrorToast(false);
+  };
+  const handleCloseSuccessToast = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+  
+    setOpenSuccessToast(false);
+  };
   return (
     <Card variant="outlined">
       <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -254,24 +292,31 @@ export default function SignInCard() {
         </Typography>
       </Box>
       <Divider></Divider>
-      {/* <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Button
-          fullWidth
-          variant="outlined"
-          onClick={() => alert('Sign in with Google')}
-          startIcon={<GoogleIcon />}
+      
+      <Snackbar open={openErrorToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} 
+      onClose={handleCloseErrorToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}
+      >
+        <Alert
+          onClose={handleCloseErrorToast}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
         >
-          Sign in with Google
-        </Button>
-        <Button
-          fullWidth
-          variant="outlined"
-          onClick={() => alert('Sign in with Facebook')}
-          startIcon={<FacebookIcon />}
+          {errorMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openSuccessToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} 
+      onClose={handleCloseSuccessToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}
+      >
+        <Alert
+          onClose={handleCloseSuccessToast}
+          severity="success"
+          variant="filled"
+          sx={{ width: '100%' }}
         >
-          Sign in with Facebook
-        </Button>
-      </Box> */}
+          {successMessage}
+        </Alert>
+      </Snackbar>
     </Card>
   );
 }

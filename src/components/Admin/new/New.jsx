@@ -5,6 +5,7 @@ import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUpload
 import { useState } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import GLOBAL_CONFIG from "../../../constants/global";
 
 const New = ({ inputs, title,requestCount,employeeCount }) => {
   const [file, setFile] = useState("");
@@ -155,7 +156,7 @@ const New = ({ inputs, title,requestCount,employeeCount }) => {
           </div>
         </div>
       </div>
-      <Snackbar open={openErrorToast} autoHideDuration={6000} onClose={handleCloseErrorToast}>
+      <Snackbar open={openErrorToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} onClose={handleCloseErrorToast}  anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}>
         <Alert
           onClose={handleCloseErrorToast}
           severity="error"
@@ -166,8 +167,8 @@ const New = ({ inputs, title,requestCount,employeeCount }) => {
         </Alert>
       </Snackbar>
 
-      <Snackbar open={openSuccessToast} autoHideDuration={6000} 
-      onClose={handleCloseSuccessToast}
+      <Snackbar open={openSuccessToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} 
+      onClose={handleCloseSuccessToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}
       >
         <Alert
           onClose={handleCloseSuccessToast}
@@ -178,7 +179,7 @@ const New = ({ inputs, title,requestCount,employeeCount }) => {
           {successMessage}
         </Alert>
       </Snackbar>
-      <Snackbar open={openWarningToast} autoHideDuration={6000} onClose={handleCloseWarningToast}>
+      <Snackbar open={openWarningToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} onClose={handleCloseWarningToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}>
         <Alert
           onClose={handleCloseWarningToast}
           severity="warning"

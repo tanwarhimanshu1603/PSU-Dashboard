@@ -10,13 +10,14 @@ import Avatar from '@mui/material/Avatar';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { IconButton } from "@mui/material";
 import {Box }from '@mui/material';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 const FormGrid = styled(Grid)(() => ({
   display: 'flex',
   flexDirection: 'column',
 }));
 
 export default function BasicInfo({ props }) {
-  const {empImage,setEmpImage, empEmail, setEmpEmail, empId, setEmpId, empPassword, setEmpPassword, confirmPassword, setConfirmPassword } = props
+  const {empImage,setEmpImage, empEmail, setEmpEmail, empId, setEmpId, empPassword, setEmpPassword, confirmPassword, setConfirmPassword,emailValidated,setEmailValidated } = props
   //const [empId, setEmpId] = useState(""); // Employee ID state
  
   // Handle file upload
@@ -96,8 +97,9 @@ export default function BasicInfo({ props }) {
   />
 </Box>
 
-      <FormGrid size={{ xs: 6 }}>
-        <FormLabel htmlFor="empId" required>
+<FormGrid size={{ xs: 12, md: 6 }} sx={{position:'relative'}}>
+      {emailValidated?<TaskAltIcon sx={{ color: 'green',position:"absolute",left:"90px",top:"4px" }} fontSize="x-small"/>:""}
+       <FormLabel htmlFor="empId" required>
           Employee Id
         </FormLabel>
         <OutlinedInput
@@ -109,10 +111,11 @@ export default function BasicInfo({ props }) {
           required
           size="small"
           value={empId}
-          onChange={(e) => setEmpId(e.target.value)}
+          onChange={(e) => {setEmailValidated(false);setEmpId(e.target.value)}}
         />
       </FormGrid>
-      <FormGrid size={{ xs: 12, md: 6 }}>
+      <FormGrid size={{ xs: 12, md: 6 }} sx={{position:'relative'}}>
+      {emailValidated?<TaskAltIcon sx={{ color: 'green',position:"absolute",left:"50px",top:"4px" }} fontSize="x-small"/>:""}
         <FormLabel htmlFor="email" required>
           Email
         </FormLabel>
@@ -125,10 +128,10 @@ export default function BasicInfo({ props }) {
           required
           size="small"
           value={empEmail}
-          onChange={(e) => setEmpEmail(e.target.value)}
+          onChange={(e) =>{setEmailValidated(false); setEmpEmail(e.target.value)}}
         />
       </FormGrid>
-      <FormGrid size={{ xs: 12, md: 6 }} >
+      {emailValidated && <FormGrid size={{ xs: 12, md: 6 }} >
         <FormLabel htmlFor="password" required>
           Password
         </FormLabel>
@@ -137,15 +140,16 @@ export default function BasicInfo({ props }) {
           name="password"
           type="password"
           autoComplete="password"
+          disabled={!emailValidated}
           required
           size="small"
           value={empPassword}
           onChange={(e) => setEmpPassword(e.target.value)}
         />
-      </FormGrid>
+      </FormGrid>}
 
 
-      <FormGrid size={{ xs: 12, md: 6 }} >
+      {emailValidated && <FormGrid size={{ xs: 12, md: 6 }} >
         <FormLabel htmlFor="password" required>
           Confirm Password
         </FormLabel>
@@ -154,12 +158,13 @@ export default function BasicInfo({ props }) {
           name="confirmPassword"
           type="password"
           autoComplete="password"
+          disabled={!emailValidated}
           required
           size="small"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-      </FormGrid>
+      </FormGrid>}
       {/* <FormGrid size={{ xs: 12 }}>
         <FormLabel htmlFor="address1" required>
           Address line 1

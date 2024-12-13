@@ -60,7 +60,7 @@ export default function Content() {
         <Stack key={index} direction="row" sx={{ gap: 2, textAlign: "justify" }}>
           {item.icon}
           <div>
-            <Typography gutterBottom sx={{ fontWeight: 'medium' }} style={{ fontWeight: "bolder" }}>
+            <Typography gutterBottom sx={{ fontWeight:"medium" }} style={{ fontWeight: "bolder",fontFamily:"unset",fontSize:"1rem" }}>
               {item.title}
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>

@@ -6,6 +6,7 @@ import ConfirmDialog from "../../../../utils/ConfirmDialog";
 import Badge from "@mui/material/Badge";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import GLOBAL_CONFIG from "../../../../constants/global";
 const Approvaltable = ({requestCount,setRequestCount}) => {
     const [rows,setRows] = useState([]);
     // const [requestCount,setRequestCount] = useState(0);
@@ -206,7 +207,8 @@ const Approvaltable = ({requestCount,setRequestCount}) => {
         message={"Are you sure you want to delete employee record?"}
         buttonText={"Delete"}
       /> */}
-      <Snackbar open={openErrorToast} autoHideDuration={6000} onClose={handleCloseErrorToast}>
+      <Snackbar open={openErrorToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} 
+      onClose={handleCloseErrorToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}>
         <Alert
           onClose={handleCloseErrorToast}
           severity="error"
@@ -216,8 +218,8 @@ const Approvaltable = ({requestCount,setRequestCount}) => {
           {errorMessage}
         </Alert>
       </Snackbar>
-      <Snackbar open={openSuccessToast} autoHideDuration={6000} 
-      onClose={handleCloseSuccessToast}
+      <Snackbar open={openSuccessToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} 
+      onClose={handleCloseSuccessToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}
       >
         <Alert
           onClose={handleCloseSuccessToast}

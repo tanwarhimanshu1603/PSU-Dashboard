@@ -19,7 +19,7 @@ const FormGrid = styled(Grid)(() => ({
 }));
 
 export default function AmdocsJourney({ props }) {
-  const { amdocsExperience, amdocsJourney, setAmdocsJourney,journeys, setJourneys } = props;
+  const {setAmdocsJourney,journeys, setJourneys,setErrorMessage,setOpenErrorToast } = props;
 
   const [index, setIndex] = useState(journeys.length-1);
 
@@ -31,22 +31,21 @@ export default function AmdocsJourney({ props }) {
   };
 
   const addJourney = () => {
-    console.log("Adding" , journeys[journeys.length-1])
-    if(journeys[journeys.length-1]["account"]==='' || journeys[journeys.length-1]["description"]==='' || journeys[journeys.length-1]["startDate"]===''){
-        alert("Please fill all details first")
+    if(journeys.length>0 && (journeys[journeys.length-1]["account"]==='' || journeys[journeys.length-1]["description"]==='' || journeys[journeys.length-1]["startDate"]==='')){
+        setErrorMessage("Please fill all details first or delete this experience.")
+        setOpenErrorToast(true);
         return;
     }
     const newJourney = { account: '', description: '', startDate: '', endDate: '',isPresent:false    };
     setJourneys([...journeys, newJourney]);
     setIndex(journeys.length);
-    console.log(journeys)
   };
 
   const removeJourney = (currentIndex) => {
-    if (journeys.length > 1) {
+    if (journeys.length > 0) {
       const updatedJourneys = journeys.filter((_, i) => i !== currentIndex);
       setJourneys(updatedJourneys);
-      setIndex((prevIndex) => Math.max(0, prevIndex - 1));
+      setIndex((prevIndex) => Math.max(-1, prevIndex - 1));
     }
   };
 
@@ -58,16 +57,29 @@ export default function AmdocsJourney({ props }) {
     setIndex((prevIndex) => Math.min(journeys.length - 1, prevIndex + 1));
   };
 
-  if (amdocsExperience < 1) {
+  if (journeys.length===0) {
     return (
-      <Grid container spacing={3} style={{ textAlign: 'left' }}>
-        Since your experience at Amdocs is less than one year, you may skip this section.
+      <Grid container spacing={3} >
+        You can add your experience at Amdocs by clicking below icon.
+        <FormGrid
+        size={{ xs: 12, md: 6 }}
+        style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}
+      >
+        <Tooltip title="Add new">
+          <AddIcon onClick={addJourney}
+          style={{
+            cursor: 'pointer',
+          }}
+           />
+        </Tooltip>
+      </FormGrid>
       </Grid>
     );
   }
 
   return (
     <Grid container spacing={3} style={{ textAlign: 'left' }}>
+      {journeys.length>0 && (<>
       <FormGrid size={{ xs: 12, md: 6 }}>{index + 1}/{journeys.length}</FormGrid>
       <FormGrid
         size={{ xs: 12, md: 6 }}
@@ -82,7 +94,7 @@ export default function AmdocsJourney({ props }) {
         </Tooltip>
       </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }}>
-        <FormLabel htmlFor={`account-${index}`} required>
+        <FormLabel htmlFor={`account-${index}`} >
           Account
         </FormLabel>
         <OutlinedInput
@@ -91,14 +103,14 @@ export default function AmdocsJourney({ props }) {
           type="text"
           placeholder="Account Name"
           autoComplete="off"
-          required
+          // required
           size="small"
           value={journeys[index].account}
           onChange={(e) => handleInputChange('account', e.target.value)}
         />
       </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }}>
-        <FormLabel htmlFor={`description-${index}`} required>
+        <FormLabel htmlFor={`description-${index}`} >
           Description
         </FormLabel>
         <OutlinedInput
@@ -106,14 +118,14 @@ export default function AmdocsJourney({ props }) {
           name="description"
           type="text"
           placeholder="Description"
-          required
+          // required
           size="small"
           value={journeys[index].description}
           onChange={(e) => handleInputChange('description', e.target.value)}
         />
       </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }}>
-        <FormLabel htmlFor={`startDate-${index}`} required>
+        <FormLabel htmlFor={`startDate-${index}`} >
           From
         </FormLabel>
         <OutlinedInput
@@ -121,14 +133,14 @@ export default function AmdocsJourney({ props }) {
           name="startDate"
           type="text"
           placeholder='May 2023'
-          required
+          // required
           size="small"
           value={journeys[index].startDate}
           onChange={(e) => handleInputChange('startDate', e.target.value)}
         />
       </FormGrid>
       <FormGrid size={{ xs: 12, md: 6 }}>
-  <FormLabel htmlFor={`endDate-${index}`} required>
+  <FormLabel htmlFor={`endDate-${index}`} >
     To
   </FormLabel>
   <OutlinedInput
@@ -136,7 +148,7 @@ export default function AmdocsJourney({ props }) {
     name="endDate"
     type="text"
     placeholder='June 2024'
-    required
+    // required
     size="small"
     value={journeys[index].endDate}
     onChange={(e) => handleInputChange('endDate', e.target.value)}
@@ -188,7 +200,8 @@ export default function AmdocsJourney({ props }) {
     </Tooltip>
   </div>
 </FormGrid>
-
+</>
+  )}
       <FormGrid
         size={{ xs: 12, md: 6 }}
         style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}

@@ -9,6 +9,7 @@ import FilterDialog from "../../../../utils/FilterDialog";
 import Badge from "@mui/material/Badge";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import GLOBAL_CONFIG from '../../../../constants/global'
 import {
   Button,
   Dialog,
@@ -382,8 +383,8 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
         message={"Are you sure you want to delete employee record?"}
         buttonText={"Delete"}
       /> */}
-      <Snackbar open={openErrorToast} autoHideDuration={6000} 
-      onClose={handleCloseErrorToast}
+    <Snackbar open={openErrorToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} 
+      onClose={handleCloseErrorToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}
       >
         <Alert
           onClose={handleCloseErrorToast}
@@ -394,8 +395,8 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
           {errorMessage}
         </Alert>
       </Snackbar>
-      <Snackbar open={openSuccessToast} autoHideDuration={6000} 
-      onClose={handleCloseSuccessToast}
+      <Snackbar open={openSuccessToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} 
+      onClose={handleCloseSuccessToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}
       >
         <Alert
           onClose={handleCloseSuccessToast}
