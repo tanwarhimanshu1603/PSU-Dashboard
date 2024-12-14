@@ -31,7 +31,7 @@ export default function AmdocsJourney({ props }) {
   };
 
   const addJourney = () => {
-    if(journeys.length>0 && (journeys[journeys.length-1]["account"]==='' || journeys[journeys.length-1]["description"]==='' || journeys[journeys.length-1]["startDate"]==='')){
+    if(journeys.length>0 && (journeys[journeys.length-1]["account"]==='' || journeys[journeys.length-1]["description"]==='' || journeys[journeys.length-1]["startDate"]===''|| (journeys[journeys.length-1]["endDate"]==='' && journeys[journeys.length-1]["isPresent"]===false))){
         setErrorMessage("Please fill all details first or delete this experience.")
         setOpenErrorToast(true);
         return;

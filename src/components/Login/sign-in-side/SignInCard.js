@@ -111,7 +111,7 @@ export default function SignInCard() {
   
     try {
       // First API call to admin login
-      const adminResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/admin/login`, {
+      const adminResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/admin/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ export default function SignInCard() {
       }
   
       // Second API call to employee login
-      const employeeResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/employee/login`, {
+      const employeeResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

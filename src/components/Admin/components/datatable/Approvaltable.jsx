@@ -60,8 +60,9 @@ const Approvaltable = ({requestCount,setRequestCount}) => {
             body: JSON.stringify(employee),
           });
           if (response.ok) {
-            setRows(rows.filter((item) => item.empId !== employeeId));
-            setRequestCount(rows.length)
+            const updatedRows = rows.filter((item) => item.empId !== employeeId)
+            setRows(updatedRows);
+            setRequestCount(updatedRows.length)
             setSuccessMessage("Approved Successfully!!")
             setOpenSuccessToast(true);
             return;

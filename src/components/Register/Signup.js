@@ -298,7 +298,7 @@ useEffect(()=>{
       
       // }
       //else 
-      if(journeys.length===1 && (journeys[0]["account"]==='' || journeys[0]["description"]==='' || journeys[0]["startDate"]==='')){
+      if(journeys.length>=1 && (journeys[journeys.length-1]["account"]==='' || journeys[journeys.length-1]["description"]==='' || journeys[journeys.length-1]["startDate"]==='' || (journeys[journeys.length-1]["endDate"]==='' && journeys[journeys.length-1]["isPresent"]===false))){
         setErrorMessage("Please fill all details first or delete this experience.")
         setOpenErrorToast(true);
         return;

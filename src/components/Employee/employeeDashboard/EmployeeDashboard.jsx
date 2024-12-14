@@ -21,6 +21,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveIcon from '@mui/icons-material/Remove';
 import AddIcon from '@mui/icons-material/Add';
 import GLOBAL_CONFIG from '../../../constants/global';
+import EditAmdocsJourney from '../../../utils/EditAmdocsJourney';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import { IconButton } from "@mui/material";
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
     ...theme.typography.body2,
@@ -32,6 +35,7 @@ export default function EmployeeDashboard() {
     const navigate = useNavigate();
 
     const [employee, setEmployee] = useState(null);
+    const [employeeSnapshot,setEmployeeSnapshot] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [updateMode,setUpdateMode] = useState(false);  
@@ -48,7 +52,76 @@ export default function EmployeeDashboard() {
     const [successMessage,setSuccessMessage] = useState('');
     const [warningMessage,setWarningMessage]= useState('');
     const [amdocsJourney,setAmdocsJourney]=useState(null)
+    const [editAmdocsJourneyDialogOpen, setEditAmdocsJourneyDialogOpen] = useState(false);
+    const [journeys, setJourneys] = useState([]);
+    const [empImageLink,setEmpImageLink] = useState('');
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        try {
+          const uploadedUrl = await uploadToCloudinary(file);
+          setEmpImageLink(uploadedUrl); // Store the Cloudinary URL
+          setEmployee({...employee,"empImage":uploadedUrl})
+          setChangesMade(true)
+        } catch (err) {
+          console.error("Image upload failed:", err);
+        }
+      };
+    
+      const uploadToCloudinary = async (file) => {
+        const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dczif4pj4/image/upload";
+        const CLOUDINARY_UPLOAD_PRESET = "coe_dashboard";
+      
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+      
+        try {
+          // Make the POST request with fetch
+          const response = await fetch(CLOUDINARY_URL, {
+            method: "POST",
+            body: formData,
+          });
+      
+          if (!response.ok) {
+            throw new Error("Failed to upload image to Cloudinary");
+          }
+      
+          const data = await response.json(); // Parse JSON response
+          console.log("Uploaded Image URL:", data.secure_url);
+      
+          return data.secure_url; // Return the uploaded image URL
+        } catch (error) {
+          console.error("Error uploading to Cloudinary:", error);
+          throw error;
+        }
+      };
+      
+      const triggerFileInput = () => {
+        document.getElementById("imageUpload").click();
+      };
+    
+    const openEditAmdocsJourneyDialog = () => {
+        setEditAmdocsJourneyDialogOpen(true);
+    };
 
+    const closeEditAmdocsJourneyDialog = (confirmation) => {
+        if(journeys.length>=1 && (journeys[journeys.length-1]["account"]==='' || journeys[journeys.length-1]["description"]==='' || journeys[journeys.length-1]["startDate"]==='' || (journeys[journeys.length-1]["endDate"]==='' && journeys[journeys.length-1]["isPresent"]===false))){
+            setErrorMessage("Please fill all details first or delete incomplete experience.")
+            setOpenErrorToast(true);
+            return;
+        }
+        if(confirmation){
+            setAmdocsJourney(journeys);
+            employee.amdocsJourney = JSON.stringify(journeys);
+            updateDetails();
+        } else {
+            setAmdocsJourney(JSON.parse(employeeSnapshot.amdocsJourney));
+            setJourneys(JSON.parse(employeeSnapshot.amdocsJourney));
+            
+        }
+        setEditAmdocsJourneyDialogOpen(false);
+    };
     useEffect(() => {
         // Retrieve empId from localStorage
         const empId = localStorage.getItem("empId");
@@ -75,8 +148,11 @@ export default function EmployeeDashboard() {
             // console.log(data);
             
             if (response.ok) {
-            console.log(data);
+            // console.log(data);
             setEmployee(data); // Set the employee data
+            setEmployeeSnapshot(data);
+            setJourneys(await JSON.parse(data.amdocsJourney))
+            // console.log(j)
 
             try {
                 const journey= JSON.parse(data.amdocsJourney);
@@ -243,26 +319,41 @@ export default function EmployeeDashboard() {
             throw new Error('Failed to update employee. Please check the input fields.');
           }
           else{
+            const updatedEmployee = JSON.parse(await response.text())
+            setEmployee(updatedEmployee);
+            setEmployeeSnapshot(updatedEmployee);
+            setTimeout(() => {
+            
+                setSuccessMessage("Changes saved successfully.")
+                setOpenSuccessToast(true);
+            },1500);
             setLoading(false);
           }
     
         //   alert('Employee updated successfully!');
         } catch (err) {
+            setErrorMessage("An error occured while updating your details");
+            setOpenErrorToast(true);
+            setEmployee(employeeSnapshot);
+            setAmdocsJourney(JSON.parse(employeeSnapshot.amdocsJourney));
+            setJourneys(JSON.parse(employeeSnapshot.amdocsJourney));
             setLoading(false)
         }
       };
+
+    const undoChanges = () =>{
+        setEmployee(employeeSnapshot);
+        setAmdocsJourney(JSON.parse(employeeSnapshot.amdocsJourney));
+        setJourneys(JSON.parse(employeeSnapshot.amdocsJourney));
+    }
 
 
     const handleSaveDetails = () => {
         console.log("Saving Details");
         if(!changesMade) return;
         updateDetails();
-        setTimeout(() => {
-            setUpdateMode((prev) => !prev);
-            //alert("changes saved successfully")
-            setSuccessMessage("Changes saved successfully.")
-            setOpenSuccessToast(true);
-        },1500);
+        setUpdateMode((prev) => !prev);
+        
         setChangesMade(false);
         
     }
@@ -334,14 +425,30 @@ export default function EmployeeDashboard() {
               <LinearProgress color="inherit" />
             </Stack>
           )}
-            <Box sx={{mb: 1,display: 'flex', justifyContent: 'space-between'}}>
-                <Button onClick={handleBack} variant="text" sx={{display: 'flex', gap:1}}>
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    position: 'fixed',
+                    top: 0, // Ensures it's pinned to the top of the viewport
+                    left: 0, // Ensures alignment with the left edge
+                    right: 0, // Ensures it spans the full width of the screen
+                    zIndex: 1000, // High z-index to stay on top of other elements
+                    backgroundColor: 'background.paper', // Professional background color (can customize)
+                    padding: 2, // Adds padding around the content
+                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Adds a subtle shadow
+                }}
+            >
+                <Button onClick={handleBack} variant="text" sx={{ display: 'flex', gap: 1 }}>
                     <ArrowBackIcon />
                     Back
                 </Button>
-                <Button onClick={handleSaveDetails} variant="contained" disabled={!changesMade}>Save</Button>
+                <Button onClick={handleSaveDetails} variant="contained" disabled={!changesMade}>
+                    Save
+                </Button>
             </Box>
-            <Grid container spacing={2}>
+
+            <Grid container spacing={2} sx={{marginTop:8}}>
                 <Grid size={{ xs: 6, md: 4 }}>
                     <Item sx={{position: 'relative'}}>
                         <Tooltip title={updateMode ? 'Edit Off' : 'Edit'}>
@@ -352,12 +459,33 @@ export default function EmployeeDashboard() {
                             </Box>
                         </Tooltip>
                         {/* <EditIcon sx={{position: 'absolute',top: 10, right: 10}}/> */}
-                        <Box>
+                        <Box sx={{position:"relative"}}>
                             <Avatar
                                 src={employee.empImage}
                                 alt={employee.empName}
                                 sx={{ width: 120, height: 120,m:2, mx: 'auto' }}
                             />
+                            {updateMode && <><IconButton
+                                color="primary"
+                                onClick={triggerFileInput}
+                                sx={{
+                                position: "absolute",
+                                top: 80,
+                                right: 110,
+                                zIndex: 2,
+                                background: "white", // Optional: Add a white background for better visibility
+                                borderRadius: "50%",
+                                }}
+                            >
+                                <AddAPhotoIcon />
+                            </IconButton>
+                            <input
+                                id="imageUpload"
+                                type="file"
+                                style={{ display: "none" }} // Hide input
+                                accept="image/*" // Accept only images
+                                onChange={handleImageUpload}
+                            /></>}
                             <Typography align="center" variant="h6" sx={{ mt: 2,fontWeight: 700,color: '#1e88e5' }}>
                                 {employee.empName}
                             </Typography>
@@ -547,8 +675,16 @@ export default function EmployeeDashboard() {
                         </Item>
                     </Grid>
                         <Grid>
-                            <Item>
+                            <EditAmdocsJourney open={editAmdocsJourneyDialogOpen} handleClose={closeEditAmdocsJourneyDialog} buttonText={"Save"} setAmdocsJourney={setAmdocsJourney} journeys={journeys} setJourneys={setJourneys} setErrorMessage={setErrorMessage} setOpenErrorToast={setOpenErrorToast}/>
+                            <Item sx={{position:"relative"}}>
                                 {/* Amdocs Journey Section */}
+                                <Tooltip title={updateMode ? 'Edit Off' : 'Edit'}>
+                            <Box onClick={openEditAmdocsJourneyDialog} sx={{position: 'absolute',top: 10, right: 10,cursor: 'pointer' }}>
+                                {
+                                    updateMode ? <EditOffIcon /> : <EditIcon />
+                                }
+                            </Box>
+                        </Tooltip>
                             <Box sx={{m:0.5}}>
                                 <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
                                     Amdocs Journey
