@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import GLOBAL_CONFIG from '../../../constants/global';
+import { AuthContext } from '../../../context/AuthContext/AuthContext';
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -51,6 +52,7 @@ export default function SignInCard() {
   const [errorMessage,setErrorMessage]= React.useState('');
   const [successMessage,setSuccessMessage] = React.useState('');
   const navigate = useNavigate();
+  const {setJwtToken} = React.useContext(AuthContext);
   // const navigate = useNavigate(); 
   const hashText = async (text) => {
     const encoder = new TextEncoder(); // Converts the string to a Uint8Array
@@ -119,8 +121,11 @@ export default function SignInCard() {
   
       if (adminResponse.ok) {
         // Successful admin login
-        const jwtToken = await adminResponse.text();
-        localStorage.setItem("jwtToken", jwtToken);
+        const token = await adminResponse.text();
+        // localStorage.setItem("jwtToken", jwtToken);
+        setJwtToken(token);
+        console.log("navigating to admin");
+        
         navigate('/admin');
         return;
       } else if (adminResponse.status === 401) {

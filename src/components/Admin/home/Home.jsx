@@ -87,14 +87,16 @@ import "./home.scss";
 import Widget from "../components/widget/Widget";
 import { useLocation } from "react-router-dom";
 import { scroller } from "react-scroll";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
+import { AuthContext } from "../../../context/AuthContext/AuthContext";
 
 const Home = ({ requestCount, data, allDomains, allSkills,employeeCount }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const jwtToken = localStorage.getItem('jwtToken');
+  // const jwtToken = localStorage.getItem('jwtToken');
+  const {jwtToken} = useContext(AuthContext);
   const [chunkedDomainArray, setChunkedDomainArray] = useState([]);
   const [skillsObject, setSkillsObject] = useState([]);
 

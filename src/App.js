@@ -2,7 +2,6 @@ import SignInSide from './components/Login/sign-in-side/SignInSide';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Home from './components/Admin/home/Home'
 import List from './components/Admin/list/List'
-import Single from './components/Admin/single/Single'
 import New from './components/Admin/new/New'
 import Signup from './components/Register/Signup'
 import { userInputs } from './components/Admin/formSource';
@@ -10,8 +9,8 @@ import EmployeeDashboard from './components/Employee/employeeDashboard/EmployeeD
 import AdminEmployeeDashboard from './components/Admin/view/AdminEmployeeDashboard';
 import ApprovalList from './components/Admin/list/ApprovalList';
 import ResetPassword from './components/ResetPassword/ResetPassword';
-import { useEffect, useState } from 'react';
-// import Test from './components/Employee/employeeDashboard/Test';
+import { useContext, useEffect, useState } from 'react';
+import { AuthContext } from './context/AuthContext/AuthContext';
 
 
 function App() {
@@ -21,8 +20,9 @@ function App() {
   const [errorMessage,setErrorMessage]=useState('');
   const [allSkills,setAllSkills]=useState([]);
   const [allDomains,setAllDomains] = useState([]);
-  const jwtToken = localStorage.getItem('jwtToken');
-
+  // const jwtToken = localStorage.getItem('jwtToken');
+  const {jwtToken} = useContext(AuthContext);
+  // const [jwtToken,setJwtToken] = useState(null);
 
   const getApprovalRequests = async()=>{
     try {
@@ -102,13 +102,18 @@ function App() {
   }
 
   useEffect(() => {
+    console.log("token: ",jwtToken);
+    
       if (jwtToken) {
-       getApprovalRequests();
-       getAllEmployees();
-       getAllDomains();
-       getAllSkills();
-      }
-  }, []);
+      console.log("jwt token exist getting data...");
+
+      getApprovalRequests();
+      getAllEmployees();
+      getAllDomains();
+      getAllSkills();
+
+    }
+  }, [jwtToken]);
   
   return (
     <Router>

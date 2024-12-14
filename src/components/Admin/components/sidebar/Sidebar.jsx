@@ -13,11 +13,13 @@ import Stack from '@mui/material/Stack';
 import LinearProgress from '@mui/material/LinearProgress';
 import { useState } from "react";
 import ConfirmDialog from "../../../../utils/ConfirmDialog";
+import { AuthContext } from "../../../../context/AuthContext/AuthContext";
 const Sidebar = ({ requestCount,employeeCount }) => {
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const { dispatch } = useContext(DarkModeContext);
   const navigate = useNavigate();
+  const {logout} = useContext(AuthContext);
 
   const redirectToApprovals = () => {
     navigate("/admin", { state: { scrollTo: "approvals" } });
@@ -26,9 +28,9 @@ const Sidebar = ({ requestCount,employeeCount }) => {
   const handleLogout = () => {
     setLoading(true);  // Start showing the progress bar
     setTimeout(() => {
-      localStorage.removeItem('jwtToken');
-      navigate('/')
+      logout();
       setLoading(false); // Hide the progress bar after 3 seconds
+      navigate("/");
       // You can also add your logout logic here
     }, 3000);
   }

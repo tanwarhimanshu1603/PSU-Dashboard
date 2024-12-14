@@ -65,14 +65,15 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
     else if(selectedDomain.length===0 && selectedSkills.length===0) handleReset(false);
   },[selectedDomain,selectedSkills]);
 
-  useEffect(() => {
-        const processedData = data.map((employee) => ({
-        ...employee,
-          currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
-        }));
-        setData(processedData)
-        // console.log(data);
-  },[]);
+  // useEffect(() => {
+  //       const processedData = filteredData?.map((employee) => ({
+  //       ...employee,
+  //         currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
+  //       }));
+  //       console.log(processedData);
+  //       setFilteredData(processedData)
+  //       // console.log(data);
+  // },[filteredData]);
 
   
   
@@ -250,11 +251,18 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
     });
 
     console.log("Filtered data: ",filtered);
+    const updatedFilteredData = filtered?.map((employee) => ({
+    ...employee,
+      currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
+    }));
+    console.log(updatedFilteredData);
+    setFilteredData(updatedFilteredData);
+    setEmpCount(updatedFilteredData.length);
     
 
     // Update state with filtered data and employee count
-    setFilteredData(filtered);
-    setEmpCount(filtered.length);
+    // setFilteredData(filtered);
+    // setEmpCount(filtered.length);
     if(calledFromFilterDialog) setFilterDialogOpen(false); // Close the dialog
 };
 
