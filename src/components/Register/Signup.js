@@ -159,7 +159,7 @@ export default function Signup(props) {
   const handleSubmit = async () => {
     // e.preventDefault();
     const hashedPassword = await hashText(empPassword);
-    console.log({journeys})
+    // console.log({journeys})
     try {
       const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/employee/register`, {
         method: "POST",

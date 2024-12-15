@@ -53,7 +53,7 @@ export default function BasicInfo({ props }) {
       }
   
       const data = await response.json(); // Parse JSON response
-      console.log("Uploaded Image URL:", data.secure_url);
+      // console.log("Uploaded Image URL:", data.secure_url);
   
       return data.secure_url; // Return the uploaded image URL
     } catch (error) {

@@ -30,7 +30,7 @@ const List = () => {
       });
       if (response.ok) {
         const data = JSON.parse(await response.text())
-        console.log(data)
+        // console.log(data)
         setRows(data)
         setRequestCount(rows.length)
         return;
@@ -120,7 +120,7 @@ const List = () => {
   const rejectRequest = async(employeeId)=>{
     try {
       const employee = rows.find(row => row.empId === employeeId);
-      console.log(employee);
+      // console.log(employee);
       
       const response = await fetch('http://localhost:8080/api/v1/admin/reject', {
         method: 'DELETE',

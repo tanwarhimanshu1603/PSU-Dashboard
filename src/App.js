@@ -20,9 +20,7 @@ function App() {
   const [errorMessage,setErrorMessage]=useState('');
   const [allSkills,setAllSkills]=useState([]);
   const [allDomains,setAllDomains] = useState([]);
-  // const jwtToken = localStorage.getItem('jwtToken');
   const {jwtToken} = useContext(AuthContext);
-  // const [jwtToken,setJwtToken] = useState(null);
 
   const getApprovalRequests = async()=>{
     try {
@@ -40,8 +38,6 @@ function App() {
         return;
       }
     } catch (error) {
-        // setErrorMessage("Something went wrong!!")
-        // setOpenErrorToast(true);
         console.log("Error while fetching approvals!!");
         
     }
@@ -59,7 +55,12 @@ function App() {
       if (response.ok) {
         const employeeData = JSON.parse(await response.text())
 
-        setData(employeeData)
+        const processedData = employeeData.map((employee) => ({
+          ...employee,
+          currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
+        }));
+        setData(processedData)
+        // setData(employeeData)
         return;
       }
     } catch (error) {
@@ -102,16 +103,14 @@ function App() {
   }
 
   useEffect(() => {
-    console.log("token: ",jwtToken);
+    // console.log("token: ",jwtToken);
     
       if (jwtToken) {
-      console.log("jwt token exist getting data...");
-
+      // console.log("jwt token exist getting data...");
       getApprovalRequests();
       getAllEmployees();
       getAllDomains();
       getAllSkills();
-
     }
   }, [jwtToken]);
   

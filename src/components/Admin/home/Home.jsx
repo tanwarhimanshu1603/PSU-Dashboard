@@ -134,7 +134,7 @@ const Home = ({ requestCount, data, allDomains, allSkills,employeeCount }) => {
       const domains = calculateCounts(allDomains, "functionalKnowledge").sort((a, b) => b.count - a.count);
       const splitArray = splitArrayIntoChunks(domains,4);
       setChunkedDomainArray(splitArray);
-      console.log("array: ",splitArray);
+      // console.log("array: ",splitArray);
       
   
       // Calculate skill counts, sort by count, and limit to top 5
@@ -142,7 +142,7 @@ const Home = ({ requestCount, data, allDomains, allSkills,employeeCount }) => {
         .sort((a, b) => b.count - a.count)
         .slice(0, 5);
       setSkillsObject(skills);
-      console.log("Final skills with count: ",skills);
+      // console.log("Final skills with count: ",skills);
       
     }, [allDomains, allSkills, data]);
 

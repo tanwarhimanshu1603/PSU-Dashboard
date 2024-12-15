@@ -323,7 +323,7 @@ export default function EmployeeDashboard() {
             // console.log(data);
             
             if (response.ok) {
-            console.log(data);
+            // console.log(data);
             
             setEmployee(data); // Set the employee data
             setPrimaryTechSkills(data.primaryTechSkill);
@@ -384,7 +384,7 @@ export default function EmployeeDashboard() {
     }
 
     const handleEdit = () => {
-        console.log("Editing mode..");
+        // console.log("Editing mode..");
         if(changesMade){
             //alert('Click on save to update details!!');
             setWarningMessage("Please click on save to update details!!")
@@ -463,7 +463,7 @@ export default function EmployeeDashboard() {
 
 
     const handleSaveDetails = () => {
-        console.log("Saving Details");
+        // console.log("Saving Details");
         if(!changesMade) return;
         updateDetails();
         setTimeout(() => {

@@ -16,7 +16,7 @@ export default function Download({filteredData}) {
   };
 
   const handleClose = () => {
-    console.log(filteredData)
+    // console.log(filteredData)
     setAnchorEl(null);
   };
 

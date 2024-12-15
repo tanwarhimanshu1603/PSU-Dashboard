@@ -76,7 +76,7 @@ const Approvaltable = ({requestCount,setRequestCount}) => {
       const rejectRequest = async(employeeId)=>{
         try {
           const employee = rows.find(row => row.empId === employeeId);
-          console.log(employee);
+          // console.log(employee);
           
           const response = await fetch('http://localhost:8080/api/v1/admin/reject', {
             method: 'DELETE',
@@ -102,7 +102,7 @@ const Approvaltable = ({requestCount,setRequestCount}) => {
         }
       }
       const handleApproveDialogClose = (confirm) => {
-        console.log(confirm,selectedEmpId)
+        // console.log(confirm,selectedEmpId)
         setApproveDialogOpen(false); // Close the dialog
         if (confirm && selectedEmpId) {
           // If confirmed, delete the employee

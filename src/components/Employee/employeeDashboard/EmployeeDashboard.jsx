@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid2';
-import { Box, Avatar, Typography, Button, Chip, TextField, Accordion, AccordionSummary, AccordionDetails, capitalize, Autocomplete } from '@mui/material';
+import { Box, Avatar, Typography, Button, Chip, TextField, Accordion, AccordionSummary, AccordionDetails, capitalize, Autocomplete, Menu, MenuItem } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import theme from '../../../style/theme'
@@ -23,6 +23,7 @@ import AddIcon from '@mui/icons-material/Add';
 import GLOBAL_CONFIG from '../../../constants/global';
 import EditAmdocsJourney from '../../../utils/EditAmdocsJourney';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import DoneAllIcon from '@mui/icons-material/DoneAll';
 import { IconButton } from "@mui/material";
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -88,7 +89,7 @@ export default function EmployeeDashboard() {
           }
       
           const data = await response.json(); // Parse JSON response
-          console.log("Uploaded Image URL:", data.secure_url);
+        //   console.log("Uploaded Image URL:", data.secure_url);
       
           return data.secure_url; // Return the uploaded image URL
         } catch (error) {
@@ -220,6 +221,7 @@ export default function EmployeeDashboard() {
     }
 
     const handleLogout = () => {
+        setAnchorEl(null);
         setLoading(true);  // Start showing the progress bar
         setTimeout(() => {
             localStorage.removeItem("empId"); // Remove empId from localStorage
@@ -232,7 +234,7 @@ export default function EmployeeDashboard() {
       }
 
     const handleEdit = () => {
-        console.log("Editing mode..");
+        // console.log("Editing mode..");
         if(changesMade){
             //alert('Click on save to update details!!');
             setWarningMessage("Please click on save to update details!!")
@@ -349,7 +351,7 @@ export default function EmployeeDashboard() {
 
 
     const handleSaveDetails = () => {
-        console.log("Saving Details");
+        // console.log("Saving Details");
         if(!changesMade) return;
         updateDetails();
         setUpdateMode((prev) => !prev);
@@ -405,6 +407,17 @@ export default function EmployeeDashboard() {
       
         setOpenWarningToast(false);
       };
+    
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleImgDropDown = (e) => {
+        setAnchorEl(e.currentTarget);
+    }
+
+    const handleDropDownClose = () => {
+        setAnchorEl(null);
+    }
   
     if (loading) {
         return <div>{loading && (
@@ -443,20 +456,46 @@ export default function EmployeeDashboard() {
                     <ArrowBackIcon />
                     Back
                 </Button>
-                <Button onClick={handleSaveDetails} variant="contained" disabled={!changesMade}>
+                {/* <Button onClick={handleSaveDetails} variant="contained" disabled={!changesMade}>
                     Save
-                </Button>
+                </Button> */}
+                <Box>
+                    <Avatar aria-controls={open ? 'basic-menu' : undefined} aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={handleImgDropDown} alt={employee.empName} src={employee.empImage} />
+                    <Menu
+                        id="basic-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleDropDownClose}
+                        MenuListProps={{
+                        'aria-labelledby': 'basic-button',
+                        }}
+                    >
+                        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    </Menu>
+                </Box>
             </Box>
 
             <Grid container spacing={2} sx={{marginTop:8}}>
                 <Grid size={{ xs: 6, md: 4 }}>
                     <Item sx={{position: 'relative'}}>
-                        <Tooltip title={updateMode ? 'Edit Off' : 'Edit'}>
-                            <Box onClick={handleEdit} sx={{position: 'absolute',top: 10, right: 10,cursor: 'pointer' }}>
+                        <Tooltip title={updateMode ? changesMade ? 'Save' : 'Edit Off' : 'Edit'}>
+                            {
+                                changesMade ?
+                                <Box onClick={handleSaveDetails} sx={{position: 'absolute',top: 10, right: 10,cursor: 'pointer' }}>
+                                    <DoneAllIcon color="primary"/>
+                                </Box>
+                                :
+                                <Box onClick={handleEdit} sx={{position: 'absolute',top: 10, right: 10,cursor: 'pointer' }}>
+                                    {
+                                        updateMode ? <EditOffIcon /> : <EditIcon />
+                                    }
+                                </Box>   
+                            }
+                            {/* <Box onClick={handleEdit} sx={{position: 'absolute',top: 10, right: 10,cursor: 'pointer' }}>
                                 {
                                     updateMode ? <EditOffIcon /> : <EditIcon />
                                 }
-                            </Box>
+                            </Box> */}
                         </Tooltip>
                         {/* <EditIcon sx={{position: 'absolute',top: 10, right: 10}}/> */}
                         <Box sx={{position:"relative"}}>
@@ -552,7 +591,6 @@ export default function EmployeeDashboard() {
                             </Box>
 
                             {/* Domain Section */}
-                            
                             <Box sx={{m:2}}>
                                 <Typography sx={{fontWeight:600, color: '#263238'}} variant="h6">
                                     Domain Knowledge
@@ -596,6 +634,53 @@ export default function EmployeeDashboard() {
                                 }
                             </Box>
 
+                            {/* Secondary Skills Section */}
+                            <Box sx={{m:2}}>
+                                <Typography sx={{fontWeight:600, color: '#263238'}} variant="h6">
+                                    Secondary Skills
+                                </Typography>
+                                <Typography sx={{display: 'flex',flexWrap: 'wrap', gap: 1}}>
+                                
+                                {
+                                    updateMode ? 
+                                    <Autocomplete
+                                        multiple
+                                        id="primary-skills"
+                                        options={skillOptions}
+                                        value={secondaryTechSkills}
+                                        onChange={secondarySkillsHandleChange}
+                                        disableCloseOnSelect
+                                        renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            // label="Select Skills"
+                                            placeholder="Search & select skills"
+                                            required
+                                            size="small"
+                                            variant="outlined"
+                                        />
+                                        )}
+                                        renderTags={(value, getTagProps) =>
+                                        value.map((option, index) => (
+                                            <Chip
+                                            label={option}
+                                            {...getTagProps({ index })}
+                                            onDelete={() => secondarySkillsHandleDelete(option)}
+                                            key={index}
+                                            />
+                                        ))
+                                        }
+                                        freeSolo
+                                        getOptionLabel={(option) => option}
+                                    /> : 
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2,mt: 1 }}>
+                                {employee.secondaryTechSkill?.map((skill,index) => (
+                                        <Chip key={index} label={skill} color="success" variant="outlined" />
+                                    ))}
+                            </Box>
+                                }
+                            </Typography>
+                            </Box>
                             {/* Functional Knowledge */}
                         </Box>
                     </Item>
@@ -605,11 +690,11 @@ export default function EmployeeDashboard() {
                         <Item>
                             {/* Basic Information */}
                             <Box sx={{m:0.5,position: 'relative'}}>
-                            <Tooltip title="Logout">
+                            {/* <Tooltip title="Logout">
                                 <Box onClick={handleLogout} sx={{ bgcolor: 'text.error', color: 'background.paper',position: 'absolute',top: 5, right: 5,cursor: 'pointer' }}>
                                     <LogoutIcon color="error"/>
                                 </Box>
-                            </Tooltip>
+                            </Tooltip> */}
                                 <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
                                     Basic Information
                                     
@@ -719,67 +804,13 @@ export default function EmployeeDashboard() {
                         </Grid>
                     <Grid> 
                         {/* Other Sections */}
-                        <Accordion>
+                        {/* <Accordion>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
                                 Secondary Skills
-                                {/* <Tooltip title="Edit">
-                                    <Box onClick={handleEdit} sx={{display: 'flex',cursor: 'pointer' }}>
-                                        <EditIcon/>
-                                    </Box>
-                                </Tooltip> */}
                             </Typography>
                             </AccordionSummary>
                             <AccordionDetails sx={{display: 'flex',flexDirection: 'column',gap: 2}}>
-                            <Typography sx={{display: 'flex',flexWrap: 'wrap', gap: 1}}>
-                                {/* Details about {section} will go here. */}
-                                {
-                                    employee.secondaryProduct?.map((product,index) => (
-                                        <Chip key={index} label={product} color="success" variant="outlined" />
-                                    ))
-                                }
-                                {/* {
-                                    employee.secondaryTechSkill?.map((skill,index) => (
-                                        <Chip key={index} label={skill} color="success" variant="outlined" />
-                                    ))
-                                } */}
-                                {
-                                    updateMode ? 
-                                    <Autocomplete
-                                        multiple
-                                        id="primary-skills"
-                                        options={skillOptions}
-                                        value={secondaryTechSkills}
-                                        onChange={secondarySkillsHandleChange}
-                                        disableCloseOnSelect
-                                        renderInput={(params) => (
-                                        <TextField
-                                            {...params}
-                                            // label="Select Skills"
-                                            placeholder="Search & select skills"
-                                            required
-                                            size="small"
-                                            variant="outlined"
-                                        />
-                                        )}
-                                        renderTags={(value, getTagProps) =>
-                                        value.map((option, index) => (
-                                            <Chip
-                                            label={option}
-                                            {...getTagProps({ index })}
-                                            onDelete={() => secondarySkillsHandleDelete(option)}
-                                            key={index}
-                                            />
-                                        ))
-                                        }
-                                        freeSolo
-                                        getOptionLabel={(option) => option}
-                                    /> :
-                                    employee.secondaryTechSkill?.map((skill,index) => (
-                                        <Chip key={index} label={skill} color="success" variant="outlined" />
-                                    ))
-                                }
-                            </Typography>
                             <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
                                 
                                 {!updateMode && "Devops Knowledge: " } 
@@ -790,9 +821,9 @@ export default function EmployeeDashboard() {
                                 }
                             </Typography>
                             </AccordionDetails>
-                        </Accordion>
+                        </Accordion> */}
                         
-                        <Accordion>
+                        {/* <Accordion>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                             <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
                                 More Info    
@@ -800,7 +831,6 @@ export default function EmployeeDashboard() {
                             </AccordionSummary>
                             <AccordionDetails sx={{display: 'flex',flexDirection: 'column',gap: 2}}>
                             <Typography sx={{display: 'flex',flexWrap: 'wrap', gap: 1}}>
-                                {/* Details about {section} will go here. */}
                                 {
                                     updateMode ? 
                                     [{data: employee.engagementActivityContribution, label:"Contributed to Engagement Acitivities",name: "engagementActivityContribution"},
@@ -819,11 +849,6 @@ export default function EmployeeDashboard() {
                                         data && <Chip key={index} label={label} name={name} color="success" variant="outlined" />
                                     ))
                                 }
-                                {/* {employee.engagementActivityContribution && <Chip label='Contributed to Engagement Acitivities' color="success" variant="outlined" />}
-                                {employee.explorationInterest && <Chip label='Exploration Interest' color="success" variant="outlined" />}
-                                {employee.contributedToDesign && <Chip label='Contributed to Design' color="success" variant="outlined" />}
-                                {employee.mentoringAbility && <Chip label='Mentoring Ability' color="success" variant="outlined" />} */}
-                                {/* <Chip label="Deletable" onDelete={handleBooleanDelete} variant='outlined' /> */}
                             </Typography>
                             <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
                                  
@@ -855,7 +880,78 @@ export default function EmployeeDashboard() {
                                 
                             </Typography>
                             </AccordionDetails>
-                        </Accordion>
+                        </Accordion> */}
+                        <Grid>
+                            <Item>
+                                <Box sx={{m:0.5}}>
+                                    <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        More Info    
+                                    </Typography>
+                                    <Box sx={{m:1, display: "flex", flexDirection: "column", gap: 2}}>
+                                        <Typography sx={{display: 'flex',flexWrap: 'wrap', gap: 1}}>
+                                            {/* Details about {section} will go here. */}
+                                            {
+                                                updateMode ? 
+                                                [{data: employee.engagementActivityContribution, label:"Contributed to Engagement Acitivities",name: "engagementActivityContribution"},
+                                                    {data: employee.explorationInterest, label:"Exploration Interest",name: "explorationInterest"},
+                                                    {data: employee.contributedToDesign, label:"Contributed to Design",name: "contributedToDesign"},
+                                                    {data: employee.mentoringAbility, label:"Mentoring Ability",name: "mentoringAbility"}]
+                                                    .map(({data,label,name},index) => (
+                                                        data ? <Chip key={index} label={label} onDelete={() => handleBoolean(name)} deleteIcon={<RemoveIcon />} variant='outlined' color="success" /> 
+                                                        : <Chip key={index} label={label} onDelete={() => handleBoolean(name)} deleteIcon={<AddIcon />} variant='outlined' color="error" />
+                                                )) : 
+                                                [{data: employee.engagementActivityContribution, label:"Contributed to Engagement Acitivities",name: "engagementActivityContribution"},
+                                                {data: employee.explorationInterest, label:"Exploration Interest",name: "explorationInterest"},
+                                                {data: employee.contributedToDesign, label:"Contributed to Design",name: "contributedToDesign"},
+                                                {data: employee.mentoringAbility, label:"Mentoring Ability",name: "mentoringAbility"}]
+                                                .map(({data,label,name},index) => (
+                                                    data && <Chip key={index} label={label} name={name} color="success" variant="outlined" />
+                                                ))
+                                            }
+                                        </Typography>
+                                        <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
+                                    
+                                    {!updateMode && "Devops Knowledge: " } 
+                                    {
+                                        updateMode ? 
+                                        <TextField onChange={handleChange} value={employee.devOpsKnowledge} id="outlined-basic" label="devops knowledge..." name="devOpsKnowledge" variant="outlined" sx={{width: '50ch'}}/> : 
+                                        <span style={{color: 'gray'}}>{employee.devOpsKnowledge}</span>
+                                    }
+                                        </Typography>
+                                        <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
+                                            
+                                            {!updateMode && "Presentation Skills: " }
+                                            {
+                                                updateMode ? 
+                                                <TextField onChange={handleChange} value={employee.presentationSkills} id="outlined-basic" label="presentation skills" name="presentationSkills" variant="outlined" sx={{width: '50ch'}}/> : 
+                                                <span style={{color: 'gray'}}>{employee.presentationSkills}/5</span>
+                                            }
+                                            
+                                        </Typography>
+                                        <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
+                                            
+                                            {!updateMode && "Hobbies: " }
+                                            {
+                                                updateMode ? 
+                                                <TextField onChange={handleChange} value={employee.hobbiesSports} id="outlined-basic" label="hobbies" name="hobbiesSports" variant="outlined" sx={{width: '50ch'}}/> : 
+                                                <span style={{color: 'gray'}}>{employee.hobbiesSports}</span>
+                                            }
+                                            
+                                        </Typography>
+                                        <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
+                                            {!updateMode && "Additional Info: " }
+                                            {
+                                                updateMode ? 
+                                                <TextField onChange={handleChange} value={employee.additionalInfo} id="outlined-basic" label="Additional info" name="additionalInfo" variant="outlined" sx={{width: '50ch'}}/> : 
+                                                <span style={{color: 'gray'}}>{employee.additionalInfo}</span>
+                                            }
+                                            
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                            </Item>
+                        </Grid>
+                        
                     </Grid>
                 </Grid>
             </Grid>

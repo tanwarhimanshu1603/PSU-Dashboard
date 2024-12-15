@@ -65,6 +65,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
     else if(selectedDomain.length===0 && selectedSkills.length===0) handleReset(false);
   },[selectedDomain,selectedSkills]);
 
+
   // useEffect(() => {
   //       const processedData = filteredData?.map((employee) => ({
   //       ...employee,
@@ -196,14 +197,14 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
     setDialogOpen(true); // Open the dialog
   };
   const selectedSkillsHandleDelete = (skillToDelete) => {
-    console.log("Deleting ",skillToDelete)
+    // console.log("Deleting ",skillToDelete)
     setSelectedSkills(selectedSkills.filter(skill => skill !== skillToDelete));
-    console.log(selectedSkills)
+    // console.log(selectedSkills)
   };
   const selectedDomainsHandleDelete = (domainToDelete) => {
-    console.log("Deleting ",domainToDelete)
+    // console.log("Deleting ",domainToDelete)
     setSelectedDomain(selectedDomain.filter(domain => domain !== domainToDelete));
-    console.log(selectedDomain)
+    // console.log(selectedDomain)
   };
 
 
@@ -232,7 +233,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
   };
   const handleFilter = (calledFromFilterDialog) => {
     setSearchTerm(''); // Clear any existing search term
-    console.log(selectedSkills, selectedDomain);
+    // console.log(selectedSkills, selectedDomain);
 
     const filtered = data.filter((employee) => {
       // Match skills with OR logic
@@ -250,14 +251,14 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
       return matchesSkills && matchesDomains;
     });
 
-    console.log("Filtered data: ",filtered);
-    const updatedFilteredData = filtered?.map((employee) => ({
-    ...employee,
-      currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
-    }));
-    console.log(updatedFilteredData);
-    setFilteredData(updatedFilteredData);
-    setEmpCount(updatedFilteredData.length);
+    // console.log("Filtered data: ",filtered);
+    // const updatedFilteredData = filtered?.map((employee) => ({
+    // ...employee,
+    //   currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
+    // }));
+    // console.log(updatedFilteredData);
+    setFilteredData(filtered);
+    setEmpCount(filtered.length);
     
 
     // Update state with filtered data and employee count

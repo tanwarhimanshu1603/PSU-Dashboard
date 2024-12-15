@@ -124,7 +124,7 @@ export default function SignInCard() {
         const token = await adminResponse.text();
         // localStorage.setItem("jwtToken", jwtToken);
         setJwtToken(token);
-        console.log("navigating to admin");
+        // console.log("navigating to admin");
         
         navigate('/admin');
         return;

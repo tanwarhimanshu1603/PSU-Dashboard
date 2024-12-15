@@ -93,7 +93,7 @@ const ResetPassword = () => {
         // console.log(response);
         
         if(response.ok){
-            console.log(data);
+            // console.log(data);
         }else console.error("Error resetting password.");
         }
         catch(error){
