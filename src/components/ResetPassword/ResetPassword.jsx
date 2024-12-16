@@ -55,6 +55,7 @@
 import React, { useState } from 'react';
 import { Container, Typography, TextField, Box, Alert, IconButton, InputAdornment, Button } from '@mui/material';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import GLOBAL_CONFIG from '../../constants/global';
  
 const ResetPassword = () => {
   const [newPassword, setNewPassword] = useState('');
@@ -81,7 +82,7 @@ const ResetPassword = () => {
         const hashedPassword = await hashText(newPassword);
         try {
         // First API call to forgot password
-        const response = await fetch('http://localhost:8080/api/v1/employee/reset-password', {
+        const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/reset-password`, {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
@@ -90,8 +91,6 @@ const ResetPassword = () => {
             body: JSON.stringify({empPassword: hashedPassword})
         });
         const data = await response.text();
-        // console.log(response);
-        
         if(response.ok){
             // console.log(data);
         }else console.error("Error resetting password.");

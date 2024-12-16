@@ -29,7 +29,8 @@ export default function TechDetails({props}) {
   };
   
   const primarySkillsHandleChange = (event, newValue) => {
-    setPrimaryTechSkill(newValue);
+    const uniqueSkills = [...new Set(newValue)]; // Ensure unique selections
+    setPrimaryTechSkill(uniqueSkills);
   };
 
   const primarySkillsHandleDelete = (skillToDelete) => {
@@ -37,7 +38,8 @@ export default function TechDetails({props}) {
   };
 
   const secondarySkillsHandleChange = (event, newValue) => {
-    setSecondaryTechSkill(newValue);
+    const uniqueSkills = [...new Set(newValue)]; 
+    setSecondaryTechSkill(uniqueSkills);
   };
 
   const secondarySkillsHandleDelete = (skillToDelete) => {
@@ -168,7 +170,7 @@ export default function TechDetails({props}) {
       <Autocomplete
         multiple
         id="primary-skills"
-        options={skillOptions}
+        options={[...new Set(skillOptions)]}
         value={primaryTechSkill}
         onChange={primarySkillsHandleChange}
         disableCloseOnSelect
@@ -188,7 +190,7 @@ export default function TechDetails({props}) {
               label={option}
               {...getTagProps({ index })}
               onDelete={() => primarySkillsHandleDelete(option)}
-              key={index}
+              key={option}
             />
           ))
         }
@@ -203,7 +205,7 @@ export default function TechDetails({props}) {
       <Autocomplete
         multiple
         id="secondary-skills"
-        options={skillOptions}
+        options={[...new Set(skillOptions)]}
         value={secondaryTechSkill}
         onChange={secondarySkillsHandleChange}
         disableCloseOnSelect
@@ -223,7 +225,7 @@ export default function TechDetails({props}) {
               label={option}
               {...getTagProps({ index })}
               onDelete={() => secondarySkillsHandleDelete(option)}
-              key={index}
+              key={option}
             />
           ))
         }

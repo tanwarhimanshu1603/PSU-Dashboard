@@ -62,7 +62,7 @@ export default function AdditionalDetails({props}) {
           name="presentation-skill"
           type="number"
           placeholder="4"
-          value={presentationSkills}
+          value={presentationSkills?presentationSkills:""}
           onChange={handlePresentationSkillChange}
           // required
           size="small"
@@ -79,7 +79,7 @@ export default function AdditionalDetails({props}) {
           name="hobby"
           type="text"
           size="small"
-          value={hobbiesSports}
+          value={hobbiesSports?hobbiesSports:""}
           onChange={handleHobbyChange}
         />
       </FormGrid>
@@ -92,12 +92,12 @@ export default function AdditionalDetails({props}) {
         <RadioGroup
           id="mentoring-ability"
           name="mentoring-ability"
-          value={mentoringAbility}
+          value={mentoringAbility?mentoringAbility:""}
           onChange={handleMentoringChange}
           row
         >
-          <FormControlLabel value={true} control={<Radio />} label="Yes" />
-          <FormControlLabel value={false} control={<Radio />} label="No" />
+          <FormControlLabel value={"true"} control={<Radio />} label="Yes" />
+          <FormControlLabel value={"false"} control={<Radio />} label="No" />
         </RadioGroup>
       </Grid>
 
@@ -109,12 +109,12 @@ export default function AdditionalDetails({props}) {
         <RadioGroup
           id="contributed-to-design"
           name="contributed-to-design"
-          value={contributedToDesign}
+          value={contributedToDesign?contributedToDesign:""}
           onChange={handleContributedToDesignChange}
           row
         >
-          <FormControlLabel value={true} control={<Radio />} label="Yes" />
-          <FormControlLabel value={false} control={<Radio />} label="No" />
+          <FormControlLabel value={"true"} control={<Radio />} label="Yes" />
+          <FormControlLabel value={"false"} control={<Radio />} label="No" />
         </RadioGroup>
       </Grid>
 
@@ -126,12 +126,12 @@ export default function AdditionalDetails({props}) {
         <RadioGroup
           id="exploration-interest"
           name="exploration-interest"
-          value={explorationInterest}
+          value={explorationInterest?explorationInterest:""}
           onChange={handleExplorationInterestChange}
           row
         >
-          <FormControlLabel value={true} control={<Radio />} label="Yes" />
-          <FormControlLabel value={false} control={<Radio />} label="No" />
+          <FormControlLabel value={"true"} control={<Radio />} label="Yes" />
+          <FormControlLabel value={"false"} control={<Radio />} label="No" />
         </RadioGroup>
       </Grid>
 
@@ -143,12 +143,12 @@ export default function AdditionalDetails({props}) {
         <RadioGroup
           id="engagement-activity"
           name="engagement-activity"
-          value={engagementActivityContribution}
+          value={engagementActivityContribution?engagementActivityContribution:""}
           onChange={handleEngagementActivityChange}
           row
         >
-          <FormControlLabel value={true} control={<Radio />} label="Yes" />
-          <FormControlLabel value={false} control={<Radio />} label="No" />
+          <FormControlLabel value={"true"} control={<Radio />} label="Yes" />
+          <FormControlLabel value={"false"} control={<Radio />} label="No" />
         </RadioGroup>
       </Grid>
       <FormGrid size={{ xs: 12 }}>
@@ -160,7 +160,7 @@ export default function AdditionalDetails({props}) {
           name="amdocs-journey"
           type="text"
           size="small"
-          value={additionalInfo}
+          value={additionalInfo?additionalInfo:""}
           onChange={(e)=>setAdditionalInfo(e.target.value)}
         />
       </FormGrid>

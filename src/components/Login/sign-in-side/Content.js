@@ -45,11 +45,11 @@ export default function Content() {
     >
       <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
         {/* <SitemarkIcon /> */}
-        <Card sx={{ maxWidth: 345 }} style={{border:"none"}}>
+        <Card sx={{ maxWidth: 345 }} style={{border:"none",backgroundColor: "transparent"}}>
           <CardMedia
             component="img"
             height="30"
-            image="https://logos-download.com/wp-content/uploads/2019/06/Amdocs_Logo.png"
+            image="https://logodix.com/logo/1080614.png"
             alt="Description of image" // Optional alt text
           />
 

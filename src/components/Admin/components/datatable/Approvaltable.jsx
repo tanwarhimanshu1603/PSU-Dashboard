@@ -185,7 +185,7 @@ const Approvaltable = ({requestCount,setRequestCount}) => {
         rows={rows}
         columns={approvalColumns.concat(actionColumn)}
         pageSize={10}
-        rowsPerPageOptions={[9]}
+        rowsPerPageOptions={[9,10]}
         // checkboxSelection
         getRowId={(row) => row.empId} // Specify that `empId` should be used as the row id
       />

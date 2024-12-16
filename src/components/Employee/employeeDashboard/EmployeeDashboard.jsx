@@ -70,16 +70,13 @@ export default function EmployeeDashboard() {
       };
     
       const uploadToCloudinary = async (file) => {
-        const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dczif4pj4/image/upload";
-        const CLOUDINARY_UPLOAD_PRESET = "coe_dashboard";
-      
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+        formData.append("upload_preset",GLOBAL_CONFIG.CLOUDINARY_UPLOAD_PRESET);
       
         try {
           // Make the POST request with fetch
-          const response = await fetch(CLOUDINARY_URL, {
+          const response = await fetch(GLOBAL_CONFIG.CLOUDINARY_URL, {
             method: "POST",
             body: formData,
           });
@@ -138,7 +135,7 @@ export default function EmployeeDashboard() {
         // Fetch employee details using empId
         const fetchEmployeeDetails = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/employee/getById/${empId}`, {
+            const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/getById/${empId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -190,7 +187,7 @@ export default function EmployeeDashboard() {
     const getAllSkills = async()=>{
         try {
         // First API call to admin login
-        const skillResponse = await fetch('http://localhost:8080/api/v1/employee/getSkills', {
+        const skillResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/getSkills`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -206,7 +203,7 @@ export default function EmployeeDashboard() {
 
     const getAllDomains = async()=>{
         try {
-        const domainResponse = await fetch('http://localhost:8080/api/v1/employee/getDomain', {
+        const domainResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/getDomain`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -307,7 +304,7 @@ export default function EmployeeDashboard() {
     const updateDetails = async () => {
         setLoading(true)
         try {
-          const response = await fetch('http://localhost:8080/api/v1/employee/update', {
+          const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/update`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

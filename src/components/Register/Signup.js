@@ -14,7 +14,6 @@ import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import AppTheme from '../Register/shared-theme/AppTheme';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
-
 import ColorModeIconDropdown from '../Register/shared-theme/ColorModeIconDropdown';
 import BasicInfo from './signup-components/BasicInfo';
 import TechDetails from './signup-components/TechDetails';
@@ -46,15 +45,14 @@ export default function Signup(props) {
   const [empImage,setEmpImage] = useState("https://static.vecteezy.com/system/resources/previews/024/983/914/non_2x/simple-user-default-icon-free-png.png")
   const [empEmail,setEmpEmail] = useState("");
   const [empPassword,setEmpPassword] = useState("");
-  const [confirmPassword,setConfirmPassword] = useState(null);
+  const [confirmPassword,setConfirmPassword] = useState("");
   const [empId,setEmpId] = useState("");
   const [empName,setEmpName] = useState('');
   const [supervisorName,setSupervisorName] = useState('')
-  const [currentAccount,setCurrentAccount] = useState();
-  // const [currentDomain,setCurrentDomain] = useState();
-  const [amdocsExperience,setAmdocsExperience]=useState(null);
-  const [totalExperience,setTotalExperience]=useState(null);
-  const [amdocsJourney, setAmdocsJourney] = useState(null);
+  const [currentAccount,setCurrentAccount] = useState('');
+  const [amdocsExperience,setAmdocsExperience]=useState('');
+  const [totalExperience,setTotalExperience]=useState('');
+  const [amdocsJourney, setAmdocsJourney] = useState('');
   const [journeys, setJourneys] = useState([
     // { account: '', description: '', startDate: '', endDate: '',isPresent:false },
   ]);
@@ -63,9 +61,9 @@ export default function Signup(props) {
   const [primaryProductSubdomain, setPrimaryProductSubdomain] = useState([]);
   const [secondaryTechSkill, setSecondaryTechSkill] = useState([]);
   const [secondaryProduct, setSecondaryProduct] = useState(null);
-  const [devOpsKnowledge, setDevOpsKnowledge] = useState(null);
+  const [devOpsKnowledge, setDevOpsKnowledge] = useState('');
   const [engagementActivityContribution, setEngagementActivityContribution] = useState(null);
-  const [presentationSkills, setPresentationSkills] = useState();
+  const [presentationSkills, setPresentationSkills] = useState(null);
   const [hobbiesSports, setHobbiesSports] = useState(null);
   const [additionalInfo, setAdditionalInfo] = useState(null);
   const [approved, setApproved] = useState(false);
@@ -159,7 +157,6 @@ export default function Signup(props) {
   const handleSubmit = async () => {
     // e.preventDefault();
     const hashedPassword = await hashText(empPassword);
-    // console.log({journeys})
     try {
       const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/employee/register`, {
         method: "POST",

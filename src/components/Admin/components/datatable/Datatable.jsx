@@ -21,15 +21,15 @@ import {
   Chip,
   Box,
 } from "@mui/material";
-const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data,setData,allSkills,allDomains }) => {
-  const [openErrorToast,setOpenErrorToast] = useState(false);
-  const [openSuccessToast,setOpenSuccessToast] = useState(false);
+const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, data, setData, allSkills, allDomains }) => {
+  const [openErrorToast, setOpenErrorToast] = useState(false);
+  const [openSuccessToast, setOpenSuccessToast] = useState(false);
   // const [data, setData] = useState([]);
-  const [empCount,setEmpCount]=useState(0);
+  const [empCount, setEmpCount] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false); // State for dialog visibility
   const [selectedEmpId, setSelectedEmpId] = useState(null); // State to track which employee to delete
-  const [errorMessage,setErrorMessage]=useState('');
-  const [successMessage,setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [filterDialogOpen, setFilterDialogOpen] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedDomain, setSelectedDomain] = useState([]);
@@ -41,29 +41,29 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
   const location = useLocation();
 
   useEffect(() => {
-    
+
     const searchParams = new URLSearchParams(location.search);
     const domainParam = searchParams.get("domain");
     const skillParam = searchParams.get("skill");
 
-    if (domainParam){
-      const updatedDomain = [...selectedDomain,domainParam]
+    if (domainParam) {
+      const updatedDomain = [...selectedDomain, domainParam]
       setSelectedDomain(updatedDomain);
     }
-    if (skillParam){
+    if (skillParam) {
       setSelectedSkills([
         ...selectedSkills, skillParam
       ]);
     }
-    if(domainParam || skillParam) handleFilter(false);
+    if (domainParam || skillParam) handleFilter(false);
     else handleReset(false);
-   
+
   }, [location.search]); // Re-run if the search string changes
 
   useEffect(() => {
-    if(selectedDomain.length>0 || selectedSkills.length>0 ) handleFilter(false);
-    else if(selectedDomain.length===0 && selectedSkills.length===0) handleReset(false);
-  },[selectedDomain,selectedSkills]);
+    if (selectedDomain.length > 0 || selectedSkills.length > 0) handleFilter(false);
+    else if (selectedDomain.length === 0 && selectedSkills.length === 0) handleReset(false);
+  }, [selectedDomain, selectedSkills]);
 
 
   // useEffect(() => {
@@ -76,8 +76,8 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
   //       // console.log(data);
   // },[filteredData]);
 
-  
-  
+
+
   const jwtToken = localStorage.getItem('jwtToken');
   // const getAllEmployees = async () => {
   //   try {
@@ -98,7 +98,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
   //       }));
   //       setData(processedData)
   //       console.log(data);
-        
+
   //       setFilteredData(processedData)
   //       setEmpCount(filteredData.length)
   //       return;
@@ -193,7 +193,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
     }
   }
   const handleDelete = (empId) => {
-    setSelectedEmpId(empId); // Store the employee ID
+    setSelectedEmpId(empId); // Store the employee ID to delete
     setDialogOpen(true); // Open the dialog
   };
   const selectedSkillsHandleDelete = (skillToDelete) => {
@@ -221,14 +221,14 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
     if (reason === "clickaway") {
       return;
     }
-  
+
     setOpenSuccessToast(false);
   };
   const handleCloseErrorToast = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-  
+
     setOpenErrorToast(false);
   };
   const handleFilter = (calledFromFilterDialog) => {
@@ -246,7 +246,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
         ? selectedDomain.some((domain) => employee.functionalKnowledge?.includes(domain))
         : true;
       // console.log(matchesSkills);
-      
+
       // AND condition between skills and domains
       return matchesSkills && matchesDomains;
     });
@@ -259,18 +259,18 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
     // console.log(updatedFilteredData);
     setFilteredData(filtered);
     setEmpCount(filtered.length);
-    
+
 
     // Update state with filtered data and employee count
     // setFilteredData(filtered);
     // setEmpCount(filtered.length);
-    if(calledFromFilterDialog) setFilterDialogOpen(false); // Close the dialog
-};
+    if (calledFromFilterDialog) setFilterDialogOpen(false); // Close the dialog
+  };
 
 
   // Handle Reset
   const handleReset = (calledByClickingButton) => {
-    if(calledByClickingButton){
+    if (calledByClickingButton) {
       setSelectedSkills([]);
       setSelectedDomain([]);
     }
@@ -278,7 +278,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
     setEmpCount(data.length);
     setFilterDialogOpen(false);
   };
-  
+
   const actionColumn = [
     {
       field: "action",
@@ -330,40 +330,50 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
         rows={filteredData}
         columns={userColumns.concat(actionColumn)}
         pageSize={10}
-        rowsPerPageOptions={[9]}
+        rowsPerPageOptions={[9, 10]}
         // checkboxSelection
         getRowId={(row) => row.empId} // Specify that `empId` should be used as the row id
       />
-      <ConfirmDialog 
+      <ConfirmDialog
         open={dialogOpen}
         handleClose={(confirm) => handleDialogClose(confirm)}
         message={"Are you sure you want to delete employee record?"}
-        buttonText = {"Delete"}
+        buttonText={"Delete"}
       />
-       <Dialog open={filterDialogOpen} onClose={() => setFilterDialogOpen(false)} fullWidth maxWidth="sm">
+      <Dialog open={filterDialogOpen} onClose={() => setFilterDialogOpen(false)} fullWidth maxWidth="sm">
         <DialogTitle>Filter Employees</DialogTitle>
         <DialogContent>
           {/* Skills Filter */}
           <Box sx={{ marginBottom: 3 }}>
             <Autocomplete
               multiple
-              options={allSkills}
+              options={[...new Set(allSkills)]}
               value={selectedSkills}
               onChange={(event, value) => setSelectedSkills(value)}
               renderTags={(value, getTagProps) =>
-                value.map((option, index) => (
-                  <Chip key={option} label={option} {...getTagProps({ index })} onDelete={() => selectedSkillsHandleDelete(option)} />
-                ))
+                value.map((option, index) => {
+                  const tagProps = getTagProps({ index });
+                  return (
+                    // Pass `key` directly and spread the rest of the props
+                    <Chip
+                      key={option}
+                      label={option}
+                      {...tagProps}
+                      onDelete={() => selectedSkillsHandleDelete(option)}
+                    />
+                  );
+                })
               }
               renderInput={(params) => <TextField {...params} label="Select Skills" />}
             />
           </Box>
 
+
           {/* Domain Filter */}
           <Box sx={{ marginBottom: 3 }}>
             <Autocomplete
               multiple
-              options={allDomains}
+              options={[...new Set(allDomains)]}
               value={selectedDomain}
               onChange={(event, value) => setSelectedDomain(value)}
               renderTags={(value, getTagProps) =>
@@ -378,7 +388,7 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
 
         {/* Dialog Actions */}
         <DialogActions>
-          <Button onClick={()=>handleReset(true)} color="secondary">
+          <Button onClick={() => handleReset(true)} color="secondary">
             Reset
           </Button>
           <Button onClick={() => setFilterDialogOpen(false)} variant="contained">
@@ -392,8 +402,8 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
         message={"Are you sure you want to delete employee record?"}
         buttonText={"Delete"}
       /> */}
-    <Snackbar open={openErrorToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} 
-      onClose={handleCloseErrorToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}
+      <Snackbar open={openErrorToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME}
+        onClose={handleCloseErrorToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}
       >
         <Alert
           onClose={handleCloseErrorToast}
@@ -404,8 +414,8 @@ const Datatable = ({ searchTerm,setSearchTerm,filteredData, setFilteredData,data
           {errorMessage}
         </Alert>
       </Snackbar>
-      <Snackbar open={openSuccessToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} 
-      onClose={handleCloseSuccessToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}
+      <Snackbar open={openSuccessToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME}
+        onClose={handleCloseSuccessToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}
       >
         <Alert
           onClose={handleCloseSuccessToast}

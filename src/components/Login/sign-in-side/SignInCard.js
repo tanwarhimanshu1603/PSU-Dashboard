@@ -3,11 +3,9 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import MuiCard from '@mui/material/Card';
 import Checkbox from '@mui/material/Checkbox';
-// import { useNavigate } from "react-router-dom";
 import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-// import FormControlLabel from '@mui/material/FormControlLabel';
 import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -19,6 +17,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import GLOBAL_CONFIG from '../../../constants/global';
 import { AuthContext } from '../../../context/AuthContext/AuthContext';
+import { CardMedia } from '@mui/material';
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
@@ -38,8 +37,8 @@ const Card = styled(MuiCard)(({ theme }) => ({
 }));
 
 export default function SignInCard() {
-  const [email,setEmail] = React.useState(null);
-  const [password,setPassword] = React.useState(null);
+  const [email,setEmail] = React.useState('');
+  const [password,setPassword] = React.useState('');
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
@@ -212,7 +211,16 @@ export default function SignInCard() {
   return (
     <Card variant="outlined">
       <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-        <SitemarkIcon />
+        {/* <SitemarkIcon /> */}
+        {/* <Card sx={{ maxWidth: 345 }} style={{border:"none",backgroundColor: "transparent"}}>
+          <CardMedia
+            component="img"
+            height="30"
+            image="https://logodix.com/logo/1080614.png"
+            alt="Description of image" // Optional alt text
+          />
+
+        </Card> */}
       </Box>
       <Typography
         component="h1"

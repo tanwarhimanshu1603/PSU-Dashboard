@@ -11,6 +11,7 @@ import ApprovalList from './components/Admin/list/ApprovalList';
 import ResetPassword from './components/ResetPassword/ResetPassword';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from './context/AuthContext/AuthContext';
+import GLOBAL_CONFIG from './constants/global';
 
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
   const getApprovalRequests = async()=>{
     try {
       
-      const response = await fetch('http://localhost:8080/api/v1/admin/getApprovals', {
+      const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/admin/getApprovals`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -45,7 +46,7 @@ function App() {
 
   const getAllEmployees = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/v1/admin/getAllEmp', {
+      const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/admin/getAllEmp`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -70,15 +71,15 @@ function App() {
   const getAllSkills = async()=>{
     try {
       // First API call to admin login
-      const skillResponse = await fetch('http://localhost:8080/api/v1/employee/getSkills', {
+      const skillResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/getSkills`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         }
       });
       const data = JSON.parse(await skillResponse.text());
+      data.sort()
       setAllSkills(data)
-      // console.log(data)
       }
       catch(error){
 
@@ -87,15 +88,15 @@ function App() {
   const getAllDomains = async()=>{
     try {
       // First API call to admin login
-      const domainResponse = await fetch('http://localhost:8080/api/v1/employee/getDomain', {
+      const domainResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/getDomain`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         }
       });
       const data = JSON.parse(await domainResponse.text());
+      data.sort();
       setAllDomains(data)
-      // console.log(data)
       }
       catch(error){
         console.log(error);
@@ -103,10 +104,7 @@ function App() {
   }
 
   useEffect(() => {
-    // console.log("token: ",jwtToken);
-    
       if (jwtToken) {
-      // console.log("jwt token exist getting data...");
       getApprovalRequests();
       getAllEmployees();
       getAllDomains();
