@@ -103,23 +103,35 @@ export default function Signup(props) {
       return;
     }
     try {
-      const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/getEmp/${empEmail}`, {
+      const responseForEmail = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/getEmp/${empEmail}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         }
       });
-      if (response.ok) {
-        // Successful employee login
-        const EmployeeResponse= JSON.parse(await response.text());
-        if(EmployeeResponse.length===0){
+      const responseForId = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/getEmp/${empId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      if (responseForEmail.ok && responseForId.ok) {
+        const EmployeeResponseForEmail= JSON.parse(await responseForEmail.text());
+        const EmployeeResponseForId= JSON.parse(await responseForId.text());
+        // const EmployeeResponse= JSON.parse(await response.text());
+        if(EmployeeResponseForEmail.length===0 && EmployeeResponseForId.length===0){
           setSuccessMessage('Email and Id validated successfully.')
           setOpenSuccessToast(true);
           setEmailValidated(true);
         }
-        else if(EmployeeResponse[0]["empId"]!==empId){
+        else if(EmployeeResponseForEmail.length && EmployeeResponseForEmail[0]["empId"]!==empId){
 
-          setErrorMessage(`Email is already registered with different Emp Id`)
+          setErrorMessage(`Email is already registered with different Employee Id`)
+          setOpenErrorToast(true);
+        }
+        else if(EmployeeResponseForId.length && EmployeeResponseForId[0]["empEmail"]!==empEmail){
+
+          setErrorMessage(`Employee Id is already registered with different Email`)
           setOpenErrorToast(true);
         }
         else {
