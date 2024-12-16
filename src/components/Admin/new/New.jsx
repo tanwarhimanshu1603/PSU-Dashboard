@@ -94,36 +94,10 @@ const New = ({ inputs, title,requestCount,employeeCount }) => {
           <h1>Add New Employee</h1>
         </div>
         <div className="bottom">
-          {/* <div className="left">
-            <img
-              src={
-                file
-                  ? URL.createObjectURL(file)
-                  : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-              }
-              alt=""
-            />
-          </div> */}
+          
           <div className="right">
             <div className="form-div">
-              {/* <div className="formInput">
-                <label htmlFor="file">
-                  Image: <DriveFolderUploadOutlinedIcon className="icon" />
-                </label>
-                <input
-                  type="file"
-                  id="file"
-                  onChange={(e) => setFile(e.target.files[0])}
-                  style={{ display: "none" }}
-                />
-              </div> */}
-
-              {/* {inputs.map((input) => (
-                <div className="formInput" key={input.id}>
-                  <label>{input.label}</label>
-                  <input type={input.type} placeholder={input.placeholder} />
-                </div>
-              ))} */}
+              
               <div className="formInput" >
                   <label>Name</label>
                   <input id="name" name="name" type="text" placeholder="John Doe" value={empName} onChange={(e)=>setEmpName(e.target.value)} required />
@@ -144,10 +118,6 @@ const New = ({ inputs, title,requestCount,employeeCount }) => {
                   <label>Current Supervisor</label>
                   <input type="text" value={supervisorName} onChange={(e)=>setSupervisorName(e.target.value)} required/>
                 </div>
-                {/* <div className="formInput">
-                  <label>Amdocs Experience(in years)</label>
-                  <input type="number"  placeholder="2.3" value={amdocsExperience} onChange={(e)=>setAmdocsExperience(e.target.value)} required/>
-                </div> */}
                 <div className="formInput">
                 <button onClick={handleSubmit}>Add</button>
                 </div>

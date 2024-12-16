@@ -211,16 +211,7 @@ export default function SignInCard() {
   return (
     <Card variant="outlined">
       <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-        {/* <SitemarkIcon /> */}
-        {/* <Card sx={{ maxWidth: 345 }} style={{border:"none",backgroundColor: "transparent"}}>
-          <CardMedia
-            component="img"
-            height="30"
-            image="https://logodix.com/logo/1080614.png"
-            alt="Description of image" // Optional alt text
-          />
-
-        </Card> */}
+        
       </Box>
       <Typography
         component="h1"
@@ -283,10 +274,7 @@ export default function SignInCard() {
             onChange={(e)=>setPassword(e.target.value)}
           />
         </FormControl>
-        {/* <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
-          label="Remember me"
-        /> */}
+        
         <ForgotPassword open={open} handleClose={handleClose} mail={forgotPasswordMail} setMail={setForgotPasswordMail} handleForgotPassword={handleForgotPassword} />
         <Button type="submit" fullWidth variant="contained" onClick={handleSubmit}>
              {loading ? 'Signing in...' : 'Sign in'}

@@ -483,7 +483,7 @@ export default function EmployeeDashboard() {
                                     <DoneAllIcon color="primary"/>
                                 </Box>
                                 :
-                                <Box onClick={handleEdit} sx={{position: 'absolute',top: 10, right: 10,cursor: 'pointer' }}>
+                                <Box onClick={handleEdit} sx={{position: 'absolute',top: 10, right: 10,cursor: "pointer" }}>
                                     {
                                         updateMode ? <ClearIcon /> : <EditIcon />
                                     }

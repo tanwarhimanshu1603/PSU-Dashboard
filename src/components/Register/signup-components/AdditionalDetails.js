@@ -15,12 +15,6 @@ const FormGrid = styled(Grid)(() => ({
 }));
 
 export default function AdditionalDetails({props}) {
-  // const [presentationSkill,setPresentationSkill]= useState(null);
-  // const [hobby,setHobby] = useState(null);
-  // const [mentoringAbility, setMentoringAbility] = useState(null);
-  // const [contributedToDesign, setContributedToDesign] = useState(null);
-  // const [explorationInterest, setExplorationInterest] = useState(null);
-  // const [engagementActivity, setEngagementActivity] = useState(null);
  const {
   presentationSkills,setPresentationSkills,hobbiesSports,setHobbiesSports,mentoringAbility,setMentoringAbility,
   contributedToDesign,setContributedToDesign,explorationInterest,setExplorationInterest,engagementActivityContribution,setEngagementActivityContribution,

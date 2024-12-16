@@ -45,13 +45,7 @@ const Sidebar = ({ requestCount,employeeCount }) => {
     <div className="sidebar">
       <div className="top">
         <Link to="/admin" style={{ textDecoration: "none" }}>
-          {/* <div className="item">
-            <img style={{borderRadius:"50%"}} width={"20px"}
-              src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-              alt="admin_image"
-              className="avatar"
-            />
-          </div> */}
+          
           <span className="logo">Vikrant</span>
         </Link>
       </div>
@@ -107,16 +101,7 @@ const Sidebar = ({ requestCount,employeeCount }) => {
         message={"Are you sure you want to logout?"}
         buttonText = {"Logout"}
       />
-      {/* <div className="bottom">
-        <div
-          className="colorOption"
-          onClick={() => dispatch({ type: "LIGHT" })}
-        ></div>
-        <div
-          className="colorOption"
-          onClick={() => dispatch({ type: "DARK" })}
-        ></div>
-      </div> */}
+      
     </div>
   );
 };

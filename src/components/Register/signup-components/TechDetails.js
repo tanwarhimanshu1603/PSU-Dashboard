@@ -108,26 +108,7 @@ export default function TechDetails({props}) {
           onChange={(e)=>setDevOpsKnowledge(e.target.value)}
         />
       </FormGrid>
-      {/* <FormGrid size={{ xs: 12, md: 6 }}>
-      <FormLabel htmlFor="domain" required>
-        Current Domain
-      </FormLabel>
-      <FormControl fullWidth required size="small">
-        <Select
-          labelId="domain-label"
-          id="domain"
-          name="domain"
-          value={selectedDomain}
-          onChange={handleDomainChange}
-          label="Select Domain"
-        >
-          {domainList.map((domain)=>{
-            return <MenuItem value={domain}>{domain}</MenuItem>
-          })}
-          
-        </Select>
-      </FormControl>
-    </FormGrid> */}
+      
     <FormGrid size={{ xs: 12 }}>
       <FormLabel htmlFor="functional-knowledge" required>
         Functional Knowledge
@@ -233,21 +214,7 @@ export default function TechDetails({props}) {
         getOptionLabel={(option) => option}
       />
     </FormGrid>
-    {/* <FormGrid size={{ xs: 12, md: 12 }} >
-        <FormLabel htmlFor="secondary-skill" required>
-          Secondary Skills
-        </FormLabel>
-        <OutlinedInput
-          id="secondary-skill"
-          name="secondary-skill"
-          type="text"
-          placeholder="ReactJS"
-          required
-          size="small"
-          value={secondaryTechSkill}
-          onChange={(e)=>setSecondaryTechSkill(e.target.value)}
-        />
-      </FormGrid> */}
+    
       
       <FormGrid size={{ xs: 6 }}>
         <FormLabel htmlFor="amdocs-experience" required>
@@ -266,9 +233,6 @@ export default function TechDetails({props}) {
             if (parseFloat(value) >= 0) {
               setAmdocsExperience(value);
             }
-            // else{
-            //   setAmdocsExperience("0")
-            // }
           }}
         />
       </FormGrid>
@@ -289,69 +253,9 @@ export default function TechDetails({props}) {
             if (parseFloat(value) >= 0) {
               setTotalExperience(value);
             }
-            // else{
-            //   setTotalExperience("0")
-            // }
           }}
         />
       </FormGrid>
-      {/* <FormGrid size={{ xs: 12 }}>
-        <FormLabel htmlFor="amdocs-journey" required>
-          Amdocs Journey
-        </FormLabel>
-        <OutlinedInput
-          id="amdocs-journey"
-          name="amdocs-journey"
-          type="text"
-          required
-          size="small"
-          value={amdocsJourney}
-          onChange={(e)=>setAmdocsJourney(e.target.value)}
-        />
-      </FormGrid> */}
-      {/* <FormGrid size={{ xs: 6 }}>
-        <FormLabel htmlFor="city" required>
-          City
-        </FormLabel>
-        <OutlinedInput
-          id="city"
-          name="city"
-          type="city"
-          placeholder="New York"
-          autoComplete="City"
-          required
-          size="small"
-        />
-      </FormGrid>
-      <FormGrid size={{ xs: 6 }}>
-        <FormLabel htmlFor="state" required>
-          State
-        </FormLabel>
-        <OutlinedInput
-          id="state"
-          name="state"
-          type="state"
-          placeholder="NY"
-          autoComplete="State"
-          required
-          size="small"
-        />
-      </FormGrid>
-      
-      <FormGrid size={{ xs: 6 }}>
-        <FormLabel htmlFor="country" required>
-          Country
-        </FormLabel>
-        <OutlinedInput
-          id="country"
-          name="country"
-          type="country"
-          placeholder="United States"
-          autoComplete="shipping country"
-          required
-          size="small"
-        />
-      </FormGrid> */}
 
     </Grid>
   );
