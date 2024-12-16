@@ -162,7 +162,7 @@ export default function SignInCard() {
         setOpenErrorToast(true)
       }
     } catch (error) {
-      setErrorMessage("Error : ",error.message)
+      setErrorMessage(`Error while logging in `, error)
       setOpenErrorToast(true)
     } finally {
       setLoading(false); // Always stop loading, even if there's an error
