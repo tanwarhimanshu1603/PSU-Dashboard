@@ -39,7 +39,7 @@ function App() {
         return;
       }
     } catch (error) {
-        console.log("Error while fetching approvals!!");
+        // console.log("Error while fetching approvals!!");
         
     }
   }
@@ -99,7 +99,7 @@ function App() {
       setAllDomains(data)
       }
       catch(error){
-        console.log(error);
+        // console.log(error);
       }
   }
 

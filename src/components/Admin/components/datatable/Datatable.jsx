@@ -33,7 +33,7 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
   const [filterDialogOpen, setFilterDialogOpen] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedDomain, setSelectedDomain] = useState([]);
-
+  const jwtToken = localStorage.getItem('jwtToken');
 
   // const [allSkills,setAllSkills]=useState([]);
   // const [allDomains,setAllDomains] = useState([]);
@@ -45,7 +45,7 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
     const searchParams = new URLSearchParams(location.search);
     const domainParam = searchParams.get("domain");
     const skillParam = searchParams.get("skill");
-
+    // console.log(selectedDomain,selectedSkills)
     if (domainParam) {
       const updatedDomain = [...selectedDomain, domainParam]
       setSelectedDomain(updatedDomain);
@@ -55,99 +55,18 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
         ...selectedSkills, skillParam
       ]);
     }
-    if (domainParam || skillParam) handleFilter(false);
+    
     else handleReset(false);
 
   }, [location.search]); // Re-run if the search string changes
 
   useEffect(() => {
     if (selectedDomain.length > 0 || selectedSkills.length > 0) handleFilter(false);
-    else if (selectedDomain.length === 0 && selectedSkills.length === 0) handleReset(false);
+    // else if (selectedDomain.length === 0 && selectedSkills.length === 0) handleReset(false);
   }, [selectedDomain, selectedSkills]);
 
 
-  // useEffect(() => {
-  //       const processedData = filteredData?.map((employee) => ({
-  //       ...employee,
-  //         currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
-  //       }));
-  //       console.log(processedData);
-  //       setFilteredData(processedData)
-  //       // console.log(data);
-  // },[filteredData]);
 
-
-
-  const jwtToken = localStorage.getItem('jwtToken');
-  // const getAllEmployees = async () => {
-  //   try {
-  //     const response = await fetch('http://localhost:8080/api/v1/admin/getAllEmp', {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Authorization': `${jwtToken}`
-  //       },
-  //     });
-  //     if (response.ok) {
-  //       const employeeData = JSON.parse(await response.text())
-
-  //       // console.log(employeeData)
-  //       const processedData = employeeData.map((employee) => ({
-  //         ...employee,
-  //         currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
-  //       }));
-  //       setData(processedData)
-  //       console.log(data);
-
-  //       setFilteredData(processedData)
-  //       setEmpCount(filteredData.length)
-  //       return;
-  //     }
-  //   } catch (error) {
-  //     setErrorMessage(error.message)
-  //   }
-  // }
-  // const getAllSkills = async()=>{
-  //   try {
-  //     // First API call to admin login
-  //     const skillResponse = await fetch('http://localhost:8080/api/v1/employee/getSkills', {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       }
-  //     });
-  //     const data = JSON.parse(await skillResponse.text());
-  //     setAllSkills(data)
-  //     // console.log(data)
-  //     }
-  //     catch(error){
-
-  //     }
-  // }
-  // const getAllDomains = async()=>{
-  //   try {
-  //     // First API call to admin login
-  //     const domainResponse = await fetch('http://localhost:8080/api/v1/employee/getDomain', {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       }
-  //     });
-  //     const data = JSON.parse(await domainResponse.text());
-  //     setAllDomains(data)
-  //     // console.log(data)
-  //     }
-  //     catch(error){
-  //       console.log(error);
-  //     }
-  // }
-
-  // useEffect(() => {
-  //   getAllEmployees();
-  //   getAllSkills();
-  //   getAllDomains()
-  //   if(selectedDomain || selectedSkills)handleFilter();
-  // }, [])
 
   useEffect(() => {
     if (!searchTerm) {
@@ -232,9 +151,8 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
     setOpenErrorToast(false);
   };
   const handleFilter = (calledFromFilterDialog) => {
-    setSearchTerm(''); // Clear any existing search term
-    // console.log(selectedSkills, selectedDomain);
 
+    setSearchTerm(''); // Clear any existing search term
     const filtered = data.filter((employee) => {
       // Match skills with OR logic
       const matchesSkills = selectedSkills.length
@@ -245,21 +163,11 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
       const matchesDomains = selectedDomain.length
         ? selectedDomain.some((domain) => employee.functionalKnowledge?.includes(domain))
         : true;
-      // console.log(matchesSkills);
-
       // AND condition between skills and domains
       return matchesSkills && matchesDomains;
     });
-
-    // console.log("Filtered data: ",filtered);
-    // const updatedFilteredData = filtered?.map((employee) => ({
-    // ...employee,
-    //   currentAccount: employee.currentAccount==="undefined" ? "" : employee.currentAccount
-    // }));
-    // console.log(updatedFilteredData);
     setFilteredData(filtered);
     setEmpCount(filtered.length);
-
 
     // Update state with filtered data and employee count
     // setFilteredData(filtered);

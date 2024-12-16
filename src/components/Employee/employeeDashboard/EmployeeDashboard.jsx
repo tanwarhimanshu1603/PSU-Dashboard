@@ -90,7 +90,7 @@ export default function EmployeeDashboard() {
       
           return data.secure_url; // Return the uploaded image URL
         } catch (error) {
-          console.error("Error uploading to Cloudinary:", error);
+        //   console.error("Error uploading to Cloudinary:", error);
           throw error;
         }
       };
@@ -156,7 +156,7 @@ export default function EmployeeDashboard() {
                 const journey= JSON.parse(data.amdocsJourney);
                 setAmdocsJourney(journey)
             } catch (error) {
-                console.log(error)
+                // console.log(error)
             }
             
             setPrimaryTechSkills(data.primaryTechSkill);

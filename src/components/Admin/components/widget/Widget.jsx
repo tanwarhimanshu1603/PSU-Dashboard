@@ -6,8 +6,10 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import GroupsIcon from '@mui/icons-material/Groups';
 import { Link } from "react-router-dom";
+import { Badge, Chip, Tooltip } from "@mui/material";
+import { color } from "@cloudinary/url-gen/qualifiers/background";
 
-const Widget = ({ count,isDomain,domain,skill }) => {
+const Widget = ({ count,isDomain,domain,skill,topSkills }) => {
   let data;
   if(isDomain){
     const tempData = {
@@ -43,300 +45,7 @@ const Widget = ({ count,isDomain,domain,skill }) => {
     data = tempData;
   }
 
-  // switch (type) {
-  //     case "C1-stats":
-  //       data = {
-  //         title: "C1",
-  //         value:count,
-  //         link: "employees/?domain=C1",
-  //         icon: (
-  //           <GroupsIcon
-  //             className="icon"
-  //             style={{
-  //             backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //             color: "purple",
-  //             }}
-  //           />
-  //         ),
-  //       };
-  //       break;
-  //       case "D1-stats":
-  //     data = {
-  //       title: "D1",
-  //       value:count,
-  //       link: "employees/?domain=D1",
-  //       icon: (
-  //         <GroupsIcon
-  //           className="icon"
-  //           style={{
-  //           backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //           color: "purple",
-  //           }}
-  //         />
-  //       ),
-  //     };
-  //     break;
-  //     case "R1-stats":
-  //     data = {
-  //       title: "R1",
-  //       value:count,
-  //       link: "employees/?domain=R1",
-  //       icon: (
-  //         <GroupsIcon
-  //           className="icon"
-  //           style={{
-  //           backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //           color: "purple",
-  //           }}
-  //         />
-  //       ),
-  //     };
-  //     break;
-  //     case "PSU-stats":
-  //     data = {
-  //       title: "PSU",
-  //       value:count,
-  //       link: "employees/?domain=PSU",
-  //       icon: (
-  //         <GroupsIcon
-  //           className="icon"
-  //           style={{
-  //           backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //           color: "purple",
-  //           }}
-  //         />
-  //       ),
-  //     };
-  //     break;
-  //     case "OC-stats":
-  //     data = {
-  //       title: "OC",
-  //       value:count,
-  //       link: "employees/?domain=OC",
-  //       icon: (
-  //         <GroupsIcon
-  //           className="icon"
-  //           style={{
-  //           backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //           color: "purple",
-  //           }}
-  //         />
-  //       ),
-  //     };
-  //     break;
-  //     case "OH-stats":
-  //     data = {
-  //       title: "OH",
-  //       value:count,
-  //       link: "employees/?domain=OH",
-  //       icon: (
-  //         <GroupsIcon
-  //           className="icon"
-  //           style={{
-  //           backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //           color: "purple",
-  //           }}
-  //         />
-  //       ),
-  //     };
-  //     break;
-  //     case "RTB-stats":
-  //     data = {
-  //       title: "RTB",
-  //       value:count,
-  //       link: "employees/?domain=RTB",
-  //       icon: (
-  //         <GroupsIcon
-  //           className="icon"
-  //           style={{
-  //           backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //           color: "purple",
-  //           }}
-  //         />
-  //       ),
-  //     };
-  //     break;
-  //     case "CARE-stats":
-  //     data = {
-  //       title: "CARE",
-  //       value:count,
-  //       link: "employees/?domain=CARE",
-  //       icon: (
-  //         <GroupsIcon
-  //           className="icon"
-  //           style={{
-  //           backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //           color: "purple",
-  //           }}
-  //         />
-  //       ),
-  //     };
-  //     break;
-  //     case "LCEP-stats":
-  //     data = {
-  //       title: "LCEP",
-  //       value:count,
-  //       link: "employees/?domain=LCEP",
-  //       icon: (
-  //         <GroupsIcon
-  //           className="icon"
-  //           style={{
-  //           backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //           color: "purple",
-  //           }}
-  //         />
-  //       ),
-  //     };
-  //     break;
-  //     case "CPQ-stats":
-  //     data = {
-  //       title: "CPQ",
-  //       value:count,
-  //       link: "employees/?domain=CPQ",
-  //       icon: (
-  //         <GroupsIcon
-  //           className="icon"
-  //           style={{
-  //           backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //           color: "purple",
-  //           }}
-  //         />
-  //       ),
-  //     };
-  //     break;
-  //     case "MEC-stats":
-  //     data = {
-  //       title: "MEC",
-  //       value:count,
-  //       link: "employees/?domain=MEC",
-  //       icon: (
-  //         <GroupsIcon
-  //           className="icon"
-  //           style={{
-  //           backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //           color: "purple",
-  //           }}
-  //         />
-  //       ),
-  //     };
-  //     break;
-  //     case "OMS-stats":
-  //     data = {
-  //       title: "OMS",
-  //       value:count,
-  //       link: "employees/?domain=OMS",
-  //       icon: (
-  //         <GroupsIcon
-  //           className="icon"
-  //           style={{
-  //           backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //           color: "purple",
-  //           }}
-  //         />
-  //       ),
-  //     };
-  //     break;
-  //     case "CRM-stats":
-  //     data = {
-  //       title: "CRM",
-  //       value:count,
-  //       link: "employees/?domain=CRM",
-  //       icon: (
-  //         <GroupsIcon
-  //           className="icon"
-  //           style={{
-  //           backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //           color: "purple",
-  //           }}
-  //         />
-  //       ),
-  //     };
-  //     break;
-  //       case "java-stats":
-  //         data = {
-  //           title: "Java",
-  //           value:14,
-  //           link: "employees/?skill=Java",
-  //           icon: (
-  //             <GroupsIcon
-  //               className="icon"
-  //               style={{
-  //               backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //               color: "purple",
-  //               }}
-  //             />
-  //           ),
-  //         };
-  //         break;
-  //         case "reactJs-stats":
-  //           data = {
-  //             title: "ReactJs",
-  //             value:21,
-  //             link: "employees/?skill=ReactJs",
-  //             icon: (
-  //               <GroupsIcon
-  //                 className="icon"
-  //                 style={{
-  //                 backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //                 color: "purple",
-  //                 }}
-  //               />
-  //             ),
-  //           };
-  //           break;
 
-  //           case "python-stats":
-  //             data = {
-  //               title: "Python",
-  //               value:15,
-  //               link: "employees/?skill=Python",
-  //               icon: (
-  //                 <GroupsIcon
-  //                   className="icon"
-  //                   style={{
-  //                   backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //                   color: "purple",
-  //                   }}
-  //                 />
-  //               ),
-  //             };
-  //             break;
-
-  //             case "jenkins-stats":
-  //               data = {
-  //                 title: "Jenkins",
-  //                 value:44,
-  //                 link: "employees/?skill=jenkins",
-  //                 icon: (
-  //                   <GroupsIcon
-  //                     className="icon"
-  //                     style={{
-  //                     backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //                     color: "purple",
-  //                     }}
-  //                   />
-  //                 ),
-  //               };
-  //               break;
-  //               case "js-stats":
-  //               data = {
-  //                 title: "Javascript",
-  //                 value:25,
-  //                 link: "employees/?skill=javascript",
-  //                 icon: (
-  //                   <GroupsIcon
-  //                     className="icon"
-  //                     style={{
-  //                     backgroundColor: "rgba(128, 0, 128, 0.2)",
-  //                     color: "purple",
-  //                     }}
-  //                   />
-  //                 ),
-  //               };
-  //               break;
-  //   default:
-  //     break;
-  // }
 
   return (
     <div className="widget">
@@ -346,14 +55,24 @@ const Widget = ({ count,isDomain,domain,skill }) => {
            {data.value}
         </span>
         <Link to={data.link} style={{textDecoration:"none",color:"gray"}}>
-        <span className="link">See details</span>
+    <span className="link" >See details</span>
         </Link>
       </div>
-      <div className="right">
-        <div className="percentage positive">
-          {/* <KeyboardArrowUpIcon />
-          {diff} % */}
-        </div>
+      <div className="right" >
+        {
+          isDomain ? 
+          topSkills?.map((skillInfo,index)=>(
+            <div key={index} className="percentage positive">
+              <Tooltip title={skillInfo.skill}>
+              <Chip label={`${skillInfo.count} ${skillInfo.skill}`} color="primary" variant="outlined" sx={{width:"70px"}}></Chip>
+              </Tooltip>
+            </div>
+          ))
+         :
+        <div className="percentage positive"></div>
+        }
+        
+        
         {data.icon}
       </div>
     </div>

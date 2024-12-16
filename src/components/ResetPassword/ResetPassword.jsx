@@ -1,57 +1,3 @@
-// import React, { useState } from 'react';
-// import { useSearchParams } from 'react-router-dom';
-
-// export default function ResetPassword() {
-//   // Extract the 'token' query parameter
-//   const [searchParams] = useSearchParams();
-//   const [password,setPassword]=useState("");
-//   const [confirmPassword,setConfirmPassword]=useState("");
-//   const token = searchParams.get('token'); // Get the 'token' parameter from the URL
-
-//   const handleResetPassword = async ()=>{
-//     try {
-//       // First API call to forgot password
-//       const response = await fetch('http://localhost:8080/api/v1/employee/reset-password', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'Authorization': token
-//         },
-//         body: JSON.stringify({empPassword: password})
-//       });
-//       const data = await response.text();
-//     // console.log(response);
-    
-//       if(response.ok){
-//         console.log(data);
-//       }else console.error("Error resetting password.");
-//       }
-//       catch(error){
-//         console.log(error);
-//       }
-//   }
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     if(password === confirmPassword)handleResetPassword();
-//   }
-
-//   return (
-//     <div>
-//       <h1>Reset Password</h1>
-
-//       {/* Render your reset password form here */}
-//       <form onSubmit={handleSubmit}>
-//         <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="New Password" />
-//         <input value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} type="password" placeholder="Confirm Password" />
-//         <button onClick={handleSubmit} type="submit">Reset Password</button>
-//       </form>
-//     </div>
-//   );
-// }
-
-
-
 import React, { useState } from 'react';
 import { Container, Typography, TextField, Box, Alert, IconButton, InputAdornment, Button } from '@mui/material';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -96,7 +42,7 @@ const ResetPassword = () => {
         }else console.error("Error resetting password.");
         }
         catch(error){
-            console.log(error);
+            // console.log(error);
         }
     }
  
