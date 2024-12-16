@@ -41,7 +41,9 @@ export default function EmployeeDashboard() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [updateMode,setUpdateMode] = useState(false);  
+    const [amdocsJourneyUpdateMode,setAmdocsJourneyUpdateMode] = useState(false);
     const [changesMade,setChangesMade] = useState(false);
+    const [amdocsJourneyChangesMade,setAmdocsJourneyChangesMade] = useState(false);
     const [skillOptions,setSkillOptions] = useState([]);
     const [primaryTechSkills, setPrimaryTechSkills] = useState([]);
     const [secondaryTechSkills, setSecondaryTechSkills] = useState([]);
@@ -91,7 +93,7 @@ export default function EmployeeDashboard() {
       
           return data.secure_url; // Return the uploaded image URL
         } catch (error) {
-          console.error("Error uploading to Cloudinary:", error);
+        //   console.error("Error uploading to Cloudinary:", error);
           throw error;
         }
       };
@@ -101,6 +103,7 @@ export default function EmployeeDashboard() {
       };
     
     const openEditAmdocsJourneyDialog = () => {
+        setAmdocsJourneyUpdateMode(true)
         setEditAmdocsJourneyDialogOpen(true);
     };
 
@@ -119,6 +122,7 @@ export default function EmployeeDashboard() {
             setJourneys(JSON.parse(employeeSnapshot.amdocsJourney));
             
         }
+        setAmdocsJourneyUpdateMode(false)
         setEditAmdocsJourneyDialogOpen(false);
     };
     useEffect(() => {
@@ -157,7 +161,7 @@ export default function EmployeeDashboard() {
                 const journey= JSON.parse(data.amdocsJourney);
                 setAmdocsJourney(journey)
             } catch (error) {
-                console.log(error)
+                // console.log(error)
             }
             
             setPrimaryTechSkills(data.primaryTechSkill);
@@ -761,10 +765,10 @@ export default function EmployeeDashboard() {
                             <EditAmdocsJourney open={editAmdocsJourneyDialogOpen} handleClose={closeEditAmdocsJourneyDialog} buttonText={"Save"} setAmdocsJourney={setAmdocsJourney} journeys={journeys} setJourneys={setJourneys} setErrorMessage={setErrorMessage} setOpenErrorToast={setOpenErrorToast}/>
                             <Item sx={{position:"relative"}}>
                                 {/* Amdocs Journey Section */}
-                                <Tooltip title={updateMode ? 'Cancel' : 'Edit'}>
+                                <Tooltip title={amdocsJourneyUpdateMode ? 'Cancel' : 'Edit'}>
                             <Box onClick={openEditAmdocsJourneyDialog} sx={{position: 'absolute',top: 10, right: 10,cursor: 'pointer' }}>
                                 {
-                                    updateMode ? <ClearIcon /> : <EditIcon />
+                                    amdocsJourneyUpdateMode ? <ClearIcon /> : <EditIcon />
                                 }
                             </Box>
                         </Tooltip>
@@ -911,40 +915,64 @@ export default function EmployeeDashboard() {
                                     
                                     {!updateMode && "Devops Knowledge: " } 
                                     {
-                                        updateMode ? 
+                                        (updateMode && employee.devOpsKnowledge) ? 
                                         <TextField onChange={handleChange} value={employee.devOpsKnowledge} id="outlined-basic" label="devops knowledge..." name="devOpsKnowledge" variant="outlined" sx={{width: '50ch'}}/> : 
                                         <span style={{color: 'gray'}}>{employee.devOpsKnowledge}</span>
                                     }
                                         </Typography>
-                                        <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
+                                        {(updateMode || employee.areaOfCriticalIssue) && <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
+                                            
+                                            {!updateMode && "Area of critical issues: " }
+                                            {
+                                                (updateMode) ? 
+                                                <TextField onChange={handleChange} value={employee.areaOfCriticalIssue} id="outlined-basic" label="Area of Critical issue" name="areaOfCriticalIssue" variant="outlined" sx={{width: '50ch'}}/> : 
+                                                <span style={{color: 'gray'}}>{employee.areaOfCriticalIssue}</span>
+                                            }
+                                            
+                                        </Typography>}
+                                        {(updateMode || employee.productionSupport) && <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
+                                            
+                                            {!updateMode && "Production Support: " }
+                                            {
+                                                (updateMode) ? 
+                                                <TextField onChange={handleChange} value={employee.productionSupport} id="outlined-basic" label="Production Support" name="productionSupport" variant="outlined" sx={{width: '50ch'}}/> : 
+                                                <span style={{color: 'gray'}}>{employee.productionSupport}</span>
+                                            }
+                                            
+                                        </Typography>}
+                                        
+                                        {(updateMode || employee.presentationSkills) &&<Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
                                             
                                             {!updateMode && "Presentation Skills: " }
                                             {
-                                                updateMode ? 
+                                                (updateMode)? 
                                                 <TextField onChange={handleChange} value={employee.presentationSkills} id="outlined-basic" label="presentation skills" name="presentationSkills" variant="outlined" sx={{width: '50ch'}}/> : 
                                                 <span style={{color: 'gray'}}>{employee.presentationSkills}/5</span>
                                             }
                                             
-                                        </Typography>
-                                        <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
+                                        </Typography> }
+                                        
+                                        {(updateMode || employee.hobbiesSports) && <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
                                             
                                             {!updateMode && "Hobbies: " }
                                             {
-                                                updateMode ? 
+                                                (updateMode) ? 
                                                 <TextField onChange={handleChange} value={employee.hobbiesSports} id="outlined-basic" label="hobbies" name="hobbiesSports" variant="outlined" sx={{width: '50ch'}}/> : 
                                                 <span style={{color: 'gray'}}>{employee.hobbiesSports}</span>
                                             }
                                             
-                                        </Typography>
-                                        <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
+                                        </Typography>}
+                                        
+                                        {(updateMode || employee.additionalInfo) && <Typography variant="body2" sx={{fontWeight: 700,display: 'flex', alignItems: 'center',gap: 1}}>
                                             {!updateMode && "Additional Info: " }
                                             {
-                                                updateMode ? 
+                                                (updateMode) ? 
                                                 <TextField onChange={handleChange} value={employee.additionalInfo} id="outlined-basic" label="Additional info" name="additionalInfo" variant="outlined" sx={{width: '50ch'}}/> : 
                                                 <span style={{color: 'gray'}}>{employee.additionalInfo}</span>
                                             }
                                             
-                                        </Typography>
+                                        </Typography>}
+                                        
                                     </Box>
                                 </Box>
                             </Item>

@@ -33,7 +33,7 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
   const [filterDialogOpen, setFilterDialogOpen] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedDomain, setSelectedDomain] = useState([]);
-
+  const jwtToken = localStorage.getItem('jwtToken');
 
   // const [allSkills,setAllSkills]=useState([]);
   // const [allDomains,setAllDomains] = useState([]);
@@ -45,7 +45,7 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
     const searchParams = new URLSearchParams(location.search);
     const domainParam = searchParams.get("domain");
     const skillParam = searchParams.get("skill");
-
+    // console.log(selectedDomain,selectedSkills)
     if (domainParam) {
       const updatedDomain = [...selectedDomain, domainParam]
       setSelectedDomain(updatedDomain);
@@ -55,7 +55,7 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
         ...selectedSkills, skillParam
       ]);
     }
-    if (domainParam || skillParam) handleFilter(false);
+    
     else handleReset(false);
 
   }, [location.search]); // Re-run if the search string changes
@@ -67,8 +67,6 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
 
 
 
-
-  const jwtToken = localStorage.getItem('jwtToken');
 
   useEffect(() => {
     if (!searchTerm) {
@@ -153,9 +151,8 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
     setOpenErrorToast(false);
   };
   const handleFilter = (calledFromFilterDialog) => {
-    setSearchTerm(''); // Clear any existing search term
-    // console.log(selectedSkills, selectedDomain);
 
+    setSearchTerm(''); // Clear any existing search term
     const filtered = data.filter((employee) => {
       // Match skills with OR logic
       const matchesSkills = selectedSkills.length
@@ -166,15 +163,15 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
       const matchesDomains = selectedDomain.length
         ? selectedDomain.some((domain) => employee.functionalKnowledge?.includes(domain))
         : true;
-      // console.log(matchesSkills);
-
       // AND condition between skills and domains
       return matchesSkills && matchesDomains;
     });
-
     setFilteredData(filtered);
     setEmpCount(filtered.length);
 
+    // Update state with filtered data and employee count
+    // setFilteredData(filtered);
+    // setEmpCount(filtered.length);
     if (calledFromFilterDialog) setFilterDialogOpen(false); // Close the dialog
   };
 

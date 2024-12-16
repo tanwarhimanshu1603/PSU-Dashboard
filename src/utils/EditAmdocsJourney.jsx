@@ -15,14 +15,14 @@ function EditAmdocsJourney({ open, handleClose,buttonText,setAmdocsJourney,journ
     
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={()=>handleClose(false)}
       fullWidth
       maxWidth="md"
       PaperProps={{
         component: 'form',
         onSubmit: (event) => {
           event.preventDefault();
-          handleClose();
+          handleClose(false);
         },
         sx: { backgroundImage: 'none',overflow: 'visible' },
       }}

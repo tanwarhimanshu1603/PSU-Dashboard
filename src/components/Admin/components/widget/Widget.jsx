@@ -6,8 +6,9 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 import GroupsIcon from '@mui/icons-material/Groups';
 import { Link } from "react-router-dom";
+import { Badge, Chip, Tooltip } from "@mui/material";
 
-const Widget = ({ count,isDomain,domain,skill }) => {
+const Widget = ({ count,isDomain,domain,skill,topSkills }) => {
   let data;
   if(isDomain){
     const tempData = {
@@ -18,8 +19,8 @@ const Widget = ({ count,isDomain,domain,skill }) => {
         <GroupsIcon
           className="icon"
           style={{
-          backgroundColor: "rgba(128, 0, 128, 0.2)",
-          color: "purple",
+          backgroundColor: "#E0EDFA",
+          color: "#1976d2",
           }}
         />
       )
@@ -34,14 +35,15 @@ const Widget = ({ count,isDomain,domain,skill }) => {
         <GroupsIcon
           className="icon"
           style={{
-          backgroundColor: "rgba(128, 0, 128, 0.2)",
-          color: "purple",
+            backgroundColor: "#E0EDFA",
+            color: "#1976d2",
           }}
         />
       )
     }
     data = tempData;
   }
+
 
 
   return (
@@ -52,14 +54,24 @@ const Widget = ({ count,isDomain,domain,skill }) => {
            {data.value}
         </span>
         <Link to={data.link} style={{textDecoration:"none",color:"gray"}}>
-        <span className="link">See details</span>
+    <span className="link" >See details</span>
         </Link>
       </div>
-      <div className="right">
-        <div className="percentage positive">
-          {/* <KeyboardArrowUpIcon />
-          {diff} % */}
-        </div>
+      <div className="right" >
+        {
+          isDomain ? 
+          topSkills?.map((skillInfo,index)=>(
+            <div key={index} className="percentage positive">
+              <Tooltip title={skillInfo.skill}>
+              <Chip label={`${skillInfo.skill}`} color="primary" variant="outlined" sx={{width:"70px",cursor:"pointer"}}></Chip>
+              </Tooltip>
+            </div>
+          ))
+         :
+        <div className="percentage positive"></div>
+        }
+        
+        
         {data.icon}
       </div>
     </div>

@@ -42,7 +42,7 @@ const ResetPassword = () => {
         }else console.error("Error resetting password.");
         }
         catch(error){
-            console.log(error);
+            // console.log(error);
         }
     }
  

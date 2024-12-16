@@ -45,8 +45,14 @@ const Sidebar = ({ requestCount,employeeCount }) => {
     <div className="sidebar">
       <div className="top">
         <Link to="/admin" style={{ textDecoration: "none" }}>
-          
-          <span className="logo">Vikrant</span>
+          {/* <div className="item">
+            <img style={{borderRadius:"50%"}} width={"20px"}
+              src="https://images.pexels.com/photos/941693/pexels-photo-941693.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+              alt="admin_image"
+              className="avatar"
+            />
+          </div> */}
+          <span className="logo" style={{color:"#1976d2"}}>Admin</span>
         </Link>
       </div>
       <hr />
