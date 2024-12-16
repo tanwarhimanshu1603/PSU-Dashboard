@@ -24,6 +24,7 @@ import GLOBAL_CONFIG from '../../../constants/global';
 import EditAmdocsJourney from '../../../utils/EditAmdocsJourney';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
+import ClearIcon from '@mui/icons-material/Clear';
 import { IconButton } from "@mui/material";
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -475,7 +476,7 @@ export default function EmployeeDashboard() {
             <Grid container spacing={2} sx={{marginTop:8}}>
                 <Grid size={{ xs: 6, md: 4 }}>
                     <Item sx={{position: 'relative'}}>
-                        <Tooltip title={updateMode ? changesMade ? 'Save' : 'Edit Off' : 'Edit'}>
+                        <Tooltip title={updateMode ? changesMade ? 'Save' : 'Cancel' : 'Edit'}>
                             {
                                 changesMade ?
                                 <Box onClick={handleSaveDetails} sx={{position: 'absolute',top: 10, right: 10,cursor: 'pointer' }}>
@@ -484,7 +485,7 @@ export default function EmployeeDashboard() {
                                 :
                                 <Box onClick={handleEdit} sx={{position: 'absolute',top: 10, right: 10,cursor: 'pointer' }}>
                                     {
-                                        updateMode ? <EditOffIcon /> : <EditIcon />
+                                        updateMode ? <ClearIcon /> : <EditIcon />
                                     }
                                 </Box>   
                             }
@@ -760,10 +761,10 @@ export default function EmployeeDashboard() {
                             <EditAmdocsJourney open={editAmdocsJourneyDialogOpen} handleClose={closeEditAmdocsJourneyDialog} buttonText={"Save"} setAmdocsJourney={setAmdocsJourney} journeys={journeys} setJourneys={setJourneys} setErrorMessage={setErrorMessage} setOpenErrorToast={setOpenErrorToast}/>
                             <Item sx={{position:"relative"}}>
                                 {/* Amdocs Journey Section */}
-                                <Tooltip title={updateMode ? 'Edit Off' : 'Edit'}>
+                                <Tooltip title={updateMode ? 'Cancel' : 'Edit'}>
                             <Box onClick={openEditAmdocsJourneyDialog} sx={{position: 'absolute',top: 10, right: 10,cursor: 'pointer' }}>
                                 {
-                                    updateMode ? <EditOffIcon /> : <EditIcon />
+                                    updateMode ? <ClearIcon /> : <EditIcon />
                                 }
                             </Box>
                         </Tooltip>
