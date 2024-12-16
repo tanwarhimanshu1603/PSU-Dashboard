@@ -62,7 +62,7 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
 
   useEffect(() => {
     if (selectedDomain.length > 0 || selectedSkills.length > 0) handleFilter(false);
-    // else if (selectedDomain.length === 0 && selectedSkills.length === 0) handleReset(false);
+    else if (selectedDomain.length === 0 && selectedSkills.length === 0) handleReset(false);
   }, [selectedDomain, selectedSkills]);
 
 

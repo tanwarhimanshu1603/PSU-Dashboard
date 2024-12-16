@@ -215,7 +215,7 @@ const Home = ({ requestCount, data, allDomains, allSkills,employeeCount }) => {
       <Sidebar requestCount={requestCount} employeeCount={employeeCount}/>
       <div className="homeContainer">
         {/* <Navbar /> */}
-        <h1 style={{ paddingLeft: "15px" }}>Domain</h1>
+        <h1 style={{ paddingLeft: "15px"}}>Domain</h1>
         {
           chunkedDomainInfoArray.map((domainList, index) => (
             <Box key={index} className="widgets">

@@ -105,7 +105,7 @@ export default function Signup(props) {
       return;
     }
     try {
-      const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/employee/getEmp/${empEmail}`, {
+      const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/getEmp/${empEmail}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -158,7 +158,7 @@ export default function Signup(props) {
     // e.preventDefault();
     const hashedPassword = await hashText(empPassword);
     try {
-      const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/employee/register`, {
+      const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -184,7 +184,7 @@ export default function Signup(props) {
 const getAllSkills = async()=>{
   try {
     // First API call to admin login
-    const skillResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/employee/getSkills`, {
+    const skillResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/getSkills`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -200,7 +200,7 @@ const getAllSkills = async()=>{
 const getAllDomains = async()=>{
   try {
     // First API call to admin login
-    const domainResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}/api/v1/employee/getDomain`, {
+    const domainResponse = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/getDomain`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

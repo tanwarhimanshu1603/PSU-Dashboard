@@ -20,8 +20,8 @@ const Widget = ({ count,isDomain,domain,skill,topSkills }) => {
         <GroupsIcon
           className="icon"
           style={{
-          backgroundColor: "rgba(128, 0, 128, 0.2)",
-          color: "purple",
+          backgroundColor: "#E0EDFA",
+          color: "#1976d2",
           }}
         />
       )
@@ -36,8 +36,8 @@ const Widget = ({ count,isDomain,domain,skill,topSkills }) => {
         <GroupsIcon
           className="icon"
           style={{
-          backgroundColor: "rgba(128, 0, 128, 0.2)",
-          color: "purple",
+            backgroundColor: "#E0EDFA",
+            color: "#1976d2",
           }}
         />
       )
@@ -64,7 +64,7 @@ const Widget = ({ count,isDomain,domain,skill,topSkills }) => {
           topSkills?.map((skillInfo,index)=>(
             <div key={index} className="percentage positive">
               <Tooltip title={skillInfo.skill}>
-              <Chip label={`${skillInfo.count} ${skillInfo.skill}`} color="primary" variant="outlined" sx={{width:"70px"}}></Chip>
+              <Chip label={`${skillInfo.skill}`} color="primary" variant="outlined" sx={{width:"70px",cursor:"pointer"}}></Chip>
               </Tooltip>
             </div>
           ))

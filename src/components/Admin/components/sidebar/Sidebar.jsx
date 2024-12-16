@@ -52,7 +52,7 @@ const Sidebar = ({ requestCount,employeeCount }) => {
               className="avatar"
             />
           </div> */}
-          <span className="logo">Vikrant</span>
+          <span className="logo" style={{color:"#1976d2"}}>Admin</span>
         </Link>
       </div>
       <hr />
