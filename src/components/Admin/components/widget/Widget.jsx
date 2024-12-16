@@ -63,7 +63,7 @@ const Widget = ({ count,isDomain,domain,skill,topSkills }) => {
           topSkills?.map((skillInfo,index)=>(
             <div key={index} className="percentage positive">
               <Tooltip title={skillInfo.skill}>
-              <Chip label={`${skillInfo.skill}`} color="primary" variant="outlined" sx={{width:"70px",cursor:"pointer"}}></Chip>
+              <Chip label={`${skillInfo.skill.charAt(0).toUpperCase() + skillInfo.skill.slice(1).toLowerCase()}`} color="primary" variant="outlined" sx={{width:"70px",cursor:"pointer"}}></Chip>
               </Tooltip>
             </div>
           ))
