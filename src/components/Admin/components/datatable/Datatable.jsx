@@ -10,6 +10,10 @@ import Badge from "@mui/material/Badge";
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import GLOBAL_CONFIG from '../../../../constants/global'
+import Checkbox from "@mui/material/Checkbox";
+import Modal from "@mui/material/Modal";
+import SettingsIcon from '@mui/icons-material/Settings';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import {
   Button,
   Dialog,
@@ -21,7 +25,9 @@ import {
   Chip,
   Box,
 } from "@mui/material";
+import Download from "../download/Download";
 const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, data, setData, allSkills, allDomains }) => {
+  // console.log(filteredData)
   const [openErrorToast, setOpenErrorToast] = useState(false);
   const [openSuccessToast, setOpenSuccessToast] = useState(false);
   // const [data, setData] = useState([]);
@@ -34,6 +40,27 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedDomain, setSelectedDomain] = useState([]);
   const jwtToken = localStorage.getItem('jwtToken');
+
+  const [selectedColumns, setSelectedColumns] = useState([
+    "empId",
+    "empName",
+    "empEmail",
+  ]);
+  const [openModal, setOpenModal] = useState(false);
+
+  // Filter columns based on user selection
+  const filteredColumns = userColumns.filter((col) =>
+    selectedColumns.includes(col.field)
+  );
+
+  // Toggle field selection
+  const handleFieldToggle = (field) => {
+    setSelectedColumns((prev) =>
+      prev.includes(field)
+        ? prev.filter((f) => f !== field) // Remove field
+        : [...prev, field] // Add field
+    );
+  };
 
   // const [allSkills,setAllSkills]=useState([]);
   // const [allDomains,setAllDomains] = useState([]);
@@ -224,19 +251,58 @@ const Datatable = ({ searchTerm, setSearchTerm, filteredData, setFilteredData, d
           />
         </div>
         <div className="edit-table">
+        
+        <div  >            
+            <Download filteredData={filteredData} columnsList={filteredColumns} />
+          </div>
           <div className="filter-table" onClick={() => setFilterDialogOpen(true)}>
             <FilterListIcon />
             Filter
           </div>
-          <Link to="/admin/employees/new" className="link">
+          {/* <Link to="/admin/employees/new" className="link">
             Add New
-          </Link>
+          </Link> */}
+          <SettingsIcon onClick={() => setOpenModal(true)} sx={{cursor:"pointer"}}/>
         </div>
       </div>
+      
+      
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 2,
+          }}
+        >
+          <h3>Select Columns to Display</h3>
+          {userColumns.map((col) => (
+            <div key={col.field}>
+              <Checkbox
+                checked={selectedColumns.includes(col.field)}
+                onChange={() => handleFieldToggle(col.field)}
+              />
+              {col.headerName}
+            </div>
+          ))}
+          <Button
+            variant="contained"
+            onClick={() => setOpenModal(false)}
+            style={{ marginTop: 10 }}
+          >
+            Apply
+          </Button>
+        </Box>
+      </Modal>
       <DataGrid
         className="datagrid"
         rows={filteredData}
-        columns={userColumns.concat(actionColumn)}
+        columns={filteredColumns.concat(actionColumn)}
         pageSize={10}
         rowsPerPageOptions={[9, 10]}
         // checkboxSelection

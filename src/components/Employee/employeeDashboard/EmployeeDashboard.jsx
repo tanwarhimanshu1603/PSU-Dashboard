@@ -715,7 +715,7 @@ export default function EmployeeDashboard() {
                                                 {
                                                     updateMode ? 
                                                     <TextField onChange={handleChange} id="standard-basic" name='amdocsExperience' value={employee.amdocsExperience} variant="standard" /> 
-                                                    : `${employee.amdocsExperience} Years`
+                                                    : `${employee.amdocsExperience}`
                                                 }
                                             </Typography>
                                         </Grid>
@@ -739,7 +739,7 @@ export default function EmployeeDashboard() {
                                                 {
                                                     updateMode ? 
                                                     <TextField onChange={handleChange} id="standard-basic" name='totalExperience' value={employee.totalExperience} variant="standard" /> 
-                                                    : `${employee.totalExperience} Years`
+                                                    : `${employee.totalExperience}`
                                                 }
                                             </Typography>
                                         </Grid>

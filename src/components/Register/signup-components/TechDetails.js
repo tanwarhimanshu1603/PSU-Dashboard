@@ -1,14 +1,10 @@
 import * as React from 'react';
-import {useState,useEffect} from 'react'
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import Grid from '@mui/material/Grid2';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { styled } from '@mui/system';
-import { Select, MenuItem,Chip,InputLabel,TextField } from '@mui/material'
+import { Chip,TextField } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete';
-import{ FormControl }from '@mui/material';
 const FormGrid = styled(Grid)(() => ({
   display: 'flex',
   flexDirection: 'column',
@@ -17,8 +13,8 @@ const FormGrid = styled(Grid)(() => ({
 export default function TechDetails({props}) {
   const {
     empName,setEmpName,supervisorName,setSupervisorName,currentAccount,setCurrentAccount,devOpsKnowledge,setDevOpsKnowledge,functionalKnowledge, setFunctionalKnowledge,
-    primaryTechSkill,setPrimaryTechSkill,secondaryTechSkill,setSecondaryTechSkill,amdocsExperience,setAmdocsExperience,
-    totalExperience,setTotalExperience,skillOptions,domainList} = props
+    primaryTechSkill,setPrimaryTechSkill,secondaryTechSkill,setSecondaryTechSkill,amdocsExperienceYear,setAmdocsExperienceYear,amdocsExperienceMonths,setAmdocsExperienceMonths,
+    totalExperienceYear,setTotalExperienceYear,totalExperienceMonths,setTotalExperienceMonths,skillOptions,domainList} = props
    
   const functionalKnowledgeHandleChange = (event, newValue) => {
     setFunctionalKnowledge(newValue);
@@ -250,108 +246,131 @@ export default function TechDetails({props}) {
       </FormGrid> */}
       
       <FormGrid size={{ xs: 6 }}>
-        <FormLabel htmlFor="amdocs-experience" required>
-          Experience @Amdocs (in years)
-        </FormLabel>
-        <OutlinedInput
-          id="amdocs-experience"
-          name="amdocs-experience"
-          type="number"
-          placeholder="2.5"
-          required
-          size="small"
-          value={amdocsExperience}
-          onChange={(e) => {
-            const value = e.target.value;
-            if (parseFloat(value) >= 0) {
-              setAmdocsExperience(value);
+  <FormLabel htmlFor="amdocs-experience" required>
+    Experience @Amdocs
+  </FormLabel>
+  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+    {/* Years Input */}
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <OutlinedInput
+        id="amdocs-experience-years"
+        name="amdocs-experience-years"
+        type="number"
+        placeholder="4"
+        required
+        size="small"
+        value={amdocsExperienceYear}
+        onChange={(e) => {
+          let value = parseFloat(e.target.value);
+           if (value < 0) {
+              e.target.value = ''; // Reset to 0 if user enters a negative number
+              setAmdocsExperienceYear(0)
             }
-            // else{
-            //   setAmdocsExperience("0")
-            // }
-          }}
-        />
-      </FormGrid>
-      <FormGrid size={{ xs: 6 }}>
-        <FormLabel htmlFor="total-experience" required>
-          Total Experience (in years)
-        </FormLabel>
-        <OutlinedInput
-          id="total-experience"
-          name="total-experience"
-          type="number"
-          placeholder="4.2"
-          required
-          size="small"
-          value={totalExperience}
-          onChange={(e) => {
-            const value = e.target.value;
-            if (parseFloat(value) >= 0) {
-              setTotalExperience(value);
+          else setAmdocsExperienceYear(value)
+        }}
+        inputProps={{
+          min: 0
+        }}
+        style={{ width: '60px' }} // Adjust the width to make it smaller
+      />
+      <span>Years</span>
+    </div>
+
+    {/* Months Input */}
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <OutlinedInput
+        id="amdocs-experience-months"
+        name="amdocs-experience-months"
+        type="number"
+        placeholder="0"
+         
+        size="small"
+        value={amdocsExperienceMonths}
+        onChange={(e) => {
+          let value = parseFloat(e.target.value);
+          if (value >= 0 && value <= 11) {
+            setAmdocsExperienceMonths(value); 
+          } else if (value > 11) {
+            e.target.value = 11;  
+            setAmdocsExperienceMonths(11);
+          } else if (value < 0) {
+            e.target.value = 0; // Reset to 0 if user enters a negative number
+            setAmdocsExperienceMonths(0);
+        }}}
+        inputProps={{
+          min: 0,
+          max: 11,
+        }}
+        style={{ width: '60px' }} // Adjust the width to make it smaller
+      />
+      <span>Months</span>
+    </div>
+  </div>
+</FormGrid>
+
+<FormGrid size={{ xs: 6 }}>
+  <FormLabel htmlFor="total-experience" required>
+    Total Experience
+  </FormLabel>
+  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+    {/* Years Input */}
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <OutlinedInput
+        id="total-experience-years"
+        name="total-experience-years"
+        type="number"
+        placeholder="4"
+        required
+        size="small"
+        value={totalExperienceYear}
+        onChange={(e) => {
+          let value = parseFloat(e.target.value);
+           if (value < 0) {
+              e.target.value = ''; // Reset to 0 if user enters a negative number
+              setTotalExperienceYear(0)
             }
-            // else{
-            //   setTotalExperience("0")
-            // }
-          }}
-        />
-      </FormGrid>
-      {/* <FormGrid size={{ xs: 12 }}>
-        <FormLabel htmlFor="amdocs-journey" required>
-          Amdocs Journey
-        </FormLabel>
-        <OutlinedInput
-          id="amdocs-journey"
-          name="amdocs-journey"
-          type="text"
-          required
-          size="small"
-          value={amdocsJourney}
-          onChange={(e)=>setAmdocsJourney(e.target.value)}
-        />
-      </FormGrid> */}
-      {/* <FormGrid size={{ xs: 6 }}>
-        <FormLabel htmlFor="city" required>
-          City
-        </FormLabel>
-        <OutlinedInput
-          id="city"
-          name="city"
-          type="city"
-          placeholder="New York"
-          autoComplete="City"
-          required
-          size="small"
-        />
-      </FormGrid>
-      <FormGrid size={{ xs: 6 }}>
-        <FormLabel htmlFor="state" required>
-          State
-        </FormLabel>
-        <OutlinedInput
-          id="state"
-          name="state"
-          type="state"
-          placeholder="NY"
-          autoComplete="State"
-          required
-          size="small"
-        />
-      </FormGrid>
-      
-      <FormGrid size={{ xs: 6 }}>
-        <FormLabel htmlFor="country" required>
-          Country
-        </FormLabel>
-        <OutlinedInput
-          id="country"
-          name="country"
-          type="country"
-          placeholder="United States"
-          autoComplete="shipping country"
-          required
-          size="small"
-        />
-      </FormGrid> */}
+           else setTotalExperienceYear(value)
+        }}
+        inputProps={{
+          min: 0
+        }}
+        style={{ width: '60px' }} // Adjust the width to make it smaller
+      />
+      <span>Years</span>
+    </div>
+
+    {/* Months Input */}
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <OutlinedInput
+        id="total-experience-months"
+        name="total-experience-months"
+        type="number"
+        placeholder="0"
+         
+        size="small"
+        // value={amdocsExperienceMonths}
+        onChange={(e) => {
+          let value = parseFloat(e.target.value);
+          if (value >= 0 && value <= 11) {
+            setTotalExperienceMonths(value); 
+          } else if (value > 11) {
+            e.target.value = 11;  
+            setTotalExperienceMonths(11);
+          } else if (value < 0) {
+            e.target.value = 0; // Reset to 0 if user enters a negative number
+            setTotalExperienceMonths(0);
+        }
+        }}
+        inputProps={{
+          min: 0,
+          max: 12,
+        }}
+        style={{ width: '60px' }} // Adjust the width to make it smaller
+      />
+      <span>Months</span>
+    </div>
+  </div>
+</FormGrid>
 
     </Grid>
   );

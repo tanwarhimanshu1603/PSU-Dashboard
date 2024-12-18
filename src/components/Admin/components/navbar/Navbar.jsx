@@ -1,6 +1,7 @@
 import "./navbar.scss";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import Download from "../download/Download";
+import { Link } from "react-router-dom";
 
 const Navbar = ({setSearchTerm,filteredData}) => {
   let debounceTimeout;
@@ -22,9 +23,12 @@ const Navbar = ({setSearchTerm,filteredData}) => {
           <SearchOutlinedIcon />
         </div>
         <div className="items">
-          <div className="item">            
+          {/* <div className="item">            
             <Download filteredData={filteredData} />
-          </div>
+          </div> */}
+           <Link to="/admin/employees/new" className="link">
+            Add New
+          </Link>
           <div className="item">
             <img
               src="https://res.cloudinary.com/dczif4pj4/image/upload/v1734180819/gmtnwdvmduhiuk7hrpxp.jpg"

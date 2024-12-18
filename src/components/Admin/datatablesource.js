@@ -36,6 +36,27 @@ export const userColumns = [
     //   );
     // },
   },
+  {
+    field: "empRole",
+    headerName: "Role",
+    width: 150,
+  },
+  {
+    field: "presentationSkills",
+    headerName: "Presentation Skill",
+    width: 150,
+  },
+  {
+    field: "mentoringAbility",
+    headerName: "Mentoring Ability",
+    width: 150,
+  },
+  {
+    field: "amdocsExperience",
+    headerName: "Experience @Amdocs",
+    width: 150,
+  },
+  
 ];
 
 export const approvalColumns = [

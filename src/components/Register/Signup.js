@@ -41,7 +41,17 @@ function getStepContent(step,propsCombined) {
   }
 }
 export default function Signup(props) {
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [employeeInfo,setEmployeeInfo] = useState({
+    empImage:"https://static.vecteezy.com/system/resources/previews/024/983/914/non_2x/simple-user-default-icon-free-png.png",
+    empEmail:"",  empPassword:"",  empId:"",  empName:"", supervisorName:"",
+    currentAccount:"", amdocsExperience:"", totalExperience:"", amdocsJourney:"",
+    functionalKnowledge:[], primaryTechSkill:[], primaryProductSubdomain:[],
+    secondaryTechSkill:[], secondaryProduct:null, devOpsKnowledge:"", engagementActivityContribution:null,
+    presentationSkills:null, hobbiesSports:null, additionalInfo:null, mentoringAbility:null,
+    contributedToDesign:null, explorationInterest:null, approved:false
+  }) // to be used
+
+
   const [empImage,setEmpImage] = useState("https://static.vecteezy.com/system/resources/previews/024/983/914/non_2x/simple-user-default-icon-free-png.png")
   const [empEmail,setEmpEmail] = useState("");
   const [empPassword,setEmpPassword] = useState("");
@@ -53,9 +63,6 @@ export default function Signup(props) {
   const [amdocsExperience,setAmdocsExperience]=useState('');
   const [totalExperience,setTotalExperience]=useState('');
   const [amdocsJourney, setAmdocsJourney] = useState('');
-  const [journeys, setJourneys] = useState([
-    // { account: '', description: '', startDate: '', endDate: '',isPresent:false },
-  ]);
   const [functionalKnowledge, setFunctionalKnowledge] = useState([]);
   const [primaryTechSkill, setPrimaryTechSkill] = useState([]);
   const [primaryProductSubdomain, setPrimaryProductSubdomain] = useState([]);
@@ -67,23 +74,31 @@ export default function Signup(props) {
   const [hobbiesSports, setHobbiesSports] = useState(null);
   const [additionalInfo, setAdditionalInfo] = useState(null);
   const [approved, setApproved] = useState(false);
-  const [openErrorToast,setOpenErrorToast] = useState(false);
-  const [openSuccessToast,setOpenSuccessToast] = useState(false);
-  const [errorMessage,setErrorMessage]=useState('');
-  const [successMessage,setSuccessMessage] = useState('');
   const [mentoringAbility, setMentoringAbility] = useState(null);
   const [contributedToDesign, setContributedToDesign] = useState(null);
   const [explorationInterest, setExplorationInterest] = useState(null);
   const [skillOptions,setSkillOptions] = useState([]);
   const [domainList,setDomainList] = useState([]);
   const [emailValidated,setEmailValidated] = useState(false);
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [openErrorToast,setOpenErrorToast] = useState(false);
+  const [openSuccessToast,setOpenSuccessToast] = useState(false);
+  const [errorMessage,setErrorMessage]=useState('');
+  const [successMessage,setSuccessMessage] = useState('');
+  const [journeys, setJourneys] = useState([
+    // { account: '', description: '', startDate: '', endDate: '',isPresent:false },
+  ]);
+  const [totalExperienceYear,setTotalExperienceYear] = useState("");
+  const [totalExperienceMonths,setTotalExperienceMonths] = useState('');
+  const [amdocsExperienceYear,setAmdocsExperienceYear] = useState("");
+  const [amdocsExperienceMonths,setAmdocsExperienceMonths] = useState('');
   const basicInfoProps = {
     empImage,setEmpImage,empEmail,setEmpEmail,empId,setEmpId,empPassword,setEmpPassword,confirmPassword,setConfirmPassword,emailValidated,setEmailValidated
   }
   const techDetailsProps = {
     empName,setEmpName,supervisorName,setSupervisorName,currentAccount,setCurrentAccount,devOpsKnowledge,setDevOpsKnowledge,functionalKnowledge, setFunctionalKnowledge,
-    primaryTechSkill,setPrimaryTechSkill,secondaryTechSkill,setSecondaryTechSkill,amdocsExperience,setAmdocsExperience,
-    totalExperience,setTotalExperience,skillOptions,domainList
+    primaryTechSkill,setPrimaryTechSkill,secondaryTechSkill,setSecondaryTechSkill,amdocsExperienceYear,setAmdocsExperienceYear,amdocsExperienceMonths,setAmdocsExperienceMonths,
+    totalExperienceYear,setTotalExperienceYear,totalExperienceMonths,setTotalExperienceMonths,skillOptions,domainList
   }
   const amdocsJourneyProps = {
     setAmdocsJourney,journeys,setJourneys,setErrorMessage,setOpenErrorToast
@@ -166,9 +181,10 @@ export default function Signup(props) {
     const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toString(); // Convert bytes to hex
     return hashHex; // Return the hash as a hex string
   };
+
   const handleSubmit = async () => {
-    // e.preventDefault();
     const hashedPassword = await hashText(empPassword);
+
     try {
       const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/register`, {
         method: "POST",
@@ -177,8 +193,10 @@ export default function Signup(props) {
         },
         body: JSON.stringify({
           empEmail, empPassword:hashedPassword, empId, empName,
-          empImage,currentAccount,supervisorName,amdocsExperience,
-          totalExperience,amdocsJourney,functionalKnowledge,primaryTechSkill,
+          empImage,currentAccount,supervisorName,
+          amdocsExperience:`${amdocsExperienceYear} years, ${amdocsExperienceMonths} months`,
+          totalExperience:`${totalExperienceYear} years, ${totalExperienceMonths} months`,
+          amdocsJourney,functionalKnowledge,primaryTechSkill,
           primaryProductSubdomain,secondaryTechSkill,secondaryProduct,
           devOpsKnowledge,mentoringAbility,explorationInterest,contributedToDesign,
           engagementActivityContribution,presentationSkills,hobbiesSports,additionalInfo,approved
@@ -289,8 +307,8 @@ useEffect(()=>{
         !functionalKnowledge ||
         !primaryTechSkill ||
         !secondaryTechSkill ||
-        !amdocsExperience ||
-        !totalExperience
+        (!amdocsExperienceYear && !amdocsExperienceMonths) ||
+        (!totalExperienceYear && !totalExperienceMonths)
       ) {
         isValid = false;
         setErrorMessage("Please fill in all required field before proceeding.")
@@ -333,6 +351,8 @@ useEffect(()=>{
 
       <Grid
         container
+        justifyContent="center"
+  alignItems="center"
         sx={{
           height: {
             xs: '100%',
@@ -342,9 +362,10 @@ useEffect(()=>{
             xs: 4,
             sm: 0,
           },
+          
         }}
       >
-        <Grid
+        {/* <Grid
           size={{ xs: 12, sm: 5, lg: 4 }}
           sx={{
             display: { xs: 'none', md: 'flex' },
@@ -358,20 +379,9 @@ useEffect(()=>{
             gap: 4,
           }}
         >
-          {/* <SitemarkIcon />
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              flexGrow: 1,
-              width: '100%',
-              maxWidth: 500,
-            }}
-          >
-            <Info totalPrice={activeStep >= 2 ? '$144.97' : '$134.98'} />
-          </Box> */}
+          
           <Content/>
-        </Grid>
+        </Grid> */}
         <Grid
           size={{ sm: 12, md: 7, lg: 8 }}
           sx={{
@@ -544,10 +554,7 @@ useEffect(()=>{
                     sx={{ width: { xs: '100%', sm: 'fit-content' } }}
                   >
                     {(() => {
-                      if(activeStep ===0 && !emailValidated){
-                        return 'Validate Email'
-                      }
-                      else if (activeStep === steps.length - 1) {
+                      if (activeStep === steps.length - 1) {
                             return 'Send for approval';
                         } else {
                             return 'Next';

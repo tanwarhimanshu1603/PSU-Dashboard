@@ -7,8 +7,9 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import DescriptionIcon from '@mui/icons-material/Description';
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+import { userColumns } from '../../datatablesource';
 
-export default function Download({filteredData}) {
+export default function Download({filteredData,columnsList}) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -22,15 +23,12 @@ export default function Download({filteredData}) {
 
   const downloadCSV = () => {
     handleClose();
-    const headers = ["Employee ID","Name", "Email", "Supervisor","Current Domain"];
-    const rows = filteredData.map(emp => [
-      emp.empId,
-      emp.empName,
-      emp.empEmail,
-      emp.supervisorName,
-      emp.currentAccount
-    ]);
-
+    const headers = columnsList.map((col)=>col["headerName"]);
+    
+    const rows = filteredData.map((emp) => {
+      return columnsList.map((col) => emp[col.field] || ""); // Fallback for empty values
+    });
+    
     const csvContent = [
       headers.join(","),
       ...rows.map(row => row.join(","))
@@ -53,14 +51,12 @@ export default function Download({filteredData}) {
     doc.setFontSize(12);
     doc.text("Employee List", 20, 20);
 
-    const headers = ["Employee ID","Name", "Email", "Supervisor","Current Domain"];
-    const rows = filteredData.map(emp => [
-      emp.empId,
-      emp.empName,
-      emp.empEmail,
-      emp.supervisorName,
-      emp.currentAccount
-    ]);
+    const headers = columnsList.map((col)=>col["headerName"]);
+    
+    const rows = filteredData.map((emp) => {
+      return columnsList.map((col) => emp[col.field] || ""); // Fallback for empty values
+    });
+    
 
     doc.autoTable({
       head: [headers],
@@ -79,8 +75,9 @@ export default function Download({filteredData}) {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        sx={{color:"gray"}}
       >
-        <FileDownloadOutlinedIcon className="icon" />
+        <FileDownloadOutlinedIcon className="icon" />Export
       </Button>
       <Menu
         id="basic-menu"
