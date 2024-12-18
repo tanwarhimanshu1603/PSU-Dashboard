@@ -129,7 +129,6 @@ function App() {
           <Route path='approval-requests' element={<ApprovalList requestCount={requestCount} setRequestCount={setRequestCount} employeeCount={data.length}/>} />
           <Route path="employees">
             <Route index element={<List requestCount={requestCount} employeeCount={data.length} data={data} setData={setData} allSkills={allSkills} allDomains={allDomains}/> }  />
-            {/* <Route path=":userId" element={<Single />} /> */}
             <Route path=":empId" element={<AdminEmployeeDashboard />} />
             <Route
               path="new"
@@ -150,7 +149,6 @@ function App() {
         <Route path='/reset' element={<ResetPassword />}/>
       </Routes>
     </Router>
-    // </div>
   );
 }
 

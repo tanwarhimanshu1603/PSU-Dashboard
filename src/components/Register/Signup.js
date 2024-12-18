@@ -247,9 +247,7 @@ useEffect(()=>{
   getAllSkills();
   getAllDomains()
 },[])
-  // const handleNext = () => {
-  //   setActiveStep(activeStep + 1);
-  // };
+
   const handleCloseErrorToast = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -315,16 +313,9 @@ useEffect(()=>{
         setOpenErrorToast(true);
         
       }
-      // else if(parseFloat(amdocsExperience)<1){
-      //   setJourneys([{ account: '', description: '', startDate: '', endDate: '',isPresent:false}])
-      // }
     }
     else if(activeStep ===2){
-      // if(amdocsExperience>0 && journeys[0].account===''){
-      //   isValid=false;
       
-      // }
-      //else 
       if(journeys.length>=1 && (journeys[journeys.length-1]["account"]==='' || journeys[journeys.length-1]["description"]==='' || journeys[journeys.length-1]["startDate"]==='' || (journeys[journeys.length-1]["endDate"]==='' && journeys[journeys.length-1]["isPresent"]===false))){
         setErrorMessage("Please fill all details first or delete this experience.")
         setOpenErrorToast(true);
@@ -379,6 +370,7 @@ useEffect(()=>{
             gap: 4,
           }}
         >
+          
           
           <Content/>
         </Grid> */}

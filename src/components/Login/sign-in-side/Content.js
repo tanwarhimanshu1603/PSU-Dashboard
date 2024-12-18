@@ -30,12 +30,6 @@ const items = [
     description:
       'Integrate our product into your routine with an intuitive and easy-to-use interface.',
   },
-  // {
-  //   icon: <AutoFixHighRoundedIcon sx={{ color: 'text.secondary' }} />,
-  //   title: 'Innovative functionality',
-  //   description:
-  //     'Stay ahead with features that set new standards, addressing your evolving needs better than the rest.',
-  // },
 ];
 
 export default function Content() {

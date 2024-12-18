@@ -1260,7 +1260,7 @@ export default function EmployeeDashboard() {
                                     />
                                     )}
                                     renderTags={(value, getTagProps) =>
-                                    value.map((option, index) => (
+                                    value?.map((option, index) => (
                                         <Chip
                                         label={option}
                                         {...getTagProps({ index })}
@@ -1272,7 +1272,7 @@ export default function EmployeeDashboard() {
                                     freeSolo
                                     getOptionLabel={(option) => option}
                                 /> : <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2,mt: 1 }}>
-                                {employee.primaryTechSkill.map((skill) => (
+                                {employee.primaryTechSkill?.map((skill) => (
                                     <Chip key={skill} label={skill} color="primary" variant="outlined" />
                                 ))}
                             </Box>
@@ -1316,7 +1316,7 @@ export default function EmployeeDashboard() {
                                     freeSolo
                                     getOptionLabel={(option) => option}
                                 /> : <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2,mt: 1 }}>
-                                {employee.functionalKnowledge.map((skill) => (
+                                {employee.functionalKnowledge?.map((skill) => (
                                     <Chip key={skill} label={skill} color="primary" variant="outlined" />
                                 ))}
                             </Box>
@@ -1402,7 +1402,7 @@ export default function EmployeeDashboard() {
                                                 {
                                                     updateMode ? 
                                                     <TextField onChange={handleChange} id="standard-basic" name='amdocsExperience' value={employee.amdocsExperience} variant="standard" /> 
-                                                    : `${employee.amdocsExperience} Years`
+                                                    : `${employee.amdocsExperience} `
                                                 }
                                             </Typography>
                                         </Grid>
@@ -1426,7 +1426,7 @@ export default function EmployeeDashboard() {
                                                 {
                                                     updateMode ? 
                                                     <TextField onChange={handleChange} id="standard-basic" name='totalExperience' value={employee.totalExperience} variant="standard" /> 
-                                                    : `${employee.totalExperience} Years`
+                                                    : `${employee.totalExperience} `
                                                 }
                                             </Typography>
                                         </Grid>

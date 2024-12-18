@@ -113,18 +113,6 @@ const ResetPassword = () => {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             required
-            // InputProps={{
-            //   endAdornment: (
-            //     <InputAdornment position="end">
-            //       <IconButton
-            //         onClick={() => setShowNewPassword((prev) => !prev)} // Toggle password visibility
-            //         edge="end"
-            //       >
-            //         {showNewPassword ? <VisibilityOff /> : <Visibility />}
-            //       </IconButton>
-            //     </InputAdornment>
-            //   ),
-            // }}
           />
  
           {/* Confirm Password Input Field */}
@@ -138,18 +126,6 @@ const ResetPassword = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
-            // InputProps={{
-            //   endAdornment: (
-            //     <InputAdornment position="end">
-            //       <IconButton
-            //         onClick={() => setShowConfirmPassword((prev) => !prev)} // Toggle password visibility
-            //         edge="end"
-            //       >
-            //         {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-            //       </IconButton>
-            //     </InputAdornment>
-            //   ),
-            // }}
           />
  
           {/* Button Container */}

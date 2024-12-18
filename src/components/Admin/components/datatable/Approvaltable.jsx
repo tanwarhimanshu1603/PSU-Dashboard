@@ -202,12 +202,6 @@ const Approvaltable = ({requestCount,setRequestCount}) => {
         buttonText = {"Reject"}
       />
 
-      {/* <FilterDialog
-        open={dialogOpen}
-        handleClose={(confirm) => handleDialogClose(confirm)}
-        message={"Are you sure you want to delete employee record?"}
-        buttonText={"Delete"}
-      /> */}
       <Snackbar open={openErrorToast} autoHideDuration={GLOBAL_CONFIG.ALERT_TIME} 
       onClose={handleCloseErrorToast} anchorOrigin={{ vertical: GLOBAL_CONFIG.ALERT_VERTICAL_POSITION, horizontal: GLOBAL_CONFIG.ALERT_HORIZONTAL_POSITION }}>
         <Alert

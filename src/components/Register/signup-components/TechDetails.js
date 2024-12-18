@@ -104,26 +104,7 @@ export default function TechDetails({props}) {
           onChange={(e)=>setDevOpsKnowledge(e.target.value)}
         />
       </FormGrid>
-      {/* <FormGrid size={{ xs: 12, md: 6 }}>
-      <FormLabel htmlFor="domain" required>
-        Current Domain
-      </FormLabel>
-      <FormControl fullWidth required size="small">
-        <Select
-          labelId="domain-label"
-          id="domain"
-          name="domain"
-          value={selectedDomain}
-          onChange={handleDomainChange}
-          label="Select Domain"
-        >
-          {domainList.map((domain)=>{
-            return <MenuItem value={domain}>{domain}</MenuItem>
-          })}
-          
-        </Select>
-      </FormControl>
-    </FormGrid> */}
+      
     <FormGrid size={{ xs: 12 }}>
       <FormLabel htmlFor="functional-knowledge" required>
         Functional Knowledge
@@ -229,21 +210,7 @@ export default function TechDetails({props}) {
         getOptionLabel={(option) => option}
       />
     </FormGrid>
-    {/* <FormGrid size={{ xs: 12, md: 12 }} >
-        <FormLabel htmlFor="secondary-skill" required>
-          Secondary Skills
-        </FormLabel>
-        <OutlinedInput
-          id="secondary-skill"
-          name="secondary-skill"
-          type="text"
-          placeholder="ReactJS"
-          required
-          size="small"
-          value={secondaryTechSkill}
-          onChange={(e)=>setSecondaryTechSkill(e.target.value)}
-        />
-      </FormGrid> */}
+    
       
       <FormGrid size={{ xs: 6 }}>
   <FormLabel htmlFor="amdocs-experience" required>
