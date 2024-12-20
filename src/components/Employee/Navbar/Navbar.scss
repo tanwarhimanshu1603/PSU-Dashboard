@@ -1,0 +1,22 @@
+.search {
+    display: flex;
+    align-items: center;
+    margin: 12px;
+    padding: 3px;
+    position: relative;
+
+    input {
+      border: none;
+      outline: none;
+      background: transparent;
+
+      &::placeholder {
+        font-size: 12px;
+      }
+    }
+    .icon{
+        position: absolute;
+        right: 0;
+        margin-right: 15px;
+    }
+  }

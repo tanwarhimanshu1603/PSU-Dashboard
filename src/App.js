@@ -12,6 +12,7 @@ import ResetPassword from './components/ResetPassword/ResetPassword';
 import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from './context/AuthContext/AuthContext';
 import GLOBAL_CONFIG from './constants/global';
+import EmployeePortal from './components/Employee/Dashboard/EmployeePortal';
 
 
 function App() {
@@ -140,9 +141,10 @@ function App() {
         {/* ---------------------------- */}
                   {/* Employee */}
         {/* ---------------------------- */}
-        <Route path='/dashboard'>
-          <Route index element={<EmployeeDashboard />} />
-        </Route>
+        <Route path='/dashboard/*' element={<EmployeePortal/>}/>
+          {/* <Route index element={<EmployeePortal />} />
+          <Route path=':empId' element={<EmployeeProfile />} /> */}
+        {/* </Route> */}
 
 
         {/* Reset Password */}

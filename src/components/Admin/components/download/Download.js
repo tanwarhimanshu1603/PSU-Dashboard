@@ -21,19 +21,48 @@ export default function Download({filteredData,columnsList}) {
     setAnchorEl(null);
   };
 
+  // const downloadCSV = () => {
+  //   handleClose();
+  //   const headers = columnsList.map((col)=>col["headerName"]);
+    
+  //   const rows = filteredData.map((emp) => {
+  //     return columnsList.map((col) => emp[col.field] || ""); // Fallback for empty values
+  //   });
+    
+  //   const csvContent = [
+  //     headers.join(","),
+  //     ...rows.map(row => row.join(","))
+  //   ].join("\n");
+
+  //   // Create a Blob from the CSV data
+  //   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  //   const link = document.createElement("a");
+  //   if (link.download !== undefined) {
+  //     const url = URL.createObjectURL(blob);
+  //     link.setAttribute("href", url);
+  //     link.setAttribute("download", "employees.csv");
+  //     link.click();
+  //   }
+  // };
   const downloadCSV = () => {
     handleClose();
-    const headers = columnsList.map((col)=>col["headerName"]);
-    
+  
+    // Generate headers
+    const headers = columnsList.map((col) => col["headerName"]);
+  
+    // Generate rows
     const rows = filteredData.map((emp) => {
-      return columnsList.map((col) => emp[col.field] || ""); // Fallback for empty values
+      return columnsList.map((col) => {
+        const value = emp[col.field] || ""; // Fallback for empty values
+        return `"${String(value).replace(/"/g, '""')}"`;
+      });
     });
-    
+  
     const csvContent = [
-      headers.join(","),
+      headers.map(header => `"${header.replace(/"/g, '""')}"`).join(","), 
       ...rows.map(row => row.join(","))
     ].join("\n");
-
+  
     // Create a Blob from the CSV data
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
@@ -44,6 +73,7 @@ export default function Download({filteredData,columnsList}) {
       link.click();
     }
   };
+  
   const downloadPDF = () => {
     handleClose();
     const doc = new jsPDF();

@@ -51,7 +51,7 @@ export default function Signup(props) {
     contributedToDesign:null, explorationInterest:null, approved:false
   }) // to be used
 
-
+  const [loading,setLoading] = useState(false);
   const [empImage,setEmpImage] = useState("https://static.vecteezy.com/system/resources/previews/024/983/914/non_2x/simple-user-default-icon-free-png.png")
   const [empEmail,setEmpEmail] = useState("");
   const [empPassword,setEmpPassword] = useState("");
@@ -114,9 +114,11 @@ export default function Signup(props) {
 
   const validateEmail = async () => {
     // e.preventDefault(); // Prevent default form submission behavior
+    setLoading(true);
     if (!empEmail || !/^[a-zA-Z0-9._%+-]+@amdocs\.com$/.test(empEmail)) {
       setErrorMessage('Please enter a valid email address with the @amdocs.com domain.')
       setOpenErrorToast(true);
+      setLoading(false);
       return;
     }
     try {
@@ -164,7 +166,7 @@ export default function Signup(props) {
       setErrorMessage("Something went wrong while validating. : ",error.message)
       setOpenErrorToast(true)
     } finally {
-      // setLoading(false); 
+      setLoading(false); 
     }
   };
   
@@ -183,9 +185,10 @@ export default function Signup(props) {
   };
 
   const handleSubmit = async () => {
-    const hashedPassword = await hashText(empPassword);
-
+    setLoading(true)
+    
     try {
+      const hashedPassword = await hashText(empPassword);
       const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/register`, {
         method: "POST",
         headers: {
@@ -209,6 +212,8 @@ export default function Signup(props) {
       handleNext();
     } catch (err) {
       // console.log(err.message)
+    }finally{
+      setLoading(false)
     }
 };
 const getAllSkills = async()=>{
@@ -342,8 +347,8 @@ useEffect(()=>{
 
       <Grid
         container
-        justifyContent="center"
-  alignItems="center"
+  //       justifyContent="center"
+  // alignItems="center"
         sx={{
           height: {
             xs: '100%',
@@ -356,7 +361,7 @@ useEffect(()=>{
           
         }}
       >
-        {/* <Grid
+        <Grid
           size={{ xs: 12, sm: 5, lg: 4 }}
           sx={{
             display: { xs: 'none', md: 'flex' },
@@ -373,7 +378,7 @@ useEffect(()=>{
           
           
           <Content/>
-        </Grid> */}
+        </Grid>
         <Grid
           size={{ sm: 12, md: 7, lg: 8 }}
           sx={{
@@ -546,7 +551,8 @@ useEffect(()=>{
                     sx={{ width: { xs: '100%', sm: 'fit-content' } }}
                   >
                     {(() => {
-                      if (activeStep === steps.length - 1) {
+                      if(loading) return 'Loading...';
+                      else if (activeStep === steps.length - 1) {
                             return 'Send for approval';
                         } else {
                             return 'Next';
