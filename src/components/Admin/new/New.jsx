@@ -7,7 +7,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import GLOBAL_CONFIG from "../../../constants/global";
 
-const New = ({ inputs, title,requestCount,employeeCount }) => {
+const New = ({requestCount,employeeCount }) => {
   const [file, setFile] = useState("");
   const [empName,setEmpName] = useState('');
   const [empEmail,setEmpEmail] = useState('');

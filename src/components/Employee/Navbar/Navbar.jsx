@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useCallback } from 'react'
 import '../Navbar/Navbar.scss'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import OutlinedInput from '@mui/material/OutlinedInput';
-import { Box, Avatar,Button, Menu, MenuItem, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, TextField, Stack, LinearProgress } from '@mui/material';
+import { Box, Avatar,Button, Menu, MenuItem, Drawer, List, TextField, Stack, LinearProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { resultColumns } from '../searchResultDatatableColumn';
 import { DataGrid } from '@mui/x-data-grid';
 import GLOBAL_CONFIG from '../../../constants/global';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LogoutIcon from '@mui/icons-material/Logout';
+import debounce from 'lodash/debounce';
 function Navbar({empImage,empName,loading,setLoading}) {
     let debounceTimeout;
     const navigate = useNavigate();
@@ -51,13 +51,13 @@ function Navbar({empImage,empName,loading,setLoading}) {
       const selectedEmployee = params.row;  
       navigate(`${selectedEmployee.empId}`, { state: { employee: selectedEmployee } }); 
     };
-    const searchEmployees = async()=>{
-      if(searchQuery===''){
+    const searchEmployees = async(searchTerm)=>{
+      if(searchTerm===''){
         setSearchResultData([]);
         return
       }
       try {
-        const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/getEmp/${searchQuery}`, {
+        const response = await fetch(`${GLOBAL_CONFIG.BASE_URL}api/v1/employee/getEmp/${searchTerm}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -70,19 +70,19 @@ function Navbar({empImage,empName,loading,setLoading}) {
         
       }
     }
-    const handleSearch = (e)=>{
+    const debouncedFetch = useCallback(
+      debounce((searchTerm) => {
+        searchEmployees(searchTerm);
+      }, 500), // Adjust debounce delay as needed
+      []
+    );
+   
+    const handleSearch = (e) => {
+      
       const value = e.target.value;
-
-      if (debounceTimeout) clearTimeout(debounceTimeout);
-  
-      debounceTimeout = setTimeout(() => {
-        setSearchQuery(value); 
-      }, 500); 
-    }
-    useEffect(()=>{
-      searchEmployees();
-    },[searchQuery])
-    
+      setSearchQuery(value);
+      debouncedFetch(value);
+    };
     if(loading){
       return (
         <>
@@ -150,7 +150,7 @@ function Navbar({empImage,empName,loading,setLoading}) {
                     >
                       <List>
                           <div className="search">
-                            <TextField id="standard-basic" label="Search by name,id or email" name='empRole'  variant="standard" sx={{width:"90%"}}  onChange={handleSearch} autoFocus/>
+                            <TextField id="standard-basic" label="Search by name,id or email" name='empRole'  variant="standard" sx={{width:"90%"}} value={searchQuery}  onChange={handleSearch} autoFocus/>
                             <SearchOutlinedIcon className='icon'/>
                           </div>
                           <DataGrid

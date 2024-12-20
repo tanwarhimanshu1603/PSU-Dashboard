@@ -4,8 +4,6 @@ import Home from './components/Admin/home/Home'
 import List from './components/Admin/list/List'
 import New from './components/Admin/new/New'
 import Signup from './components/Register/Signup'
-import { userInputs } from './components/Admin/formSource';
-import EmployeeDashboard from './components/Employee/employeeDashboard/EmployeeDashboard';
 import AdminEmployeeDashboard from './components/Admin/view/AdminEmployeeDashboard';
 import ApprovalList from './components/Admin/list/ApprovalList';
 import ResetPassword from './components/ResetPassword/ResetPassword';
@@ -133,7 +131,7 @@ function App() {
             <Route path=":empId" element={<AdminEmployeeDashboard />} />
             <Route
               path="new"
-              element={<New inputs={userInputs} title="Add New User" requestCount={requestCount} employeeCount={data.length}/>}
+              element={<New requestCount={requestCount} employeeCount={data.length}/>}
             />
           </Route>
         </Route>
